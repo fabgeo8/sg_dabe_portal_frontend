@@ -1,0 +1,13 @@
+h1 {
+  color: $deafult;
+}
+
+.v-application {
+  font-family: $default-font-family !important;
+}
+
+.theme--light {
+  a.nav-btn-active {
+    color: $primary;
+  }
+}
