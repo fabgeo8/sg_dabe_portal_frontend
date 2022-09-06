@@ -14,6 +14,29 @@
               contain
           ></v-img>
         </a>
+        <div class="text-center">
+          <v-menu offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                  color="primary"
+                  dark
+                  v-bind="attrs"
+                  v-on="on"
+              >
+                {{ activeApplicationType }}
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item
+                  v-for="item in applicationTypes"
+                  :key="item.id"
+                  @click="changeApplicationType(item.id)"
+              >
+                <v-list-item-title>{{ item.name }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div>
         <v-btn
             v-for="link in links"
             :key="link.path"
@@ -48,9 +71,20 @@ import EventBus, { ACTIONS } from './events/index'
 export default {
   components: {},
   data: () => ({
+    activeApplicationType: 'PV',
     snackbar: false,
     snackbarMessage: '',
     snackbarColor: '',
+    applicationTypes: [
+      {
+        name: 'PV',
+        id: 1
+      },
+      {
+        name: 'Gas',
+        id: 2
+      }
+    ],
     links: [
       {
         name: 'Dashboard',
@@ -77,6 +111,10 @@ export default {
 
   },
   methods: {
+    changeApplicationType (applicationTypeId) {
+      const applicationType = this.applicationTypes[this.applicationTypes.findIndex(x => x.id === applicationTypeId)]
+      this.activeApplicationType = applicationType.name
+    }
   },
   mounted () {
     EventBus.$on(ACTIONS.SNACKBAR, message => {

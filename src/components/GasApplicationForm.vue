@@ -1,5 +1,4 @@
 <template>
-  <v-dialog v-model="showDialog">
     <v-card>
       <v-card-title>
         <span class="headline">Gesuchdetail</span>
@@ -11,13 +10,18 @@
         >
           <v-container>
             <v-row>
+              <v-col>
+                <h4>Gesuchs-ID: {{ form.gasApplication.id }}</h4>
+              </v-col>
+            </v-row>
+            <v-row>
               <v-col cols="12" sm="12" md="12">
                 <validation-provider
                     v-slot="{ errors }"
                     name="Title"
                     rules="required"
                 >
-                  <v-text-field v-model="form.application.identifier" disabled label="Identifier*" :error-messages="errors" ></v-text-field>
+                  <v-text-field v-model="form.gasApplication.identifier" disabled label="Identifier*" :error-messages="errors" ></v-text-field>
                 </validation-provider>
               </v-col>
             </v-row>
@@ -29,7 +33,18 @@
                     name="egid"
                     rules=""
                 >
-                  <v-textarea v-model="form.createEvent.egid" label="EGID"></v-textarea>
+                  <v-text-field v-model="form.gasApplication.egid" label="EGID"></v-text-field>
+                </validation-provider>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" sm="12" md="12">
+                <validation-provider
+                    v-slot="{  }"
+                    name="status"
+                    rules=""
+                >
+                  <v-combobox :items="applicationStatusItems" item-value="value" item-text="text" v-model="form.gasApplication.status" label="Status"></v-combobox>
                 </validation-provider>
               </v-col>
             </v-row>
@@ -54,7 +69,6 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-  </v-dialog>
 </template>
 
 <script>
@@ -96,7 +110,7 @@ extend('password', {
 
 export default {
   name: 'ApplicationDialog',
-  props: ['applicationId', 'showDialog'],
+  props: ['applicationId'],
   components: {
     ValidationProvider,
     ValidationObserver
@@ -104,11 +118,14 @@ export default {
   data: function () {
     return {
       form: {
-        createEvent: {
+        gasApplication: {
+          id: '',
           identifier: '',
-          egid: ''
+          egid: '',
+          status: null
         }
       },
+      editedApplication: null,
       applicationStatusItems: [
         { value: null, text: '--' },
         { value: 1, text: 'offen' },
@@ -120,19 +137,20 @@ export default {
     }
   },
   mounted () {
-    this.getSingleEvent()
+    this.getApplication()
   },
   methods: {
-    getSingleEvent () {
-      if (this.eventItemId > 0) {
-        axios
-          .get('/operators/' + this.operatorId + '/events/' + this.eventItemId)
-          .then((response) => {
-            this.existingEvent = response.data
-            this.form.createEvent.title = this.existingEvent.title
-            this.form.createEvent.description = this.existingEvent.description
-          })
-      }
+    getApplication () {
+      console.log('GET APPLICATION, ID ' + this.applicationId)
+      axios
+        .get('/applications/gas/' + this.applicationId)
+        .then((response) => {
+          this.editedApplication = response.data
+          this.form.gasApplication.id = this.editedApplication.id
+          this.form.gasApplication.egid = this.editedApplication.egid
+          this.form.gasApplication.identifier = this.editedApplication.identifier
+          this.form.gasApplication.status = this.editedApplication.status
+        })
     },
     save () {
       this.$refs.applicationFormObserver.validate()
@@ -155,11 +173,11 @@ export default {
           }
         })
     },
-    updateEvent () {
+    updateApplication () {
 
     },
     resetApplicationDialog () {
-      this.form.createEvent = null
+      this.form.gasApplication = null
     }
   }
 }
