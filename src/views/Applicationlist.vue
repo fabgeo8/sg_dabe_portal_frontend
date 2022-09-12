@@ -12,6 +12,8 @@
                 <v-checkbox label="Offene Gesuche" class="my-0"></v-checkbox>
                 <v-checkbox label="Beweilligte Gesuche" class="my-0"></v-checkbox>
                 <v-checkbox label="Abgelehnte Gesuche" class="my-0"></v-checkbox>
+                <v-checkbox label="Realisierte Gesuche" class="my-0"></v-checkbox>
+                <v-checkbox label="Nicht realisierte Gesuche" class="my-0"></v-checkbox>
               </v-col>
             </v-row>
           </v-col>

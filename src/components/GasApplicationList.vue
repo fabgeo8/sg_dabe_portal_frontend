@@ -15,7 +15,7 @@
             <th class="text-start">Gemeinde</th>
             <th class="text-start">EBF</th>
             <th class="text-start">EGID</th>
-            <th class="text-end">Abgabe</th>
+            <th class="text-start">Abgabe</th>
             <th class="text-start">Adresse</th>
             <th class="text-start">Aktionen</th>
           </tr>
@@ -25,11 +25,11 @@
         <template v-slot:item="props">
           <tr>
             <td>{{ props.item.identifier }}</td>
-            <td nowrap="true">{{ props.item.status }}</td>
-            <td nowrap="true">{{ props.item['Municipality.name'] }}</td>
-            <td nowrap="true">{{ props.item.generator_area }}</td>
-            <td nowrap="true">{{ props.item.egid }}</td>
-            <td nowrap="true" class="text-end">CHF {{ parseFloat(props.item.fee).toFixed(2) }}</td>
+            <td nowrap="true"><v-chip v-if="props.item.status" small pill :color="statusChips[props.item.status].color">{{ statusChips[props.item.status].text }}</v-chip></td>
+            <td nowrap="true">{{ props.item.Municipality.name }}</td>
+            <td nowrap="true">{{ props.item.generator_area }} m&sup2;</td>
+            <td nowrap="true">{{ props.item.object_egid }}</td>
+            <td nowrap="true" class="">CHF {{ parseFloat(props.item.fee).toFixed(2) }}</td>
             <td nowrap="true">{{ props.item.object_street }} {{ props.item.object_streetnumber }},
               {{ props.item.object_zip }} {{ props.item.object_city }}
             </td>
@@ -41,14 +41,14 @@
       </v-data-table>
     </v-col>
     </v-row>
-    <v-dialog v-model="applicationDialog" max-width="960">
-      <gas-application-form :application-id="selectedId" ></gas-application-form>
-    </v-dialog>
+    <gas-application-form ref="gasForm" :visible="applicationDialog" @closeDialog="closeApplicationDialog();" @getApplications="getApplicationList()" ></gas-application-form>
   </v-col>
 </template>
 <script>
 import axios from 'axios'
 import GasApplicationForm from '../components/GasApplicationForm'
+import { showSnack } from '@/globalActions'
+import StatusChips from '../utils/statusChips'
 
 export default {
   components: {
@@ -56,8 +56,9 @@ export default {
   },
   data: () => ({
     applicationList: [],
-    selectedId: null,
-    applicationDialog: false
+    selectedId: '',
+    applicationDialog: false,
+    statusChips: StatusChips
   }),
   computed: {},
   created () {
@@ -71,11 +72,16 @@ export default {
         })
         .catch((ex) => {
           console.log('fetch application failed: ' + ex.message)
+          showSnack({ message: 'Gesuchsliste konnte nicht geladen werden.', color: 'red' })
         })
     },
     editApplication (application) {
       this.selectedId = application.id
       this.applicationDialog = true
+      this.$refs.gasForm.setApplication(application.id)
+    },
+    closeApplicationDialog () {
+      this.applicationDialog = false
     }
   }
 }
