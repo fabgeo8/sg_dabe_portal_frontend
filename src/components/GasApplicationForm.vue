@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="showDialog" max-width="960" persistent>
+<!--  <v-dialog v-model="showDialog" max-width="960" persistent>-->
     <v-card>
       <v-card-title>
         <span class="headline">Gesuchsdetail</span>
@@ -171,7 +171,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-  </v-dialog>
+<!--  </v-dialog>-->
 </template>
 
 <script>
@@ -196,7 +196,7 @@ extend('regex', {
 
 export default {
   name: 'GasApplicationDialog',
-  props: ['visible'],
+  props: [],
   components: {
     ValidationProvider,
     ValidationObserver
