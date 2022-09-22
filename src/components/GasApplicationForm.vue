@@ -158,7 +158,7 @@
         <v-btn
             color=""
             :class="{ collapse: isSingleForm }"
-            @click="resetApplicationDialog(); $emit('closeDialog')"
+            @click="closeDialog()"
         >
           Abbrechen
         </v-btn>
@@ -301,6 +301,11 @@ export default {
       this.form.gasApplication = null
       this.editedApplication = null
       this.editedApplicationId = null
+    },
+    closeDialog() {
+      this.resetApplicationDialog()
+      this.$emit('getApplications')
+      this.$emit('closeDialog')
     },
     getMunicipalities () {
       axios.get('/municipalities')

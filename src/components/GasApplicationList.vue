@@ -29,7 +29,7 @@
       </v-data-table>
     </v-col>
       <v-dialog v-model="applicationDialog" eager persistent max-width="960">
-        <gas-application-form ref="gasForm" @getApplications="getApplicationList()" ></gas-application-form>
+        <gas-application-form ref="gasForm" @getApplications="getApplicationList()" @closeDialog="applicationDialog = false;" ></gas-application-form>
       </v-dialog>
   </v-row>
 </template>
