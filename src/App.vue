@@ -48,6 +48,14 @@
           {{ link.name }}
         </v-btn>
         <v-spacer></v-spacer>
+        <v-btn
+            text
+            class="mx-1"
+            active-class="nav-btn-active"
+            to="/login"
+        >
+        Login
+        </v-btn>
       </v-container>
     </v-app-bar>
     <v-main class="">
@@ -102,10 +110,6 @@ export default {
       {
         name: 'Aktivitäten',
         path: '/aktivitaet'
-      },
-      {
-        name: 'Login',
-        path: '/login'
       }
     ],
     municipalities: [],
