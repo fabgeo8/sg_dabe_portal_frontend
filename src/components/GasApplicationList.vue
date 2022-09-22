@@ -17,6 +17,7 @@
             <td nowrap="true">{{ new Date(props.item.createdAt).toLocaleDateString() }}</td>
             <td nowrap="true">{{ props.item.Municipality.name }}</td>
             <td nowrap="true">{{ props.item.generator_area }} m&sup2;</td>
+            <td nowrap="true">{{ props.item.fuel_type }}</td>
             <td nowrap="true">{{ props.item.object_egid }}</td>
             <td nowrap="true" class="">CHF {{ parseFloat(props.item.fee).toFixed(2) }}</td>
             <td nowrap="true">{{ props.item.address }}</td>
@@ -110,6 +111,12 @@ export default {
             align: 'start',
             filterable: true,
             value: 'generator_area'
+          },
+          {
+            text: 'Brennstoff',
+            align: 'start',
+            filterable: true,
+            value: 'fuel_type'
           },
           {
             text: 'EGID',
