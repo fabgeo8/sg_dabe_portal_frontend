@@ -1,6 +1,6 @@
 <template>
 <!--  <v-dialog v-model="showDialog" max-width="960" persistent>-->
-    <v-card>
+    <v-card :class="{ collapse: collapse }">
       <v-card-title>
         <span class="headline">Gesuchsdetail</span>
       </v-card-title>
@@ -157,6 +157,7 @@
         <v-spacer></v-spacer>
         <v-btn
             color=""
+            :class="{ collapse: isSingleForm }"
             @click="resetApplicationDialog(); $emit('closeDialog')"
         >
           Abbrechen
@@ -196,7 +197,16 @@ extend('regex', {
 
 export default {
   name: 'GasApplicationDialog',
-  props: [],
+  props: {
+    collapse: {
+      default: false,
+      type: Boolean
+    },
+    isSingleForm: {
+      default: false,
+      type: Boolean
+    }
+  },
   components: {
     ValidationProvider,
     ValidationObserver
@@ -312,4 +322,7 @@ export default {
 </script>
 
 <style scoped>
+.collapse {
+  display: none;
+}
 </style>

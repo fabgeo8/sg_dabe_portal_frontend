@@ -67,11 +67,12 @@
 
 <script>
 import EventBus, { ACTIONS } from './events/index'
+import {showSnack} from "@/globalActions";
 
 export default {
   components: {},
   data: () => ({
-    activeApplicationType: 'PV',
+    activeApplicationType: 'Gas',
     snackbar: false,
     snackbarMessage: '',
     snackbarColor: '',
@@ -101,6 +102,10 @@ export default {
       {
         name: 'Aktivitäten',
         path: '/aktivitaet'
+      },
+      {
+        name: 'Login',
+        path: '/login'
       }
     ],
     municipalities: [],
@@ -114,6 +119,10 @@ export default {
     changeApplicationType (applicationTypeId) {
       const applicationType = this.applicationTypes[this.applicationTypes.findIndex(x => x.id === applicationTypeId)]
       this.activeApplicationType = applicationType.name
+      if (applicationType.name === 'PV') {
+        showSnack({message: 'not implemented!', color: 'red'})
+        this.activeApplicationType = 'Gas'
+      }
     }
   },
   mounted () {

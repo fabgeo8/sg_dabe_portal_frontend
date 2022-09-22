@@ -3,15 +3,15 @@
     <v-col>
       <v-row>
         <v-col>
-          <v-text-field v-model="searchApplication" label="Gesuch suche"></v-text-field>
+          <v-text-field outlined v-model="searchApplication" label="Gesuch suchen"></v-text-field>
         </v-col>
         <v-col>
-          <v-btn @click="loadApplication()">Gesuch laden</v-btn>
+          <v-btn @click="loadApplication()" color="primary">Gesuch laden</v-btn>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12">
-          <gas-application-form ref="gasForm" ></gas-application-form>
+          <gas-application-form ref="gasForm" :collapse="!showApplication" :isSingleForm="true"></gas-application-form>
         </v-col>
       </v-row>
     </v-col>
@@ -28,10 +28,12 @@ export default {
     'gas-application-form': GasApplicationForm
   },
   data: () => ({
-    searchApplication: ''
+    searchApplication: '',
+    showApplication: false
   }),
   methods: {
     loadApplication () {
+      this.showApplication = true
       axios
         .get('/applications/gas/by_identifier/' + this.searchApplication)
         .then((response) => {
@@ -41,6 +43,10 @@ export default {
             showSnack({ message: 'Fehler beim Abrufen des gewünschten Gesuch.', color: 'red' })
           }
         })
+      .catch((err) => {
+        showSnack({ message: 'Fehler beim Abrufen des gewünschten Gesuch.', color: 'red' })
+        this.showApplication = false
+      })
     }
   },
   computed: {
