@@ -2,12 +2,12 @@ const oidc_client = require("oidc-client")
 
 export default (function () {
     function AuthService() {
-        var OIDC_DOMAIN = "https://dev-gm5pjwd8.us.auth0.com";
+        var OIDC_DOMAIN = process.env.VUE_APP_AUTH_HOST;
         var settings = {
             userStore: new oidc_client.WebStorageStateStore({ store: window.localStorage }),
             authority: OIDC_DOMAIN,
-            client_id: "QCVDUQuubOq3JMPZFOiK6TrV0Cj6QnAN",
-            redirect_uri: "http://localhost:8080/callback.html",
+            client_id: process.env.VUE_APP_AUTH_CLIENT_ID,
+            redirect_uri: process.env.VUE_APP_AUTH_REDIRECT_URL,
             response_type: "id_token token",
             scope: "openid profile",
             post_logout_redirect_uri: "http://localhost:8080/",
