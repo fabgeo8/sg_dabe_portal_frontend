@@ -24,7 +24,7 @@
             <td nowrap="true"><v-chip v-if="props.item.status" small pill :color="statusChips[props.item.status].color">{{ statusChips[props.item.status].text }}</v-chip></td>
             <td nowrap="true">{{ props.item.object_egid }}</td>
             <td nowrap="true">{{ props.item.address }}</td>
-            <td nowrap="true" class="">{{ formatCurrency(parseFloat(props.item.fee).toFixed(2)) }}</td>
+            <td nowrap="true" class="">{{ formatCurrency(props.item.fee) }}</td>
             <td nowrap="true">{{ props.item.generator_area }} m&sup2;</td>
             <td nowrap="true">{{ props.item.fuel_type }}</td>
             <td nowrap="true">{{ props.item.Municipality.name }}</td>
@@ -82,7 +82,11 @@ export default {
       this.filteredList = e
     },
     formatCurrency (value) {
-      return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
+      if (!isNaN(parseFloat(value))) {
+        return parseFloat(value).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'")
+      } else {
+        return ''
+      }
     },
     exportDataset () {
       const data = this.filteredList
