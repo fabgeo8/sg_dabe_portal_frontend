@@ -1,4 +1,11 @@
 <template>
+  <div>
+    <v-row>
+      <v-col>
+        <v-btn class="float-end" @click="exportDataset">Excel exportieren
+        </v-btn>
+      </v-col>
+    </v-row>
     <v-row class="my-0">
     <v-col>
       <!-- Application List Table -->
@@ -8,19 +15,20 @@
           :loading="loadingData"
           :headers="headers"
           :search="searchText"
+          @current-items="setFilteredList"
           loading-text="Gesuchsdaten werden geladen."
           class="elevation-1 mt-6">
         <template v-slot:item="props">
           <tr>
-            <td>{{ props.item.identifier }}</td>
+            <td nowrap="true">{{ new Date(props.item.createdAt).toLocaleDateString(undefined, {day: '2-digit', month: '2-digit', year: 'numeric'}) }}</td>
             <td nowrap="true"><v-chip v-if="props.item.status" small pill :color="statusChips[props.item.status].color">{{ statusChips[props.item.status].text }}</v-chip></td>
-            <td nowrap="true">{{ new Date(props.item.createdAt).toLocaleDateString() }}</td>
-            <td nowrap="true">{{ props.item.Municipality.name }}</td>
+            <td nowrap="true">{{ props.item.object_egid }}</td>
+            <td nowrap="true">{{ props.item.address }}</td>
+            <td nowrap="true" class="">{{ formatCurrency(parseFloat(props.item.fee).toFixed(2)) }}</td>
             <td nowrap="true">{{ props.item.generator_area }} m&sup2;</td>
             <td nowrap="true">{{ props.item.fuel_type }}</td>
-            <td nowrap="true">{{ props.item.object_egid }}</td>
-            <td nowrap="true" class="">CHF {{ parseFloat(props.item.fee).toFixed(2) }}</td>
-            <td nowrap="true">{{ props.item.address }}</td>
+            <td nowrap="true">{{ props.item.Municipality.name }}</td>
+            <td>{{ props.item.identifier }}</td>
             <td nowrap="true">
               <v-icon small @click="editApplication(props.item)" class="mr-2">mdi-pencil</v-icon>
             </td>
@@ -32,12 +40,14 @@
         <gas-application-form ref="gasForm" @getApplications="getApplicationList()" @closeDialog="applicationDialog = false;" ></gas-application-form>
       </v-dialog>
   </v-row>
+  </div>
 </template>
 <script>
 // import axios from 'axios'
 import GasApplicationForm from '../components/GasApplicationForm'
 // import { showSnack } from '@/globalActions'
 import StatusChips from '../utils/statusChips'
+import { json2excel } from 'js2excel'
 
 export default {
   props: ['searchText', 'statusFilter'],
@@ -47,7 +57,8 @@ export default {
   data: () => ({
     selectedId: '',
     applicationDialog: false,
-    statusChips: StatusChips
+    statusChips: StatusChips,
+    filteredList: []
   }),
   mounted () {
     this.getApplicationList()
@@ -66,6 +77,24 @@ export default {
     },
     closeApplicationDialog () {
       this.applicationDialog = false
+    },
+    setFilteredList (e) {
+      this.filteredList = e
+    },
+    formatCurrency (value) {
+      return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
+    },
+    exportDataset () {
+      const data = this.filteredList
+      try {
+        json2excel({
+          data,
+          name: 'gas_gesuche',
+          formateDate: 'yyyy.mm.dd'
+        });
+      } catch (e) {
+        console.error('export error', e);
+      }
     }
   },
   computed: {
@@ -79,10 +108,10 @@ export default {
       get () {
         return [
           {
-            text: 'Identifier',
+            text: 'Erstellt',
             align: 'start',
-            filterable: true,
-            value: 'identifier'
+            filterable: false,
+            value: 'createdAt'
           },
           {
             text: 'Status',
@@ -95,16 +124,22 @@ export default {
             }
           },
           {
-            text: 'Erstellt',
+            text: 'EGID',
             align: 'start',
-            filterable: false,
-            value: 'createdAt'
+            filterable: true,
+            value: 'object_egid'
           },
           {
-            text: 'Gemeinde',
+            text: 'Adresse',
             align: 'start',
-            filterable: false,
-            value: 'Municipality.name'
+            filterable: true,
+            value: 'address'
+          },
+          {
+            text: 'Abgabe',
+            align: 'start',
+            filterable: true,
+            value: 'fee'
           },
           {
             text: 'EBF',
@@ -119,22 +154,16 @@ export default {
             value: 'fuel_type'
           },
           {
-            text: 'EGID',
+            text: 'Gemeinde',
             align: 'start',
-            filterable: true,
-            value: 'object_egid'
+            filterable: false,
+            value: 'Municipality.name'
           },
           {
-            text: 'Abgabe',
+            text: 'Gesuchs-ID',
             align: 'start',
             filterable: true,
-            value: 'fee'
-          },
-          {
-            text: 'Adresse',
-            align: 'start',
-            filterable: true,
-            value: 'address'
+            value: 'identifier'
           },
           {
             text: 'Aktionen',

@@ -3,7 +3,6 @@
   <global-filter title="Dashboard"></global-filter>
   <v-row>
     <v-col>
-      <h2>Dashboard graphs</h2>
     </v-col>
   </v-row>
 </div>

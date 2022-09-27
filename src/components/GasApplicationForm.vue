@@ -1,8 +1,30 @@
 <template>
 <!--  <v-dialog v-model="showDialog" max-width="960" persistent>-->
     <v-card :class="{ collapse: collapse }">
-      <v-card-title>
+      <v-card-title class="pr-4">
         <span class="headline">Gesuchsdetail</span>
+
+        <v-spacer></v-spacer>
+        <v-card-actions class="pa-0">
+          <v-btn
+              color=""
+              :class="{ collapse: isSingleForm }"
+              @click="closeDialog()"
+              depressed
+          >
+            Abbrechen
+          </v-btn>
+          <v-btn
+              color="primary lighten-1"
+              @click="save()"
+              :loading="isSaving"
+              :disabled="isSaving"
+              depressed
+              :class="{ collapse: isSingleForm }"
+          >
+            Speichern
+          </v-btn>
+        </v-card-actions>
       </v-card-title>
       <v-container v-if="!editedApplication" style="height: 400px;">
         <v-row
@@ -33,24 +55,19 @@
         >
           <v-container>
             <v-row>
-              <v-col>
-                <h4>Gesuchs-ID: {{ form.gasApplication.id }}</h4>
-              </v-col>
-            </v-row>
-            <v-row>
               <v-col cols="12" sm="12" md="12">
                 <validation-provider
                     v-slot="{ errors }"
-                    name="municipality"
+                    name="status"
                     rules=""
                 >
-                  <v-select :items="municipalityItems" item-value="id" item-text="name" v-model="form.gasApplication.municipality" label="Gemeinde" :error-messages="errors"></v-select>
+                  <v-select   :items="applicationStatusItems" item-value="value" item-text="text" v-model="form.gasApplication.status" label="Status" :error-messages="errors"></v-select>
                 </validation-provider>
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="12" sm="12" md="12">
-                <v-text-field   v-model="form.gasApplication.identifier" disabled label="Identifier*"></v-text-field>
+                <v-text-field   v-model="form.gasApplication.identifier" disabled label="Gesuchs-ID"></v-text-field>
               </v-col>
             </v-row>
             <v-row>
@@ -114,6 +131,17 @@
               </v-col>
             </v-row>
             <v-row>
+              <v-col cols="12" sm="12" md="12">
+                <validation-provider
+                    v-slot="{ errors }"
+                    name="municipality"
+                    rules=""
+                >
+                  <v-select :items="municipalityItems" item-value="id" item-text="name" v-model="form.gasApplication.municipality" label="Gemeinde" :error-messages="errors"></v-select>
+                </validation-provider>
+              </v-col>
+            </v-row>
+            <v-row>
               <v-col cols="6" sm="12" md="6">
                   <v-text-field disabled   v-model="form.gasApplication.generator_area" label="EBF">
                     <template slot="append">m&sup2;</template>
@@ -132,22 +160,16 @@
               <v-col cols="12" sm="12" md="12">
                 <validation-provider
                     v-slot="{ errors }"
-                    name="status"
+                    name="remarks"
                     rules=""
                 >
-                  <v-select   :items="applicationStatusItems" item-value="value" item-text="text" v-model="form.gasApplication.status" label="Status" :error-messages="errors"></v-select>
+                  <v-textarea v-model="form.gasApplication.remark" label="Interne Bemerkung" :error-messages="errors" counter="2048" ></v-textarea>
                 </validation-provider>
               </v-col>
             </v-row>
             <v-row>
-              <v-col cols="12" sm="12" md="12">
-                <validation-provider
-                    v-slot="{ errors }"
-                    name="remarks"
-                    rules=""
-                >
-                  <v-textarea v-model="form.gasApplication.remark" label="Bemerkung" :error-messages="errors" counter="2048" ></v-textarea>
-                </validation-provider>
+              <v-col>
+                <h6 class="text--secondary">ID: {{ form.gasApplication.id }}</h6>
               </v-col>
             </v-row>
           </v-container>
@@ -159,6 +181,7 @@
             color=""
             :class="{ collapse: isSingleForm }"
             @click="closeDialog()"
+            depressed
         >
           Abbrechen
         </v-btn>
@@ -167,6 +190,8 @@
             @click="save()"
             :loading="isSaving"
             :disabled="isSaving"
+            depressed
+            :class="{ collapse: !editedApplication }"
         >
           Speichern
         </v-btn>
@@ -275,9 +300,11 @@ export default {
               .then((response) => {
                 if (response.status === 200) {
                   showSnack({ message: 'Gesucht wurde erfolgreich aktualisert', color: 'success' })
-                  this.resetApplicationDialog()
-                  this.$emit('getApplications')
-                  this.$emit('closeDialog')
+                  if (!this.isSingleForm) {
+                    this.resetApplicationDialog()
+                    this.$emit('getApplications')
+                    this.$emit('closeDialog')
+                  }
                 } else {
                   showSnack({ message: 'Gesuch konnte nicht aktualisiert werden', color: 'red' })
                 }

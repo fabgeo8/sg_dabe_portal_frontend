@@ -13,6 +13,7 @@
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "debounce": "^1.2.1",
+    "js2excel": "^1.0.1",
     "oidc-client": "^1.11.5",
     "openid-client": "^5.1.9",
     "register-service-worker": "^1.7.1",

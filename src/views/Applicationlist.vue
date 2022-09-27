@@ -57,6 +57,7 @@ export default {
   }),
   computed: {},
   created () {
+    this.updateAppliedFilters()
   },
   methods: {
     resetFilter () {
@@ -65,7 +66,6 @@ export default {
       this.updateAppliedFilters()
     },
     updateAppliedFilters () {
-      console.log('update apply')
       this.appliedStatusFilters = []
       this.filters.statusFilter.forEach((el) => {
         if (el.active) {

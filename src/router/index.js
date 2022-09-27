@@ -10,7 +10,7 @@ const routes = [
     component: () => import('../views/Dashboard')
   },
   {
-    path: '/gesuche',
+    path: '/gesuch',
     name: 'Application',
     component: () => import('../views/Application')
   },
@@ -28,6 +28,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: () => import('../views/Login')
+  },
+  {
+    path: '/einstellungen',
+    name: 'Settings',
+    component: () => import('../views/Settings')
   }
 ]
 

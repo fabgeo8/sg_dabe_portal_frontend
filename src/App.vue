@@ -20,6 +20,7 @@
               <v-btn
                   color="primary"
                   dark
+                  class="mr-1"
                   v-bind="attrs"
                   v-on="on"
               >
@@ -50,11 +51,23 @@
         <v-spacer></v-spacer>
         <v-btn
             text
-            class="mx-1"
+            class=""
             active-class="nav-btn-active"
             to="/login"
+            icon
+            large
         >
-        Login
+          <v-icon>mdi-account</v-icon>
+        </v-btn>
+        <v-btn
+            text
+            class=""
+            active-class="nav-btn-active"
+            to="/einstellungen"
+            icon
+            large
+        >
+          <v-icon>mdi-cog</v-icon>
         </v-btn>
       </v-container>
     </v-app-bar>
@@ -64,8 +77,35 @@
       </v-container>
     </v-main>
 
-    <v-footer>
+    <v-footer padless>
+      <v-card
+          flat
+          tile
+          class="grey lighten-4"
+          width="100%"
+      >
+        <v-row class="ma-0 align-center">
+          <v-col cols="6" class="pa-0">
+            <v-card-text class="d-flex align-center" style="font-size: 0.8rem">
+              <p class="d-flex align-self-center mb-0">
+                © 2022 Kanton St.Gallen, Entwicklung Small Business Know How GmbH
+              </p>
+            </v-card-text>
+          </v-col>
+          <v-col cols="6" class="pa-0">
+            <v-spacer></v-spacer>
+            <v-card-text class="text-right">
+              <v-btn text small>Impressum</v-btn>
+              <v-btn text small>Support</v-btn>
+            </v-card-text>
+          </v-col>
+        </v-row>
+
+      </v-card>
     </v-footer>
+
+    <div class="">
+    </div>
     <!-- global snackbar for alerts -->
     <v-snackbar v-model="snackbar" timeout="2500" :color="snackbarColor"
     >{{ snackbarMessage }}</v-snackbar
@@ -100,8 +140,8 @@ export default {
         path: '/'
       },
       {
-        name: 'Gesuche',
-        path: '/gesuche'
+        name: 'Gesuch',
+        path: '/gesuch'
       },
       {
         name: 'Gesuchliste',
@@ -145,6 +185,10 @@ export default {
 
 .v-btn.nav-btn-active {
   background-color: #fff;
+
+  .v-icon {
+    color: #008334;
+  }
 
   &::before {
     background-color: #fff;
