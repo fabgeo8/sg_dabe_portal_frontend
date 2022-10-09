@@ -170,15 +170,15 @@ export default {
   },
   computed: {
     selectedMunicipality: {
-      get () { return this.$store.state.auth.municipality },
-      set (value) { this.$store.commit('updateMunicipality', value) }
+      get () { return this.$store.state.data.municipality },
+      set (value) { this.$store.commit('updateMunicipality', value)}
     },
     dateFrom: {
-      get () { return this.$store.state.auth.dateFrom },
+      get () { return this.$store.state.data.dateFrom },
       set (value) { this.$store.commit('updateDateFrom', value) }
     },
     dateTo: {
-      get () { return this.$store.state.auth.dateTo },
+      get () { return this.$store.state.data.dateTo },
       set (value) { this.$store.commit('updateDateTo', value) }
     }
   }

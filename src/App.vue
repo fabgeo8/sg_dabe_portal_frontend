@@ -4,8 +4,9 @@
         app
         color="white"
         height="90px"
+        class="px-0"
     >
-      <v-container class="py-0 fill-height">
+      <v-container fluid class="py-0 fill-height  px-md-12">
         <a href="/">
           <v-img
               class="ml-2 mr-4"
@@ -25,6 +26,12 @@
                   v-on="on"
               >
                 {{ activeApplicationType }}
+                <v-icon
+                    right
+                    dark
+                >
+                  mdi-chevron-down
+                </v-icon>
               </v-btn>
             </template>
             <v-list>
@@ -72,7 +79,7 @@
       </v-container>
     </v-app-bar>
     <v-main class="">
-      <v-container class="h-100">
+      <v-container fluid class="h-100 px-md-12">
         <router-view></router-view>
       </v-container>
     </v-main>
@@ -108,29 +115,32 @@
     </div>
     <!-- global snackbar for alerts -->
     <v-snackbar v-model="snackbar" timeout="2500" :color="snackbarColor"
-    >{{ snackbarMessage }}</v-snackbar
+    >{{ snackbarMessage }}
+    </v-snackbar
     >
   </v-app>
 </template>
 
 <script>
-import EventBus, { ACTIONS } from './events/index'
+import EventBus, {ACTIONS} from './events/index'
 import {showSnack} from "@/globalActions";
 
 export default {
   components: {},
   data: () => ({
-    activeApplicationType: 'Gas',
+    activeApplicationType: 'Gewährleistung Biobrennstoffe',
     snackbar: false,
     snackbarMessage: '',
     snackbarColor: '',
     applicationTypes: [
       {
-        name: 'PV',
+        name: 'PV-Ersatzabgabe',
+        value: 'pv',
         id: 1
       },
       {
-        name: 'Gas',
+        name: 'Gewährleistung Biobrennstoffe',
+        value: 'gas',
         id: 2
       }
     ],
@@ -156,20 +166,17 @@ export default {
     dateFrom: null,
     dateTo: null
   }),
-  created () {
-
+  created() {
+    this.changeApplicationType(this.applicationTypes[this.applicationTypes.findIndex(x => x.value === this.$store.state.data.applicationType)].id)
   },
   methods: {
-    changeApplicationType (applicationTypeId) {
-      const applicationType = this.applicationTypes[this.applicationTypes.findIndex(x => x.id === applicationTypeId)]
-      this.activeApplicationType = applicationType.name
-      if (applicationType.name === 'PV') {
-        showSnack({message: 'not implemented!', color: 'red'})
-        this.activeApplicationType = 'Gas'
+    changeApplicationType(applicationTypeId) {
+        const applicationType = this.applicationTypes[this.applicationTypes.findIndex(x => x.id === applicationTypeId)]
+        this.activeApplicationType = applicationType.name
+        this.$store.commit('updateApplicationType', applicationType.value)
       }
-    }
   },
-  mounted () {
+  mounted() {
     EventBus.$on(ACTIONS.SNACKBAR, message => {
       this.snackbarMessage = message.message
       this.snackbarColor = message.color
@@ -192,6 +199,12 @@ export default {
 
   &::before {
     background-color: #fff;
+  }
+}
+
+header {
+  .v-toolbar__content {
+    padding: 0;
   }
 }
 </style>

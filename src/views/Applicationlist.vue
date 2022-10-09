@@ -31,7 +31,8 @@
         </v-sheet>
       </v-col>
       <v-col cols="12" md="9" lg="9" xl="10" class="pt-0 pl-8 pl-md-12">
-      <gas-application-list v-if="true" :searchText="searchText" :statusFilter="appliedStatusFilters"></gas-application-list>
+      <gas-application-list v-if="showGasApplicationList" :searchText="searchText" :statusFilter="appliedStatusFilters"></gas-application-list>
+      <pv-application-list v-if="showPvApplicationList" :searchText="searchText" :statusFilter="appliedStatusFilters"></pv-application-list>
       </v-col>
     </v-row>
   </div>
@@ -40,13 +41,15 @@
 
 import GlobalFilter from '../components/GlobalFilter'
 import GasApplicationList from '../components/GasApplicationList'
-import Status from '../utils/status'
+import PvApplicationList from '../components/PvApplicationList'
+import Status from '../utils/statusGas'
 Status.shift()
 
 export default {
   components: {
     'global-filter': GlobalFilter,
-    'gas-application-list': GasApplicationList
+    'gas-application-list': GasApplicationList,
+    'pv-application-list': PvApplicationList
   },
   data: () => ({
     searchText: '',
@@ -55,7 +58,14 @@ export default {
     },
     appliedStatusFilters: []
   }),
-  computed: {},
+  computed: {
+    showGasApplicationList: {
+      get () { return this.$store.state.data.applicationType === 'gas' }
+    },
+    showPvApplicationList: {
+      get () { return this.$store.state.data.applicationType === 'pv'}
+    }
+  },
   created () {
     this.updateAppliedFilters()
   },

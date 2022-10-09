@@ -18,8 +18,8 @@
             <td nowrap="true"><v-chip v-if="props.item.status" small pill :color="statusChips[props.item.status].color">{{ statusChips[props.item.status].text }}</v-chip></td>
             <td nowrap="true">{{ props.item.object_egid }}</td>
             <td nowrap="true">{{ props.item.address }}</td>
+            <td nowrap="true" class="">{{ formatCurrency(props.item.fee) }}</td>
             <td nowrap="true">{{ props.item.generator_area }} m&sup2;</td>
-            <td nowrap="true">{{ props.item.fuel_type }}</td>
             <td nowrap="true">{{ props.item.Municipality.name }}</td>
             <td>{{ props.item.identifier }}</td>
             <td nowrap="true">
@@ -30,22 +30,22 @@
       </v-data-table>
     </v-col>
       <v-dialog v-model="applicationDialog" eager persistent max-width="960">
-        <gas-application-form ref="gasForm" @getApplications="getApplicationList()" @closeDialog="applicationDialog = false;" ></gas-application-form>
+        <pv-application-form ref="pvForm" @getApplications="getApplicationList()" @closeDialog="applicationDialog = false;" ></pv-application-form>
       </v-dialog>
   </v-row>
   </div>
 </template>
 <script>
 // import axios from 'axios'
-import GasApplicationForm from '../components/GasApplicationForm'
+import PvApplicationForm from '../components/PvApplicationForm'
 // import { showSnack } from '@/globalActions'
-import StatusChips from '../utils/statusChipsGas'
+import StatusChips from '../utils/statusChipsPv'
 import { json2excel } from 'js2excel'
 
 export default {
   props: ['searchText', 'statusFilter'],
   components: {
-    'gas-application-form': GasApplicationForm
+    'pv-application-form': PvApplicationForm
   },
   data: () => ({
     selectedId: '',
@@ -57,16 +57,16 @@ export default {
     this.getApplicationList()
   },
   created () {
-    this.$store.dispatch('getGasApplications')
+    this.$store.dispatch('getPvApplications')
   },
   methods: {
     getApplicationList () {
-      this.$store.dispatch('getGasApplications')
+      this.$store.dispatch('getPvApplications')
     },
     editApplication (application) {
       this.selectedId = application.id
       this.applicationDialog = true
-      this.$refs.gasForm.setApplication(application.id)
+      this.$refs.pvForm.setApplication(application.id)
     },
     closeApplicationDialog () {
       this.applicationDialog = false
@@ -86,7 +86,7 @@ export default {
       try {
         json2excel({
           data,
-          name: 'gas_gesuche',
+          name: 'pv_gesuche',
           formateDate: 'yyyy.mm.dd'
         });
       } catch (e) {
@@ -96,7 +96,7 @@ export default {
   },
   computed: {
     applicationList: {
-      get () { return this.$store.state.data.gasApplications }
+      get () { return this.$store.state.data.pvApplications }
     },
     loadingData: {
       get () { return this.$store.state.data.loadingData }
@@ -133,16 +133,16 @@ export default {
             value: 'address'
           },
           {
+            text: 'Abgabe',
+            align: 'start',
+            filterable: true,
+            value: 'fee'
+          },
+          {
             text: 'EBF',
             align: 'start',
             filterable: true,
             value: 'generator_area'
-          },
-          {
-            text: 'Brennstoff',
-            align: 'start',
-            filterable: true,
-            value: 'fuel_type'
           },
           {
             text: 'Gemeinde',

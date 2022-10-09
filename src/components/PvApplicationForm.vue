@@ -147,6 +147,14 @@
                     <template slot="append">m&sup2;</template>
                   </v-text-field>
               </v-col>
+              <v-col cols="6" sm="12" md="6">
+                  <v-text-field
+                                disabled
+                                prefix="CHF"
+                                v-model="form.application.fee"
+                                label="Abgabe">
+                  </v-text-field>
+              </v-col>
             </v-row>
             <v-row>
               <v-col cols="12" sm="12" md="12">
@@ -198,7 +206,7 @@ import { showSnack } from '../globalActions'
 // eslint-disable-next-line camelcase
 import { required, regex } from 'vee-validate/dist/rules'
 import { extend, ValidationProvider, ValidationObserver, setInteractionMode } from 'vee-validate'
-import ApplicationStatus from '../utils/statusGas'
+import ApplicationStatus from '../utils/statusPv'
 
 setInteractionMode('eager')
 
@@ -213,7 +221,7 @@ extend('regex', {
 })
 
 export default {
-  name: 'GasApplicationDialog',
+  name: 'PvApplicationDialog',
   props: {
     collapse: {
       default: false,
@@ -259,7 +267,7 @@ export default {
         return
       }
       axios
-        .get('/applications/gas/' + this.editedApplicationId)
+        .get('/applications/pv/' + this.editedApplicationId)
         .then((response) => {
           if (response.data) {
             this.editedApplication = response.data
@@ -273,6 +281,7 @@ export default {
             this.form.application.object_streetnumber = this.editedApplication.object_streetnumber
             this.form.application.object_city = this.editedApplication.object_city
             this.form.application.object_zip = this.editedApplication.object_zip
+            this.form.application.fee = this.editedApplication.fee
             this.form.application.generator_area = this.editedApplication.generator_area
             this.form.application.remark = this.editedApplication.remark
             this.form.application.municipality = this.editedApplication.MunicipalityId
@@ -287,7 +296,7 @@ export default {
           if (valid) {
             this.isSaving = true
             this.loader = 'loading'
-            axios.patch('/applications/gas/' + this.editedApplicationId, this.form.application)
+            axios.patch('/applications/pv/' + this.editedApplicationId, this.form.application)
               .then((response) => {
                 if (response.status === 200) {
                   showSnack({ message: 'Gesucht wurde erfolgreich aktualisert', color: 'success' })
