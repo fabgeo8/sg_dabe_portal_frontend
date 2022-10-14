@@ -11,16 +11,17 @@ export default (function () {
             response_type: "id_token token",
             scope: "openid profile email urn:abraxas:iam:hosted_domain:sg",
             post_logout_redirect_uri: "http://localhost:8080/",
-            filterProtocolClaims: true,
+            // filterProtocolClaims: false,
             loadUserInfo: false,
             metadata: {
                 issuer: OIDC_DOMAIN,
                 //audience: "http://localhost:3005",
                 authorization_endpoint: OIDC_DOMAIN + "/authorize",
-                userinfo_endpoint: OIDC_DOMAIN + "/me",
+                // userinfo_endpoint: OIDC_DOMAIN + "/me",
                 end_session_endpoint: OIDC_DOMAIN + "/logout",
                 jwks_uri: OIDC_DOMAIN + "/keys",
-            }
+            },
+            signingKeys: [{signing_keys}]
         };
         this.userManager = new oidc_client.UserManager(settings);
     }
