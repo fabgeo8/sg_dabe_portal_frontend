@@ -55,19 +55,184 @@
         >
           <v-container>
             <v-row>
-              <v-col cols="12" sm="12" md="12">
+              <v-col cols="12" sm="2" md="2">
                 <validation-provider
                     v-slot="{ errors }"
-                    name="status"
+                    name="status1"
                     rules=""
                 >
-                  <v-select   :items="applicationStatusItems" item-value="value" item-text="text" v-model="form.application.status" label="Status" :error-messages="errors"></v-select>
+                  <v-checkbox v-model="form.application.status1_active" ref="status1" :label="status['1']"></v-checkbox>
                 </validation-provider>
+              </v-col>
+              <v-col cols="12" sm="4" md="4">
+              <v-menu
+                  v-model="datePicker.state1"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <validation-provider
+                      v-slot="{ errors }"
+                      name="status1_date"
+                      :rules="{ required_if: { target: 'status1', values: [true, 'true'] } }"
+                  >
+                  <v-text-field
+                      v-model="form.application.status1_date"
+                      label="Datum"
+                      :error-messages="errors"
+                      readonly
+                      :disabled="!form.application.status1_active"
+                      v-bind="attrs"
+                      v-on="on"
+                  ></v-text-field>
+                  </validation-provider>
+                </template>
+                <v-date-picker
+                    no-title
+                    v-model="form.application.status1_date"
+                    @input="datePicker.state1 = false"
+                ></v-date-picker>
+              </v-menu>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" sm="2" md="2">
+                <validation-provider
+                    v-slot="{ errors }"
+                    name="status2"
+                    rules=""
+                >
+                  <v-checkbox v-model="form.application.status2_active" ref="status2" :label="status['2']"></v-checkbox>
+                </validation-provider>
+              </v-col>
+              <v-col cols="12" sm="4" md="4">
+                <v-menu
+                    v-model="datePicker.state2"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="auto"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <validation-provider
+                        v-slot="{ errors }"
+                        name="status2_date"
+                        :rules="{ required_if: { target: 'status2', values: [true, 'true'] } }"
+                    >
+                      <v-text-field
+                          v-model="form.application.status2_date"
+                          label="Datum"
+                          :error-messages="errors"
+                          readonly
+                          :disabled="!form.application.status2_active"
+                          v-bind="attrs"
+                          v-on="on"
+                      ></v-text-field>
+                    </validation-provider>
+                  </template>
+                  <v-date-picker
+                      no-title
+                      v-model="form.application.status2_date"
+                      @input="datePicker.state2 = false"
+                  ></v-date-picker>
+                </v-menu>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" sm="2" md="2">
+                <validation-provider
+                    v-slot="{ errors }"
+                    name="status3"
+                    rules=""
+                >
+                  <v-checkbox v-model="form.application.status3_active" ref="status3" :label="status['3']"></v-checkbox>
+                </validation-provider>
+              </v-col>
+              <v-col cols="12" sm="4" md="4">
+                <v-menu
+                    v-model="datePicker.state3"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="auto"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <validation-provider
+                        v-slot="{ errors }"
+                        name="status3_date"
+                        :rules="{ required_if: { target: 'status3', values: [true, 'true'] } }"
+                    >
+                      <v-text-field
+                          v-model="form.application.status3_date"
+                          label="Datum"
+                          :error-messages="errors"
+                          readonly
+                          :disabled="!form.application.status3_active"
+                          v-bind="attrs"
+                          v-on="on"
+                      ></v-text-field>
+                    </validation-provider>
+                  </template>
+                  <v-date-picker
+                      no-title
+                      v-model="form.application.status3_date"
+                      @input="datePicker.state3 = false"
+                  ></v-date-picker>
+                </v-menu>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" sm="2" md="2">
+                <validation-provider
+                    v-slot="{ errors }"
+                    name="status4"
+                    rules=""
+                >
+                  <v-checkbox v-model="form.application.status4_active" ref="status4" :label="status['4']"></v-checkbox>
+                </validation-provider>
+              </v-col>
+              <v-col cols="12" sm="4" md="4">
+                <v-menu
+                    v-model="datePicker.state4"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="auto"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <validation-provider
+                        v-slot="{ errors }"
+                        name="status4_date"
+                        :rules="{ required_if: { target: 'status4', values: [true, 'true'] } }"
+                    >
+                      <v-text-field
+                          v-model="form.application.status4_date"
+                          label="Datum"
+                          :error-messages="errors"
+                          readonly
+                          :disabled="!form.application.status4_active"
+                          v-bind="attrs"
+                          v-on="on"
+                      ></v-text-field>
+                    </validation-provider>
+                  </template>
+                  <v-date-picker
+                      no-title
+                      v-model="form.application.status4_date"
+                      @input="datePicker.state4 = false"
+                  ></v-date-picker>
+                </v-menu>
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="12" sm="12" md="12">
-                <v-text-field   v-model="form.application.identifier" disabled label="Gesuchs-ID"></v-text-field>
+                <v-text-field v-model="form.application.identifier" disabled label="Gesuchs-ID"></v-text-field>
               </v-col>
             </v-row>
             <v-row>
@@ -196,7 +361,7 @@
 import axios from 'axios'
 import { showSnack } from '../globalActions'
 // eslint-disable-next-line camelcase
-import { required, regex } from 'vee-validate/dist/rules'
+import { required, regex , required_if } from 'vee-validate/dist/rules'
 import { extend, ValidationProvider, ValidationObserver, setInteractionMode } from 'vee-validate'
 import ApplicationStatus from '../utils/statusGas'
 
@@ -204,6 +369,11 @@ setInteractionMode('eager')
 
 extend('required', {
   ...required,
+  message: 'Dies ist ein Pflichtfeld'
+})
+
+extend('required_if', {
+  ...required_if,
   message: 'Dies ist ein Pflichtfeld'
 })
 
@@ -233,6 +403,19 @@ export default {
       form: {
         application: {
         }
+      },
+      status: {
+        1: 'Offen',
+        2: 'Bewilligt',
+        3: 'Realisiert',
+        4: 'Sistiert'
+      },
+      datePicker: {
+        state1: false,
+        state2: false,
+        state3: false,
+        state4: false,
+        state5: false
       },
       isSaving: false,
       loader: null,
@@ -275,6 +458,14 @@ export default {
             this.form.application.object_zip = this.editedApplication.object_zip
             this.form.application.generator_area = this.editedApplication.generator_area
             this.form.application.remark = this.editedApplication.remark
+            this.form.application.status1_active = this.editedApplication.status1_active
+            this.form.application.status2_active = this.editedApplication.status2_active
+            this.form.application.status3_active = this.editedApplication.status3_active
+            this.form.application.status4_active = this.editedApplication.status4_active
+            this.form.application.status1_date = this.editedApplication.status1_date
+            this.form.application.status2_date = this.editedApplication.status2_date
+            this.form.application.status3_date = this.editedApplication.status3_date
+            this.form.application.status4_date = this.editedApplication.status4_date
             this.form.application.municipality = this.editedApplication.MunicipalityId
           } else {
             showSnack({ message: 'Fehler beim Abrufen der Gesuchsdaten.', color: 'red' })

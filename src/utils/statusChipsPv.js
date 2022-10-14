@@ -8,15 +8,11 @@ export default {
     color: 'green lighten-1'
   },
   3: {
-    text: 'Abgelehnt',
+    text: 'Realisiert',
     color: 'red lighten-2'
   },
   4: {
-    text: 'Realisiert',
+    text: 'Sistiert',
     color: 'blue lighten-2'
-  },
-  5: {
-    text: 'Nicht realisiert',
-    color: 'grey'
   }
 }

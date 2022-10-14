@@ -9,16 +9,16 @@ export default (function () {
             client_id: process.env.VUE_APP_AUTH_CLIENT_ID,
             redirect_uri: process.env.VUE_APP_AUTH_REDIRECT_URL,
             response_type: "id_token token",
-            scope: "openid profile",
+            scope: "openid profile email urn:abraxas:iam:external_id:adfssg",
             post_logout_redirect_uri: "http://localhost:8080/",
             filterProtocolClaims: true,
             metadata: {
-                issuer: OIDC_DOMAIN + "/",
-                audience: "http://localhost:3005",
+                issuer: OIDC_DOMAIN,
+                //audience: "http://localhost:3005",
                 authorization_endpoint: OIDC_DOMAIN + "/authorize",
-                userinfo_endpoint: OIDC_DOMAIN + "/userinfo",
-                end_session_endpoint: OIDC_DOMAIN + "/v2/logout",
-                jwks_uri: OIDC_DOMAIN + "/.well-known/jwks.json",
+                userinfo_endpoint: OIDC_DOMAIN + "/me",
+                end_session_endpoint: OIDC_DOMAIN + "/logout",
+                jwks_uri: OIDC_DOMAIN + "/keys",
             }
         };
         this.userManager = new oidc_client.UserManager(settings);

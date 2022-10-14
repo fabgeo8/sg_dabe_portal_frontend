@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { showSnack } from '@/globalActions'
 
+// todo: use vuex-persist to persist state in localstorage
+
 const state = {
   municipality: 0,
   gasApplications: [],
@@ -8,7 +10,7 @@ const state = {
   dateFrom: new Date(Date.UTC(new Date().getFullYear(), 0, 1)).toISOString().substr(0, 10),
   dateTo: new Date().toISOString().substr(0, 10),
   loadingData: false,
-  applicationType: 'gas'
+  applicationType: ''
 }
 
 const getters = {

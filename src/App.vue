@@ -128,7 +128,6 @@ import {showSnack} from "@/globalActions";
 export default {
   components: {},
   data: () => ({
-    activeApplicationType: 'Gewährleistung Biobrennstoffe',
     snackbar: false,
     snackbarMessage: '',
     snackbarColor: '',
@@ -172,7 +171,6 @@ export default {
   methods: {
     changeApplicationType(applicationTypeId) {
         const applicationType = this.applicationTypes[this.applicationTypes.findIndex(x => x.id === applicationTypeId)]
-        this.activeApplicationType = applicationType.name
         this.$store.commit('updateApplicationType', applicationType.value)
       }
   },
@@ -182,6 +180,17 @@ export default {
       this.snackbarColor = message.color
       this.snackbar = true
     })
+  },
+  computed: {
+    activeApplicationType: {
+      get () {
+        try {
+          return this.applicationTypes[this.applicationTypes.findIndex(x => x.value === this.$store.state.data.applicationType)].name
+        } catch {
+          return ''
+        }
+      }
+    }
   }
 }
 </script>
