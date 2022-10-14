@@ -20,8 +20,7 @@ export default (function () {
                 // userinfo_endpoint: OIDC_DOMAIN + "/me",
                 end_session_endpoint: OIDC_DOMAIN + "/logout",
                 jwks_uri: OIDC_DOMAIN + "/keys",
-            },
-            signingKeys: [{signing_keys}]
+            }
         };
         this.userManager = new oidc_client.UserManager(settings);
     }
