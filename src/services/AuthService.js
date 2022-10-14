@@ -9,7 +9,7 @@ export default (function () {
             client_id: process.env.VUE_APP_AUTH_CLIENT_ID,
             redirect_uri: process.env.VUE_APP_AUTH_REDIRECT_URL,
             response_type: "id_token token",
-            scope: "urn:abraxas:iam:hosted_domain:sg", //openid profile email
+            scope: "openid urn:abraxas:iam:hosted_domain:sg", //openid profile email
             post_logout_redirect_uri: "http://localhost:8080/",
             filterProtocolClaims: true,
             metadata: {
