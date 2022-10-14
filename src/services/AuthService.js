@@ -5,7 +5,7 @@ export default (function () {
         var OIDC_DOMAIN = process.env.VUE_APP_AUTH_HOST;
         var settings = {
             userStore: new oidc_client.WebStorageStateStore({ store: window.localStorage }),
-            authority: OIDC_DOMAIN,
+            authority: "http://localhost:8080",
             client_id: process.env.VUE_APP_AUTH_CLIENT_ID,
             redirect_uri: process.env.VUE_APP_AUTH_REDIRECT_URL,
             response_type: "token id_token",

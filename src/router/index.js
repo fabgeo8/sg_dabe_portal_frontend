@@ -15,6 +15,7 @@ const routes = [
     props: true,
     component: () => import('../views/Application')
   },
+
   {
     path: '/gesuch',
     name: 'Application',
