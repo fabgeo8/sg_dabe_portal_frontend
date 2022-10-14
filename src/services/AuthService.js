@@ -17,7 +17,7 @@ export default (function () {
                 issuer: OIDC_DOMAIN + '/',
                 //audience: "http://localhost:3005",
                 authorization_endpoint: OIDC_DOMAIN + "/authorize",
-                // userinfo_endpoint: OIDC_DOMAIN + "/me",
+                userinfo_endpoint: OIDC_DOMAIN + "/me",
                 end_session_endpoint: OIDC_DOMAIN + "/logout",
                 jwks_uri: OIDC_DOMAIN + "/keys",
             },
