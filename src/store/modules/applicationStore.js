@@ -1,16 +1,16 @@
 import axios from 'axios'
 import { showSnack } from '@/globalActions'
 
-// todo: use vuex-persist to persist state in localstorage
-
 const state = {
-  municipality: 0,
+  persisted: {
+    municipality: 0,
+    dateFrom: new Date(Date.UTC(new Date().getFullYear(), 0, 1)).toISOString().substr(0, 10),
+    dateTo: new Date().toISOString().substr(0, 10),
+    applicationType: 'gas'
+  },
   gasApplications: [],
   pvApplications: [],
-  dateFrom: new Date(Date.UTC(new Date().getFullYear(), 0, 1)).toISOString().substr(0, 10),
-  dateTo: new Date().toISOString().substr(0, 10),
-  loadingData: false,
-  applicationType: ''
+  loadingData: false
 }
 
 const getters = {
@@ -21,14 +21,14 @@ const getters = {
     return state.pvApplications
   },
   getApplicationType (state) {
-    return state.applicationType
+    return state.persisted.applicationType
   }
 }
 
 const actions = {
   async getGasApplications ({ commit, state }) {
     state.loadingData = true
-    const params = new URLSearchParams([['municipality', state.municipality], ['dateFrom', state.dateFrom], ['dateTo', state.dateTo]])
+    const params = new URLSearchParams([['municipality', state.persisted.municipality], ['dateFrom', state.persisted.dateFrom], ['dateTo', state.persisted.dateTo]])
     axios.get('/applications/gas', { params })
       .then((res) => {
         commit('setGasApplicationList', res.data)
@@ -43,7 +43,7 @@ const actions = {
   },
   async getPvApplications ({ commit, state }) {
     state.loadingData = true
-    const params = new URLSearchParams([['municipality', state.municipality], ['dateFrom', state.dateFrom], ['dateTo', state.dateTo]])
+    const params = new URLSearchParams([['municipality', state.persisted.municipality], ['dateFrom', state.persisted.dateFrom], ['dateTo', state.persisted.dateTo]])
     axios.get('/applications/pv', { params })
       .then((res) => {
         commit('setPvApplicationList', res.data)
@@ -60,14 +60,14 @@ const actions = {
 
 const mutations = {
   updateMunicipality (state, municipality) {
-    state.municipality = municipality
+    state.persisted.municipality = municipality
     this.dispatch('getGasApplications')
   },
   updateDateFrom (state, date) {
-    state.dateFrom = date
+    state.persisted.dateFrom = date
   },
   updateDateTo (state, date) {
-    state.dateTo = date
+    state.persisted.dateTo = date
   },
   setGasApplicationList (state, value) {
     state.gasApplications = value
@@ -76,7 +76,7 @@ const mutations = {
     state.pvApplications = value
   },
   updateApplicationType (state, value) {
-    state.applicationType = value
+    state.persisted.applicationType = value
   }
 }
 

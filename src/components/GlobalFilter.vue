@@ -170,15 +170,15 @@ export default {
   },
   computed: {
     selectedMunicipality: {
-      get () { return this.$store.state.data.municipality },
+      get () { return this.$store.state.data.persisted.municipality },
       set (value) { this.$store.commit('updateMunicipality', value)}
     },
     dateFrom: {
-      get () { return this.$store.state.data.dateFrom },
+      get () { return this.$store.state.data.persisted.dateFrom },
       set (value) { this.$store.commit('updateDateFrom', value) }
     },
     dateTo: {
-      get () { return this.$store.state.data.dateTo },
+      get () { return this.$store.state.data.persisted.dateTo },
       set (value) { this.$store.commit('updateDateTo', value) }
     }
   }

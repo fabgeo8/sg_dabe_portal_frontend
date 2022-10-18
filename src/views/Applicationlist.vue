@@ -60,10 +60,10 @@ export default {
   }),
   computed: {
     showGasApplicationList: {
-      get () { return this.$store.state.data.applicationType === 'gas' }
+      get () { return this.$store.state.data.persisted.applicationType === 'gas' }
     },
     showPvApplicationList: {
-      get () { return this.$store.state.data.applicationType === 'pv'}
+      get () { return this.$store.state.data.persisted.applicationType === 'pv'}
     }
   },
   created () {

@@ -5,6 +5,9 @@
       <v-btn  @click="login" v-if="!isLoggedIn" color="primary">Login</v-btn>
       <v-btn @click="logout" v-if="isLoggedIn" color="primary">Logout</v-btn>
     </div>
+    <div class="home mt-6">
+      <v-btn  @click="loginvue" color="primary">Login</v-btn>
+    </div>
     <div>
       <v-btn class="mt-12" @click="getProtectedApiData()">Get Data</v-btn>
     </div>
@@ -12,10 +15,10 @@
 </template>
 
 <script>
-import AuthService from '../services/AuthService'
+// import AuthService from '../services/AuthService'
 import axios from "axios";
 
-const auth = new AuthService();
+// const auth = new AuthService();
 
 export default {
   name: 'Login',
@@ -29,38 +32,40 @@ export default {
     }
   },
   created() {
-    axios.get('http://localhost:8080/.well-known/openid-configuration')
   },
   mounted() {
-    auth.getUser().then((user) => {
-      if (user !== null) {
-        this.currentUser = user.profile.name;
-        this.accessTokenExpired = user.expired;
-      }
-
-      this.isLoggedIn = (user !== null && !user.expired);
-    });
+    // auth.getUser().then((user) => {
+    //   if (user !== null) {
+    //     this.currentUser = user.profile.name;
+    //     this.accessTokenExpired = user.expired;
+    //   }
+    //
+    //   this.isLoggedIn = (user !== null && !user.expired);
+    // });
   },
   methods: {
+    loginvue () {
+
+    },
     login() {
-      auth.login();
+      // auth.login();
     },
     logout() {
-      auth.logout();
+      // auth.logout();
     },
     getProtectedApiData() {
       const authorizationHeader = 'Authorization';
-      auth.getAccessToken().then((userToken) => {
-        axios.defaults.headers.common[authorizationHeader] = `Bearer ${userToken}`;
-
-        axios.get('/auth/gas')
-            .then((response) => {
-              this.dataEventRecordsItems = response.data;
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-      });
+      // auth.getAccessToken().then((userToken) => {
+      //   axios.defaults.headers.common[authorizationHeader] = `Bearer ${userToken}`;
+      //
+      //   axios.get('/auth/gas')
+      //       .then((response) => {
+      //         this.dataEventRecordsItems = response.data;
+      //       })
+      //       .catch((error) => {
+      //         console.log(error);
+      //       });
+      // });
     }
   }
 }
