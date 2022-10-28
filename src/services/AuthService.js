@@ -21,7 +21,7 @@ export default (function () {
                 end_session_endpoint: OIDC_DOMAIN + "/logout",
                 jwks_uri: OIDC_DOMAIN + "/keys",
             },
-            signingKeys: [{"use":"sig","kty":"RSA","kid":"423051494292503418","alg":"RS256","n":"wHMkz31GStrLs7ATyksNlOvE8H0QMGnIZD4F1YCKc97IFIYCa9oqDns1UqtoSkelet_d0keegyISdaqjeGCV2CTldJ1QlkI4WfYstePSgkyS97ypVafzvJdHZR9_aBfQmi-_wo4t71TnqZ8dbO0mKm0uPq6C0-KUa_o4F4Pi3895rLNcY9b5CMs2hV9LYkAnBWnSYtaaZFqJWeshTquClkcif2wOuEKlUdgJEaQdGwkB7yc6JCAICzL5tejNqhX7L-LfgmPDxeV65KsONsqHiXeVpwW0Y2G5Z3xpd8toZrSkpPjyEF4mLkzPW4K9HzrocdFHegvbxt64dSctMZFG8Q","e":"AQAB"}]
+            //signingKeys: [{"use":"sig","kty":"RSA","kid":"423051494292503418","alg":"RS256","n":"wHMkz31GStrLs7ATyksNlOvE8H0QMGnIZD4F1YCKc97IFIYCa9oqDns1UqtoSkelet_d0keegyISdaqjeGCV2CTldJ1QlkI4WfYstePSgkyS97ypVafzvJdHZR9_aBfQmi-_wo4t71TnqZ8dbO0mKm0uPq6C0-KUa_o4F4Pi3895rLNcY9b5CMs2hV9LYkAnBWnSYtaaZFqJWeshTquClkcif2wOuEKlUdgJEaQdGwkB7yc6JCAICzL5tejNqhX7L-LfgmPDxeV65KsONsqHiXeVpwW0Y2G5Z3xpd8toZrSkpPjyEF4mLkzPW4K9HzrocdFHegvbxt64dSctMZFG8Q","e":"AQAB"}]
         };
         this.userManager = new oidc_client.UserManager(settings);
     }
