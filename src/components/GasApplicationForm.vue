@@ -91,6 +91,7 @@
                           v-model="formattedStatusDate"
                           label="Datum der Statusänderung"
                           :error-messages="errors"
+                          :disabled="disableDateChange"
                           readonly
                           v-bind="attrs"
                           v-on="on"
@@ -296,6 +297,7 @@ export default {
       showDialog: false,
       editedApplication: null,
       editedApplicationId: null,
+      disableDateChange: true,
       applicationStatusItems: ApplicationStatus
     }
   },
@@ -399,12 +401,15 @@ export default {
       // check if date is already in used status dates
       if (this.statusDates[this.form.application.status]) {
         this.form.application.status_date = new Date(this.statusDates[this.form.application.status]).toISOString().substring(0, 10)
+        this.disableDateChange = true
       } else if (this.form.application.status === this.editedApplication.status) {
         // status is the same as in loaded application, use last_status_date
         this.form.application.status_date = this.editedApplication.last_status_date
+        this.disableDateChange = true
       } else {
         // status is a new state, add today as default value
         this.form.application.status_date = new Date().toISOString().substring(0, 10)
+        this.disableDateChange = false
       }
 
       this.formatStatusDate()
