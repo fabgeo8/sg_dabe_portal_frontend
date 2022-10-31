@@ -55,62 +55,26 @@
         >
           <v-container>
             <v-row>
-              <v-col cols="12" sm="2" md="2">
+              <v-col cols="12" sm="6" md="6">
                 <validation-provider
                     v-slot="{ errors }"
-                    name="status1"
+                    name="status"
                     rules=""
                 >
-                  <v-checkbox v-model="form.application.status1_active" ref="status1" :label="status['1']"></v-checkbox>
-                </validation-provider>
-              </v-col>
-              <v-col cols="12" sm="4" md="4">
-              <v-menu
-                  v-model="datePicker.state1"
-                  :close-on-content-click="false"
-                  :nudge-right="40"
-                  transition="scale-transition"
-                  offset-y
-                  min-width="auto"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <validation-provider
-                      v-slot="{ errors }"
-                      name="status1_date"
-                      :rules="{ required_if: { target: 'status1', values: [true, 'true'] } }"
+                  <v-select
+                      :items="applicationStatusItems"
+                      item-value="value"
+                      item-text="text"
+                      v-model="form.application.status"
+                      @change="updateStatusDate()"
+                      label="Status" :error-messages="errors"
                   >
-                  <v-text-field
-                      v-model="form.application.status1_date"
-                      label="Datum"
-                      :error-messages="errors"
-                      readonly
-                      :disabled="!form.application.status1_active"
-                      v-bind="attrs"
-                      v-on="on"
-                  ></v-text-field>
-                  </validation-provider>
-                </template>
-                <v-date-picker
-                    no-title
-                    v-model="form.application.status1_date"
-                    @input="datePicker.state1 = false"
-                ></v-date-picker>
-              </v-menu>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" sm="2" md="2">
-                <validation-provider
-                    v-slot="{ errors }"
-                    name="status2"
-                    rules=""
-                >
-                  <v-checkbox v-model="form.application.status2_active" ref="status2" :label="status['2']"></v-checkbox>
+                  </v-select>
                 </validation-provider>
               </v-col>
-              <v-col cols="12" sm="4" md="4">
+              <v-col cols="12" sm="6" md="6">
                 <v-menu
-                    v-model="datePicker.state2"
+                    v-model="datePicker.state1"
                     :close-on-content-click="false"
                     :nudge-right="40"
                     transition="scale-transition"
@@ -120,15 +84,14 @@
                   <template v-slot:activator="{ on, attrs }">
                     <validation-provider
                         v-slot="{ errors }"
-                        name="status2_date"
-                        :rules="{ required_if: { target: 'status2', values: [true, 'true'] } }"
+                        name="status1_date"
+                        :rules="{ required_if: { target: 'status1', values: [true, 'true'] } }"
                     >
                       <v-text-field
-                          v-model="form.application.status2_date"
-                          label="Datum"
+                          v-model="formattedStatusDate"
+                          label="Datum der Statusänderung"
                           :error-messages="errors"
                           readonly
-                          :disabled="!form.application.status2_active"
                           v-bind="attrs"
                           v-on="on"
                       ></v-text-field>
@@ -136,96 +99,8 @@
                   </template>
                   <v-date-picker
                       no-title
-                      v-model="form.application.status2_date"
-                      @input="datePicker.state2 = false"
-                  ></v-date-picker>
-                </v-menu>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" sm="2" md="2">
-                <validation-provider
-                    v-slot="{ errors }"
-                    name="status3"
-                    rules=""
-                >
-                  <v-checkbox v-model="form.application.status3_active" ref="status3" :label="status['3']"></v-checkbox>
-                </validation-provider>
-              </v-col>
-              <v-col cols="12" sm="4" md="4">
-                <v-menu
-                    v-model="datePicker.state3"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="auto"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <validation-provider
-                        v-slot="{ errors }"
-                        name="status3_date"
-                        :rules="{ required_if: { target: 'status3', values: [true, 'true'] } }"
-                    >
-                      <v-text-field
-                          v-model="form.application.status3_date"
-                          label="Datum"
-                          :error-messages="errors"
-                          readonly
-                          :disabled="!form.application.status3_active"
-                          v-bind="attrs"
-                          v-on="on"
-                      ></v-text-field>
-                    </validation-provider>
-                  </template>
-                  <v-date-picker
-                      no-title
-                      v-model="form.application.status3_date"
-                      @input="datePicker.state3 = false"
-                  ></v-date-picker>
-                </v-menu>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" sm="2" md="2">
-                <validation-provider
-                    v-slot="{ errors }"
-                    name="status4"
-                    rules=""
-                >
-                  <v-checkbox v-model="form.application.status4_active" ref="status4" :label="status['4']"></v-checkbox>
-                </validation-provider>
-              </v-col>
-              <v-col cols="12" sm="4" md="4">
-                <v-menu
-                    v-model="datePicker.state4"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="auto"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <validation-provider
-                        v-slot="{ errors }"
-                        name="status4_date"
-                        :rules="{ required_if: { target: 'status4', values: [true, 'true'] } }"
-                    >
-                      <v-text-field
-                          v-model="form.application.status4_date"
-                          label="Datum"
-                          :error-messages="errors"
-                          readonly
-                          :disabled="!form.application.status4_active"
-                          v-bind="attrs"
-                          v-on="on"
-                      ></v-text-field>
-                    </validation-provider>
-                  </template>
-                  <v-date-picker
-                      no-title
-                      v-model="form.application.status4_date"
-                      @input="datePicker.state4 = false"
+                      v-model="form.application.status_date"
+                      @input="datePicker.state1 = false; formatStatusDate()"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
@@ -412,12 +287,10 @@ export default {
       },
       datePicker: {
         state1: false,
-        state2: false,
-        state3: false,
-        state4: false,
-        state5: false
       },
+      statusDates: [],
       isSaving: false,
+      formattedStatusDate: null,
       loader: null,
       municipalityItems: [],
       showDialog: false,
@@ -430,7 +303,6 @@ export default {
     this.getMunicipalities()
   },
   mounted () {
-    // this.getApplication()
   },
   methods: {
     setApplication (id) {
@@ -458,15 +330,12 @@ export default {
             this.form.application.object_zip = this.editedApplication.object_zip
             this.form.application.generator_area = this.editedApplication.generator_area
             this.form.application.remark = this.editedApplication.remark
-            this.form.application.status1_active = this.editedApplication.status1_active
-            this.form.application.status2_active = this.editedApplication.status2_active
-            this.form.application.status3_active = this.editedApplication.status3_active
-            this.form.application.status4_active = this.editedApplication.status4_active
-            this.form.application.status1_date = this.editedApplication.status1_date
-            this.form.application.status2_date = this.editedApplication.status2_date
-            this.form.application.status3_date = this.editedApplication.status3_date
-            this.form.application.status4_date = this.editedApplication.status4_date
+            this.form.application.status = this.editedApplication.status
+            this.form.application.status_date = this.editedApplication.last_status_date
             this.form.application.municipality = this.editedApplication.MunicipalityId
+            this.statusDates = this.editedApplication.status_changed_dates
+
+            this.formatStatusDate()
           } else {
             showSnack({ message: 'Fehler beim Abrufen der Gesuchsdaten.', color: 'red' })
           }
@@ -525,12 +394,32 @@ export default {
           // todo error handling
           console.log('fetch error: ' + ex.message)
         })
+    },
+    updateStatusDate () {
+      // check if date is already in used status dates
+      if (this.statusDates[this.form.application.status]) {
+        this.form.application.status_date = new Date(this.statusDates[this.form.application.status]).toISOString().substring(0, 10)
+      } else if (this.form.application.status === this.editedApplication.status) {
+        // status is the same as in loaded application, use last_status_date
+        this.form.application.status_date = this.editedApplication.last_status_date
+      } else {
+        // status is a new state, add today as default value
+        this.form.application.status_date = new Date().toISOString().substring(0, 10)
+      }
+
+      this.formatStatusDate()
+    },
+    formatStatusDate () {
+      this.formattedStatusDate = new Date(this.form.application.status_date).toLocaleDateString()
     }
   },
   watch: {
     visible: function () {
       this.showDialog = this.visible
     }
+  },
+  computed: {
+
   }
 }
 </script>

@@ -12,7 +12,9 @@ const vuexLocalStorage = new VuexPersist({
   storage: window.localStorage, // or window.sessionStorage or localForage
   // Function that passes the state and returns the state with only the objects you want to store.
   reducer: state => ({
-    persisted: state.data.persisted
+    data: {
+      persisted: state.data.persisted
+    }
   }),
   // Function that passes a mutation and lets you decide if it should update the state in localStorage.
   // filter: mutation => (true)

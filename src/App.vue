@@ -166,7 +166,6 @@ export default {
     dateTo: null
   }),
   created() {
-    this.changeApplicationType(this.applicationTypes[this.applicationTypes.findIndex(x => x.value === this.$store.state.data.applicationType)].id)
   },
   methods: {
     changeApplicationType(applicationTypeId) {
