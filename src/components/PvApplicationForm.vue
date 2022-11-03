@@ -55,14 +55,55 @@
         >
           <v-container>
             <v-row>
-              <v-col cols="12" sm="12" md="12">
+              <v-col cols="12" sm="6" md="6">
                 <validation-provider
                     v-slot="{ errors }"
                     name="status"
                     rules=""
                 >
-                  <v-select   :items="applicationStatusItems" item-value="value" item-text="text" v-model="form.application.status" label="Status" :error-messages="errors"></v-select>
+                  <v-select
+                      :items="applicationStatusItems"
+                      item-value="value"
+                      item-text="text"
+                      v-model="form.application.status"
+                      @change="updateStatusDate()"
+                      label="Status" :error-messages="errors"
+                  >
+                  </v-select>
                 </validation-provider>
+              </v-col>
+              <v-col cols="12" sm="6" md="6">
+                <v-menu
+                    v-model="datePicker.state1"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="auto"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <validation-provider
+                        v-slot="{ errors }"
+                        name="status1_date"
+                        :rules="{ required: true }"
+                    >
+                      <v-text-field
+                          v-model="formattedStatusDate"
+                          label="Datum der Statusänderung"
+                          :error-messages="errors"
+                          :disabled="disableDateChange"
+                          readonly
+                          v-bind="attrs"
+                          v-on="on"
+                      ></v-text-field>
+                    </validation-provider>
+                  </template>
+                  <v-date-picker
+                      no-title
+                      v-model="form.application.status_date"
+                      @input="datePicker.state1 = false; formatStatusDate()"
+                  ></v-date-picker>
+                </v-menu>
               </v-col>
             </v-row>
             <v-row>
@@ -242,12 +283,24 @@ export default {
         application: {
         }
       },
+      status: {
+        1: 'Offen',
+        2: 'Bewilligt',
+        3: 'Realisiert',
+        4: 'Sistiert'
+      },
+      datePicker: {
+        state1: false,
+      },
+      formattedStatusDate: null,
+      statusDates: [],
       isSaving: false,
       loader: null,
       municipalityItems: [],
       showDialog: false,
       editedApplication: null,
       editedApplicationId: null,
+      disableDateChange: true,
       applicationStatusItems: ApplicationStatus
     }
   },
@@ -285,6 +338,10 @@ export default {
             this.form.application.generator_area = this.editedApplication.generator_area
             this.form.application.remark = this.editedApplication.remark
             this.form.application.municipality = this.editedApplication.MunicipalityId
+            this.form.application.status_date = this.editedApplication.last_status_date
+            this.statusDates = this.editedApplication.status_changed_dates
+
+            this.formatStatusDate()
           } else {
             showSnack({ message: 'Fehler beim Abrufen der Gesuchsdaten.', color: 'red' })
           }
@@ -343,6 +400,26 @@ export default {
           // todo error handling
           console.log('fetch error: ' + ex.message)
         })
+    },
+    updateStatusDate () {
+      // check if date is already in used status dates
+      if (this.statusDates[this.form.application.status]) {
+        this.form.application.status_date = new Date(this.statusDates[this.form.application.status]).toISOString().substring(0, 10)
+        this.disableDateChange = true
+      } else if (this.form.application.status === this.editedApplication.status) {
+        // status is the same as in loaded application, use last_status_date
+        this.form.application.status_date = this.editedApplication.last_status_date
+        this.disableDateChange = true
+      } else {
+        // status is a new state, add today as default value
+        this.form.application.status_date = new Date().toISOString().substring(0, 10)
+        this.disableDateChange = false
+      }
+
+      this.formatStatusDate()
+    },
+    formatStatusDate () {
+      this.formattedStatusDate = new Date(this.form.application.status_date).toLocaleDateString()
     }
   },
   watch: {

@@ -1,5 +1,9 @@
 <template>
-  <v-row>
+  <v-row class="mt-3">
+    <v-col cols="12"
+           sm="12" md="12">
+      <h1>Gesuchdetail</h1>
+    </v-col>
     <v-col>
       <v-row>
         <v-col class="mt-4">
@@ -11,7 +15,7 @@
       </v-row>
       <v-row>
         <v-col>
-          <v-text-field outlined persistent-placeholder placeholder="bspw. 220922_1054695_1" v-model="searchApplication"
+          <v-text-field outlined persistent-placeholder placeholder="bspw. 46AR1AEW-X1" v-model="searchString"
                         label="Gesuch anzeigen"></v-text-field>
         </v-col>
         <v-col>
@@ -20,7 +24,8 @@
       </v-row>
       <v-row>
         <v-col cols="12">
-          <gas-application-form ref="gasForm" :collapse="!showApplication" :isSingleForm="true"></gas-application-form>
+          <gas-application-form ref="gasForm" :collapse="!showApplication || activeApplicationType !== 'gas'" :isSingleForm="true"></gas-application-form>
+          <pv-application-form ref="pvForm" :collapse="!showApplication || activeApplicationType !== 'pv'" :isSingleForm="true"></pv-application-form>
         </v-col>
       </v-row>
     </v-col>
@@ -31,33 +36,47 @@
 import axios from 'axios'
 import {showSnack} from '@/globalActions'
 import GasApplicationForm from '@/components/GasApplicationForm'
+import PvApplicationForm from "@/components/PvApplicationForm"
 
 export default {
   components: {
-    'gas-application-form': GasApplicationForm
+    'gas-application-form': GasApplicationForm,
+    'pv-application-form': PvApplicationForm
   },
-  props: ['type','identifier'],
+  props: ['identifier'],
   data: () => ({
-    searchApplication: '',
+    searchString: '',
     showApplication: false
   }),
   mounted() {
-    if (this.type && this.identifier) {
-      this.searchGasApplication(this.identifier)
+    if (this.identifier) {
+      this.searchApplication(this.identifier)
     }
   },
   methods: {
     loadApplication() {
-      this.$router.push('/gesuch/gas/' + this.searchApplication)
-      this.searchGasApplication(this.searchApplication)
+      this.$router.push('/gesuch/' + this.searchString)
+      this.searchApplication(this.searchString)
     },
-    searchGasApplication(identifier) {
+    searchApplication(identifier) {
       this.showApplication = true
       axios
-          .get('/applications/gas/by_identifier/' + identifier)
+          .get('/applications/' + this.activeApplicationType + '/by_identifier/' + identifier)
           .then((response) => {
             if (response.data) {
-              this.$refs.gasForm.setApplication(response.data.id)
+              switch(this.activeApplicationType){
+                case 'gas':
+                  this.$refs.gasForm.setApplication(response.data.id)
+                  break
+                case 'pv':
+                  this.$refs.pvForm.setApplication(response.data.id)
+                  break
+                default:
+                  showSnack({
+                    message: 'Fehler beim Abrufen des gewünschten Gesuch.',
+                    color: 'red'
+                  })
+              }
             } else {
               showSnack({message: 'Der Datensatz konnte nicht gefunden werden.', color: 'red'})
               this.showApplication = false
@@ -73,7 +92,17 @@ export default {
           })
     }
   },
-  computed: {}
+  computed: {
+    activeApplicationType: {
+      get() {
+        try {
+          return this.$store.state.data.persisted.applicationType
+        } catch {
+          return ''
+        }
+      }
+    }
+  }
 }
 
 </script>

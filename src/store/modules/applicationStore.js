@@ -10,6 +10,8 @@ const state = {
   },
   gasApplications: [],
   pvApplications: [],
+  pvDashboardStats: {},
+  gasDashboardStats: {},
   loadingData: false
 }
 
@@ -61,7 +63,6 @@ const actions = {
 const mutations = {
   updateMunicipality (state, municipality) {
     state.persisted.municipality = municipality
-    this.dispatch('getGasApplications')
   },
   updateDateFrom (state, date) {
     state.persisted.dateFrom = date

@@ -171,6 +171,8 @@ export default {
     changeApplicationType(applicationTypeId) {
         const applicationType = this.applicationTypes[this.applicationTypes.findIndex(x => x.id === applicationTypeId)]
         this.$store.commit('updateApplicationType', applicationType.value)
+
+        window.location.reload();
       }
   },
   mounted() {

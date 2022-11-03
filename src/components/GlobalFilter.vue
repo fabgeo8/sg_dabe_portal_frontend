@@ -11,6 +11,7 @@
           item-value="id"
           item-text="name"
           outlined
+          @change="applyFilter()"
       ></v-select>
     </v-col>
     <v-col
@@ -166,6 +167,8 @@ export default {
     applyFilter () {
       this.showDatePicker = false
       this.$store.dispatch('getGasApplications')
+      this.$store.dispatch('getPvApplications')
+      this.$emit('reloadData')
     }
   },
   computed: {

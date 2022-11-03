@@ -10,7 +10,7 @@ const routes = [
     component: () => import('../views/Dashboard')
   },
   {
-    path: '/gesuch/:type/:identifier',
+    path: '/gesuch/:identifier',
     name: 'Application',
     props: true,
     component: () => import('../views/Application')

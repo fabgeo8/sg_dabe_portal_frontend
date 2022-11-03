@@ -16,6 +16,8 @@
           <tr>
             <td nowrap="true">{{ new Date(props.item.createdAt).toLocaleDateString(undefined, {day: '2-digit', month: '2-digit', year: 'numeric'}) }}</td>
             <td nowrap="true"><v-chip v-if="props.item.status" small pill :color="statusChips[props.item.status].color">{{ statusChips[props.item.status].text }}</v-chip></td>
+            <td nowrap="true">{{ new Date(props.item.last_status_date).toLocaleDateString(undefined, {day: '2-digit', month: '2-digit', year: 'numeric'}) }}</td>
+            <td nowrap="true">{{ props.item.version }}</td>
             <td nowrap="true">{{ props.item.object_egid }}</td>
             <td nowrap="true">{{ props.item.address }}</td>
             <td nowrap="true" class="">{{ formatCurrency(props.item.fee) }}</td>
@@ -54,7 +56,6 @@ export default {
     filteredList: []
   }),
   mounted () {
-    this.getApplicationList()
   },
   created () {
     this.$store.dispatch('getPvApplications')
@@ -121,6 +122,18 @@ export default {
             }
           },
           {
+            text: 'Datum der Statusänderung',
+            align: 'start',
+            filterable: true,
+            value: 'last_status_date'
+          },
+          {
+            text: 'Variante',
+            align: 'start',
+            filterable: false,
+            value: 'version'
+          },
+          {
             text: 'EGID',
             align: 'start',
             filterable: true,
@@ -157,7 +170,7 @@ export default {
             value: 'identifier'
           },
           {
-            text: 'Aktionen',
+            text: '',
             align: 'start',
             filterable: false
           }
