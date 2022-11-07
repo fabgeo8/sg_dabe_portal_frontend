@@ -12,7 +12,7 @@
         >
           <template slot="progress">
             <v-progress-linear
-                color="deep-purple"
+                color="primary lighten-3"
                 height="10"
                 indeterminate
             ></v-progress-linear>
@@ -53,7 +53,7 @@
         >
           <template slot="progress">
             <v-progress-linear
-                color="deep-purple"
+                color="primary lighten-3"
                 height="10"
                 indeterminate
             ></v-progress-linear>
@@ -96,7 +96,7 @@
         >
           <template slot="progress">
             <v-progress-linear
-                color="deep-purple"
+                color="primary lighten-3"
                 height="10"
                 indeterminate
             ></v-progress-linear>
