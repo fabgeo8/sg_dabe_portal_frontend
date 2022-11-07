@@ -5,14 +5,14 @@ export default {
   },
   2: {
     text: 'Bewilligt',
-    color: 'green lighten-1'
+    color: 'blue lighten-1'
   },
   3: {
     text: 'Realisiert',
-    color: 'red lighten-2'
+    color: 'green lighten-2'
   },
   4: {
     text: 'Sistiert',
-    color: 'blue lighten-2'
+    color: 'grey lighten-2'
   }
 }

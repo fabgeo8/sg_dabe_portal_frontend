@@ -89,7 +89,7 @@
                     >
                       <v-text-field
                           v-model="formattedStatusDate"
-                          label="Datum der Statusänderung"
+                          label="Statusänderung"
                           :error-messages="errors"
                           :disabled="disableDateChange"
                           readonly

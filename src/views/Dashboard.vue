@@ -26,9 +26,7 @@
           </v-card-subtitle>
 
           <v-card-text class="text-h5" v-if="statsObject.open">
-            Offene Gesuche: {{ statsObject.open.count }}<br/>
-            Ersatzabgaben: CHF {{ formatCurrency(statsObject.open.feeTotal) }}<br/>
-            Energiebezugsfläche: {{ formatCurrency(statsObject.open.generatorAreaTotal) }} m&sup2;
+            Offene Gesuche: {{ statsObject.open.count }}
           </v-card-text>
 
           <v-card-actions>
@@ -70,7 +68,7 @@
 
           <v-card-text class="text-h5" v-if="statsObject.granted">
             Bewilligte Gesuche: {{ statsObject.granted.count }}<br/>
-            Ersatzabgaben: CHF {{ formatCurrency(statsObject.granted.feeTotal) }}<br/>
+            <span v-if="statsObject.granted.feeTotal">Ersatzabgaben: CHF {{ formatCurrency(statsObject.granted.feeTotal) }}<br/></span>
             Energiebezugsfläche: {{ formatCurrency(statsObject.granted.generatorAreaTotal) }} m&sup2;
           </v-card-text>
 
@@ -112,7 +110,7 @@
 
           <v-card-text class="text-h5" v-if="statsObject.completed">
             Realisierte Gesuche: {{ statsObject.completed.count }}<br/>
-            Ersatzabgaben: CHF {{ formatCurrency(statsObject.completed.feeTotal) }}<br/>
+            <span v-if="statsObject.granted.feeTotal">Ersatzabgaben: CHF {{ formatCurrency(statsObject.completed.feeTotal) }}<br/></span>
             Energiebezugsfläche: {{ formatCurrency(statsObject.completed.generatorAreaTotal) }} m&sup2;
           </v-card-text>
 
@@ -133,8 +131,8 @@
           </v-card-actions>
         </v-card>
       </v-col>
-      <v-col cols="12" class="d-none d-md-flex" md="2"></v-col>
-      <v-col cols="12" md="4" class="">
+      <v-col cols="12" class="d-none" md="2"></v-col>
+      <v-col cols="12" md="6" class="">
         <v-card
 
         >

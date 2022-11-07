@@ -123,7 +123,7 @@ export default {
             }
           },
           {
-            text: 'Datum der Statusänderung',
+            text: 'Statusänderung',
             align: 'start',
             filterable: true,
             value: 'last_status_date'

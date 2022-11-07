@@ -16,7 +16,7 @@
       <v-row>
         <v-col>
           <v-text-field outlined persistent-placeholder placeholder="bspw. 46AR1AEW-X1" v-model="searchString"
-                        label="Gesuch anzeigen"></v-text-field>
+                        label="Gesuchs-ID eingeben"></v-text-field>
         </v-col>
         <v-col>
           <v-btn @click="loadApplication()" color="primary">Gesuch anzeigen</v-btn>

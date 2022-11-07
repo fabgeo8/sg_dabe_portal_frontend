@@ -29,10 +29,15 @@
           </v-col>
         </v-row>
         </v-sheet>
+        <v-row>
+          <v-col>
+            <v-btn class="mt-4" @click="exportDataToCsv()" block>Daten exportieren</v-btn>
+          </v-col>
+        </v-row>
       </v-col>
       <v-col cols="12" md="9" lg="9" xl="10" class="pt-0 pl-8 pl-md-12">
-      <gas-application-list v-if="showGasApplicationList" :searchText="searchText" :statusFilter="appliedStatusFilters"></gas-application-list>
-      <pv-application-list v-if="showPvApplicationList" :searchText="searchText" :statusFilter="appliedStatusFilters"></pv-application-list>
+      <gas-application-list v-if="showGasApplicationList" :searchText="searchText" ref="gasApplicationList" :statusFilter="appliedStatusFilters"></gas-application-list>
+      <pv-application-list v-if="showPvApplicationList" :searchText="searchText" ref="pvApplicationList" :statusFilter="appliedStatusFilters"></pv-application-list>
       </v-col>
     </v-row>
   </div>
@@ -43,7 +48,6 @@ import GlobalFilter from '../components/GlobalFilter'
 import GasApplicationList from '../components/GasApplicationList'
 import PvApplicationList from '../components/PvApplicationList'
 import Status from '../utils/statusGas'
-Status.shift()
 
 export default {
   components: {
@@ -82,6 +86,13 @@ export default {
           this.appliedStatusFilters.push(el.value)
         }
       })
+    },
+    exportDataToCsv() {
+      if (this.showGasApplicationList) {
+        this.$refs.gasApplicationList.exportDataset()
+      } else if (this.showPvApplicationList) {
+        this.$refs.pvApplicationList.exportDataset()
+      }
     }
   }
 }
