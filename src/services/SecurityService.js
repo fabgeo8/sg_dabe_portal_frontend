@@ -3,7 +3,7 @@ import Oidc from 'oidc-client';
 
 const OIDC_DOMAIN = process.env.VUE_APP_AUTH_HOST;
 
-var mgr = new Oidc.UserManager({
+const secureConnectConfig = {
     userStore: new Oidc.WebStorageStateStore(),
     authority: OIDC_DOMAIN,
     client_id: process.env.VUE_APP_AUTH_CLIENT_ID,
@@ -22,9 +22,34 @@ var mgr = new Oidc.UserManager({
         userinfo_endpoint: OIDC_DOMAIN + "/me",
         end_session_endpoint: OIDC_DOMAIN + "/logout",
         jwks_uri: OIDC_DOMAIN + "/keys",
-    },
-    signingKeys: [{"use":"sig","kty":"RSA","kid":"431748813854651801","alg":"RS256","n":"xZDcFO1jIpt9Fzjfzb2WDr_Yqu7PN2ylhMcTXvvbHK1lMcXG8kXFkHl7a-RqEAs9_Opt9FC8gZYsMihNXs8FY1HvF0LzRfZmW9l0pI3BUSXECiGuhUuRsk7ZXTCx2TgBOewntNDcgUOSD6SmThau5g74gKDQ37zd4rjEKx7RWFP6iMfDttI_-sm2Fo8vsPHl2_HuSg0yb5UEowkpUJspvRnv5pJ4lMyERd6Oh7fzdgy5qU1NSXj1p_H_C9nuLLLY0uRqvDifsAa8H-RisGKf0eF9bYwRlwosJXbMoKuctubrBs2KQfF7T6r8wAMiHjmDYp-qvRTjixO7hqs4PS9j3w","e":"AQAB"}]
-})
+    }
+}
+
+const auth0Config = {
+    userStore: new Oidc.WebStorageStateStore(),
+    authority: "https://dev-gm5pjwd8.us.auth0.com",
+    client_id: "QCVDUQuubOq3JMPZFOiK6TrV0Cj6QnAN",
+    redirect_uri: process.env.VUE_APP_AUTH_REDIRECT_URL,
+    response_type: "token id_token",
+    scope: "openid profile email urn:abraxas:iam:hosted_domain:sg",
+    post_logout_redirect_uri: "http://localhost:8080/",
+    silent_redirect_uri: window.location.origin + '/static/silent-renew.html',
+    accessTokenExpiringNotificationTime: 10,
+    automaticSilentRenew: true,
+    filterProtocolClaims: false,
+    loadUserInfo: false,
+    audience: "http://localhost:3005"
+    // metadata: {
+    //     issuer: OIDC_DOMAIN + '/',
+    //     authorization_endpoint: OIDC_DOMAIN + "/authorize",
+    //     userinfo_endpoint: OIDC_DOMAIN + "/me",
+    //     end_session_endpoint: OIDC_DOMAIN + "/logout",
+    //     jwks_uri: OIDC_DOMAIN + "/keys",
+    // }
+}
+
+
+var mgr = new Oidc.UserManager(secureConnectConfig)
 
 Oidc.Log.logger = console;
 Oidc.Log.level = Oidc.Log.INFO;
