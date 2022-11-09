@@ -8,6 +8,9 @@
     <div>
       <v-btn class="mt-12" @click="getProtectedApiData()">Get Data</v-btn>
     </div>
+    <div>
+      <v-btn class="mt-12" @click="getOidcConfiguration()">Get Config</v-btn>
+    </div>
   </div>
 </template>
 
@@ -63,6 +66,15 @@ export default {
               console.log(error);
             });
       });
+    },
+    getOidcConfiguration() {
+      axios.get('https://accounts.abraxas.ch/.well-known/openid-configuration')
+      .then((response) => {
+        console.log(response.data)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
     }
   }
 }
