@@ -23,6 +23,7 @@ var mgr = new Oidc.UserManager({
         end_session_endpoint: OIDC_DOMAIN + "/logout",
         jwks_uri: OIDC_DOMAIN + "/keys",
     },
+    signingKeys: [{"use":"sig","kty":"RSA","kid":"431748813854651801","alg":"RS256","n":"xZDcFO1jIpt9Fzjfzb2WDr_Yqu7PN2ylhMcTXvvbHK1lMcXG8kXFkHl7a-RqEAs9_Opt9FC8gZYsMihNXs8FY1HvF0LzRfZmW9l0pI3BUSXECiGuhUuRsk7ZXTCx2TgBOewntNDcgUOSD6SmThau5g74gKDQ37zd4rjEKx7RWFP6iMfDttI_-sm2Fo8vsPHl2_HuSg0yb5UEowkpUJspvRnv5pJ4lMyERd6Oh7fzdgy5qU1NSXj1p_H_C9nuLLLY0uRqvDifsAa8H-RisGKf0eF9bYwRlwosJXbMoKuctubrBs2KQfF7T6r8wAMiHjmDYp-qvRTjixO7hqs4PS9j3w","e":"AQAB"}]
 })
 
 Oidc.Log.logger = console;
