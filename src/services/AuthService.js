@@ -15,7 +15,6 @@ export default (function () {
             loadUserInfo: false,
             metadata: {
                 issuer: OIDC_DOMAIN + '/',
-                //audience: "http://localhost:3005",
                 authorization_endpoint: OIDC_DOMAIN + "/authorize",
                 userinfo_endpoint: OIDC_DOMAIN + "/me",
                 end_session_endpoint: OIDC_DOMAIN + "/logout",
