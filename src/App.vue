@@ -60,7 +60,7 @@
             text
             class=""
             active-class="nav-btn-active"
-            to="/login"
+            to="/login2"
             icon
             large
         >
