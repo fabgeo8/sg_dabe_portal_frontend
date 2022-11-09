@@ -1,6 +1,8 @@
 /* eslint-disable */
 import Oidc from 'oidc-client';
 
+const OIDC_DOMAIN = process.env.VUE_APP_AUTH_HOST;
+
 var mgr = new Oidc.UserManager({
     userStore: new Oidc.WebStorageStateStore(),
     authority: OIDC_DOMAIN,
