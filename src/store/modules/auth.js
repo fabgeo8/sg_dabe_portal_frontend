@@ -1,57 +1,69 @@
 import axios from 'axios'
-import { showSnack } from '@/globalActions'
 
 const state = {
-  municipality: 0,
-  gasApplications: [],
-  dateFrom: new Date(Date.UTC(new Date().getFullYear(), 0, 1)).toISOString().substr(0, 10),
-  dateTo: new Date().toISOString().substr(0, 10),
-  loadingData: false
+    isMunicipalityUser: true,
+    userMunicipality: '',
+    activeSettingMunicipality: '',
+    activeClient: 'Kanton',
+    isAdmin: true,
+    AccessKey: ''
 }
 
 const getters = {
-  getGasApplications (state) {
-    return state.gasApplications
-  }
+    getUserMunicipality (state) {
+        return state.userMunicipality
+    },
+
+    getIsMunicipalityUser (state) {
+        return state.isMunicipalityUser
+    },
+
+    getUserLocation (state) {
+        return state.isMunicipalityUser ? state.userMunicipality : 'canton'
+    },
+
+    getActiveClient (state) {
+        return state.activeClient
+    },
+
+    getIsAdmin (state) {
+        return state.isAdmin
+    },
+
+    getActiveSettingMunicipality(state) {
+        return state.activeSettingMunicipality !== 'canton'
+    }
 }
 
 const actions = {
-  async getGasApplications ({ commit, state }) {
-    state.loadingData = true
-    const params = new URLSearchParams([['municipality', state.municipality], ['dateFrom', state.dateFrom], ['dateTo', state.dateTo]])
-    axios.get('/applications/gas', { params })
-      .then((res) => {
-        commit('setGasApplicationList', res.data)
-      })
-      .catch((ex) => {
-        console.log('fetch application failed: ' + ex.message)
-        showSnack({ message: 'Gesuchsliste konnte nicht geladen werden.', color: 'red' })
-      })
-      .finally(() => {
-        state.loadingData = false
-      })
-  }
+
 }
 
 const mutations = {
-  updateMunicipality (state, municipality) {
-    state.municipality = municipality
-    this.dispatch('getGasApplications')
-  },
-  updateDateFrom (state, date) {
-    state.dateFrom = date
-  },
-  updateDateTo (state, date) {
-    state.dateTo = date
-  },
-  setGasApplicationList (state, value) {
-    state.gasApplications = value
-  }
+    updateUserMunicipality (state, municipality) {
+        state.userMunicipality = municipality
+        state.activeSettingMunicipality = municipality
+        state.isMunicipalityUser = true
+        state.activeClient = 'Thal'
+
+        // if user municipality is null it's a canton user
+        if (municipality === null) {
+            state.isMunicipalityUser = false
+            state.activeSettingMunicipality = 'canton'
+            state.activeClient = 'Kanton'
+        }
+    },
+    updateIsMunicipalityUser (state, isMunicipalityUser) {
+        state.isMunicipalityUser = isMunicipalityUser
+    },
+    updateIsAdmin (state, isAdmin) {
+        state.isAdmin = isAdmin
+    }
 }
 
 export default {
-  state,
-  getters,
-  actions,
-  mutations
+    state,
+    getters,
+    actions,
+    mutations
 }

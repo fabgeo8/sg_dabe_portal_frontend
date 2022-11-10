@@ -15,6 +15,10 @@
       <p>Token: </p>
       <p>{{ token }}</p>
     </div>
+    <div class="mt-4">
+      <v-text-field v-model="customToken" label="Set Access Token"></v-text-field>
+      <v-btn @click="setCustomToken()">Access Token setzen</v-btn>
+    </div>
   </div>
 </template>
 
@@ -32,6 +36,7 @@ export default {
     return {
       currentUser: '',
       token: '',
+      customToken: '',
       accessTokenExpired: false,
       isLoggedIn: false
     }
@@ -39,16 +44,19 @@ export default {
   created() {
   },
   mounted() {
-    auth.getUser().then((user) => {
-      if (user !== null) {
-        this.currentUser = user.profile.name;
-        this.accessTokenExpired = user.expired;
-      }
-
-      this.isLoggedIn = (user !== null && !user.expired);
-    });
+    // auth.getUser().then((user) => {
+    //   if (user !== null) {
+    //     this.currentUser = user.profile.name;
+    //     this.accessTokenExpired = user.expired;
+    //   }
+    //
+    //   this.isLoggedIn = (user !== null && !user.expired);
+    // });
   },
   methods: {
+    setCustomToken () {
+      axios.defaults.headers.common[authorizationHeader] = `Bearer ${this.customToken}`;
+    },
     login() {
       auth.signIn();
     },

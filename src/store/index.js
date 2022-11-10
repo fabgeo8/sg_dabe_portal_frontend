@@ -1,8 +1,8 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
 import VuexPersist from 'vuex-persist'
-import auth from './modules/auth'
 import applicationStore from './modules/applicationStore'
+import authStore from './modules/auth'
 
 // Load Vuex
 Vue.use(Vuex)
@@ -14,7 +14,8 @@ const vuexLocalStorage = new VuexPersist({
   reducer: state => ({
     data: {
       persisted: state.data.persisted
-    }
+    },
+    auth: state.auth
   }),
   // Function that passes a mutation and lets you decide if it should update the state in localStorage.
   // filter: mutation => (true)
@@ -23,7 +24,7 @@ const vuexLocalStorage = new VuexPersist({
 // Create store
 export default new Vuex.Store({
   modules: {
-    // auth,
+    auth: authStore,
     data: applicationStore
   },
   plugins: [vuexLocalStorage.plugin]

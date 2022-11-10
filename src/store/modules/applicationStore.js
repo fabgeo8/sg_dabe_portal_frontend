@@ -6,7 +6,9 @@ const state = {
     municipality: 0,
     dateFrom: new Date(Date.UTC(new Date().getFullYear(), 0, 1)).toISOString().substr(0, 10),
     dateTo: new Date().toISOString().substr(0, 10),
-    applicationType: 'gas'
+    applicationType: 'gas',
+    isMunicipalityUser: true,
+    userMunicipality: ''
   },
   gasApplications: [],
   pvApplications: [],

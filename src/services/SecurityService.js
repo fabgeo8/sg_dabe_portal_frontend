@@ -39,13 +39,6 @@ const auth0Config = {
     filterProtocolClaims: false,
     loadUserInfo: false,
     audience: "http://localhost:3005"
-    // metadata: {
-    //     issuer: OIDC_DOMAIN + '/',
-    //     authorization_endpoint: OIDC_DOMAIN + "/authorize",
-    //     userinfo_endpoint: OIDC_DOMAIN + "/me",
-    //     end_session_endpoint: OIDC_DOMAIN + "/logout",
-    //     jwks_uri: OIDC_DOMAIN + "/keys",
-    // }
 }
 
 

@@ -60,7 +60,7 @@
             text
             class=""
             active-class="nav-btn-active"
-            to="/login2"
+            to="/login"
             icon
             large
         >
@@ -169,11 +169,11 @@ export default {
   },
   methods: {
     changeApplicationType(applicationTypeId) {
-        const applicationType = this.applicationTypes[this.applicationTypes.findIndex(x => x.id === applicationTypeId)]
-        this.$store.commit('updateApplicationType', applicationType.value)
+      const applicationType = this.applicationTypes[this.applicationTypes.findIndex(x => x.id === applicationTypeId)]
+      this.$store.commit('updateApplicationType', applicationType.value)
 
-        window.location.reload();
-      }
+      window.location.reload();
+    }
   },
   mounted() {
     EventBus.$on(ACTIONS.SNACKBAR, message => {
@@ -184,7 +184,7 @@ export default {
   },
   computed: {
     activeApplicationType: {
-      get () {
+      get() {
         try {
           return this.applicationTypes[this.applicationTypes.findIndex(x => x.value === this.$store.state.data.persisted.applicationType)].name
         } catch {
