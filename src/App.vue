@@ -1,6 +1,7 @@
 <template>
   <v-app id="app">
     <v-app-bar
+        v-if="isLoggedIn"
         app
         color="white"
         height="90px"
@@ -79,8 +80,11 @@
       </v-container>
     </v-app-bar>
     <v-main class="">
-      <v-container fluid class="h-100 px-md-12">
+      <v-container v-if="isAuthorized || $route.name === 'Login' " fluid class="h-100 px-md-12">
         <router-view></router-view>
+      </v-container>
+      <v-container v-else fluid class="px-md-12">
+        <h1 class="">Sie sind nicht berechtigt für den Zugriff auf diese Applikation. Der Benutzer muss für diese Applikation konfiguriert werden.</h1>
       </v-container>
     </v-main>
 
@@ -189,6 +193,24 @@ export default {
           return this.applicationTypes[this.applicationTypes.findIndex(x => x.value === this.$store.state.data.persisted.applicationType)].name
         } catch {
           return ''
+        }
+      }
+    },
+    isLoggedIn: {
+      get() {
+        try {
+          return this.$store.state.auth.isLoggedIn
+        } catch {
+          return false
+        }
+      }
+    },
+    isAuthorized: {
+      get() {
+        try {
+          return this.$store.state.auth.isAuthorized
+        } catch {
+          return false
         }
       }
     }

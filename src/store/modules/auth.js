@@ -3,10 +3,12 @@ import axios from 'axios'
 const state = {
     isMunicipalityUser: true,
     userMunicipality: '',
+    isAuthorized: null,
     activeSettingMunicipality: '',
     activeClient: 'Kanton',
     isAdmin: true,
-    AccessKey: ''
+    AccessKey: '',
+    isLoggedIn: false
 }
 
 const getters = {
@@ -30,6 +32,10 @@ const getters = {
         return state.isAdmin
     },
 
+    getIsLoggedIn (state) {
+        return state.isLoggedIn
+    },
+
     getActiveSettingMunicipality(state) {
         return state.activeSettingMunicipality !== 'canton'
     }
@@ -37,9 +43,51 @@ const getters = {
 
 const actions = {
 
+    getUserApiInfo ({ commit, state }) {
+
+        // get user info if info is not set
+        if (!state.isAuthorized) {
+            console.log("get user info from api")
+            axios.get('users/me', )
+                .then((res) => {
+                    if (res.status === 200) {
+                        // user is authorized and can access application
+                        // store user info to state
+                        if (res.data && res.data.length > 0) {
+                            let user = res.data
+                            state.isAuthorized = user.is_authorized
+                            state.isAdmin = user.role_name === 'admin'
+                            commit("updateUserMunicipality", user.MunicipalityId)
+                        } else {
+                            state.isAuthorized = false
+                        }
+                    } else {
+                        state.isAuthorized = false
+                    }
+                })
+                .catch((ex) => {
+                    console.log('fetch userinfo failed: ' + ex.message)
+                    state.isAuthorized = false
+                    showSnack({ message: 'Benutzer konnte nicht geladen werden.', color: 'red' })
+                })
+                .finally(() => {
+                })
+        }
+    }
+
 }
 
 const mutations = {
+    updateUserInfo(state) {
+    },
+    userSignedOut(state) {
+        state.isLoggedIn = false
+        state.isAuthorized = false
+        state.isAdmin = false
+    },
+    userSignedIn(state) {
+        state.isLoggedIn = true
+    },
     updateUserMunicipality (state, municipality) {
         state.userMunicipality = municipality
         state.activeSettingMunicipality = municipality

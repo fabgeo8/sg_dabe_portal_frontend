@@ -1,20 +1,30 @@
 <template>
   <div>
-    <div class="home mt-6">
-      <p v-if="isLoggedIn">User: {{ currentUser }}</p>
-      <v-btn @click="login" v-if="!isLoggedIn" color="primary">Login</v-btn>
-      <v-btn @click="logout" v-if="isLoggedIn" color="primary">Logout</v-btn>
-    </div>
-    <div>
-      <v-btn class="mt-12" @click="getProtectedApiData()">Get Data</v-btn>
-    </div>
-    <div>
-      <v-btn class="mt-6" @click="loadToken()">Load token</v-btn>
-    </div>
-    <div class="mt-4">
-      <p>Token: </p>
-      <p>{{ token }}</p>
-    </div>
+    <v-row v-if="!isLoggedIn">
+      <v-col class="mt-4">
+        <h3>Sie sind nicht angemeldet. Bitte authentifizieren Sie sich über SECURE Connect</h3>
+        <v-btn class="mt-5" @click="login" v-if="!isLoggedIn" color="primary">Login</v-btn>
+      </v-col>
+    </v-row>
+    <v-row v-if="isLoggedIn">
+      <v-col>
+        <v-card class="mt-4">
+          <v-card-title>
+            Benutzerinfo
+          </v-card-title>
+          <v-card-text>
+            Name: {{userInfo.name}}<br>
+            Email: {{userInfo.email}}<br>
+            Gemeinde: {{ userMunicipality }}
+          </v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn @click="logout" v-if="isLoggedIn" color="primary">Logout</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -27,13 +37,18 @@ const auth = new Mgr();
 export default {
   name: 'Login',
   props: [],
+
   components: {},
   data: function () {
     return {
       currentUser: '',
       token: '',
       accessTokenExpired: false,
-      isLoggedIn: false
+      isLoggedIn: false,
+      userInfo: {
+        email: '',
+        name: ''
+      },
     }
   },
   created() {
@@ -41,7 +56,8 @@ export default {
   mounted() {
     auth.getUser().then((user) => {
       if (user !== null) {
-        this.currentUser = user.profile.name;
+        this.userInfo.name = user.profile.name
+        this.userInfo.email = user.profile.email
         this.accessTokenExpired = user.expired;
       }
 
@@ -55,26 +71,12 @@ export default {
     logout() {
       auth.signOut();
     },
-    loadToken () {
-      auth.getAccessToken().then((userToken) => {
-        this.token = userToken
-      });
-    },
-    getProtectedApiData() {
-      const authorizationHeader = 'Authorization';
-      auth.getAccessToken().then((userToken) => {
-        axios.defaults.headers.common[authorizationHeader] = `Bearer ${userToken}`;
-
-        axios.get('/auth/gas')
-            .then((response) => {
-              this.dataEventRecordsItems = response.data;
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-      });
-    },
-    computed: {
+  },
+  computed: {
+    userMunicipality: {
+      get() {
+        return this.$store.state.auth.userMunicipality
+      }
     }
   }
 }
