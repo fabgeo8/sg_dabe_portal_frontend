@@ -60,7 +60,6 @@ export default {
         this.userInfo.email = user.profile.email
         this.accessTokenExpired = user.expired;
       }
-
       this.isLoggedIn = (user !== null && !user.expired);
     });
   },
@@ -70,7 +69,7 @@ export default {
     },
     logout() {
       auth.signOut();
-    },
+    }
   },
   computed: {
     userMunicipality: {

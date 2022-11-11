@@ -108,7 +108,6 @@ export default class SecurityService {
                     // self.signIn()
                     return resolve(null)
                 } else{
-                    self.setAccessToken(user.access_token)
                     return resolve(user)
                 }
             }).catch(function (err) {
@@ -132,6 +131,8 @@ export default class SecurityService {
                     // self.signIn()
                     return resolve(false)
                 } else{
+                    // user signed in, set authorization token for requests
+                    self.setAccessToken(user.access_token)
                     return resolve(true)
                 }
             }).catch(function (err) {
