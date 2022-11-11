@@ -126,7 +126,6 @@ export default {
     showMunicipalities: false,
     showGasProviders: false,
     showUserManagement: false,
-    municipalityItems: [],
   }),
   computed: {
     activeUserMunicipality: {
@@ -142,12 +141,14 @@ export default {
           this.$store.commit("updateUserMunicipality", value)
         }
       }
+    },
+    municipalityItems: {
+      get() {
+        return this.$store.getters.getMunicipalityList
+      }
     }
   },
   mounted () {
-    if (true /*this.$store.getters.getIsMunicipalityUser === false  ONLY AFTER AUTHORIZATION*/) {
-      this.loadMunicipalites()
-    }
   },
   methods: {
     hideAllSettings () {
@@ -161,22 +162,7 @@ export default {
       this.$refs.activeUserList.getUserList()
       this.$refs.inactiveUserList.getUserList()
     },
-    loadMunicipalites() {
-      axios.get('/municipalities')
-            .then((res) => {
-              this.municipalityItems = res.data
-              this.municipalityItems.unshift({
-                id: 'canton',
-                name: 'Kanton SG'
-              })
-            })
-            .catch((ex) => {
-              // todo error handling
-              showSnack({message: "Serverfehler beim Aufrufen der Gemeindeliste", color: 'red'})
-              console.log('fetch error: ' + ex.message)
-            })
-    }
-  }
+  },
 }
 </script>
 <style>

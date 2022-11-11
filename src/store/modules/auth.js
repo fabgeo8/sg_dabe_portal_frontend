@@ -54,7 +54,8 @@ const actions = {
                     if (res.status === 200) {
                         // user is authorized and can access application
                         // store user info to state
-                        if (res.data && res.data.length > 0) {
+                        console.log("userinfo is accessed")
+                        if (res.data && res.data.fullname) {
                             let user = res.data
                             state.isAuthorized = user.is_authorized
                             state.isAdmin = user.role_name === 'admin'
@@ -69,7 +70,7 @@ const actions = {
                 .catch((ex) => {
                     console.log('fetch userinfo failed: ' + ex.message)
                     state.isAuthorized = false
-                    showSnack({ message: 'Benutzer konnte nicht geladen werden.', color: 'red' })
+                    // showSnack({ message: 'Benutzer konnte nicht geladen werden.', color: 'red' })
                 })
                 .finally(() => {
                 })

@@ -8,7 +8,8 @@ const state = {
     dateTo: new Date().toISOString().substr(0, 10),
     applicationType: 'gas',
     isMunicipalityUser: true,
-    userMunicipality: ''
+    userMunicipality: '',
+    municipalityList: []
   },
   gasApplications: [],
   pvApplications: [],
@@ -26,6 +27,9 @@ const getters = {
   },
   getApplicationType (state) {
     return state.persisted.applicationType
+  },
+  getMunicipalityList(state) {
+    return state.persisted.municipalityList
   }
 }
 
@@ -44,6 +48,20 @@ const actions = {
       .finally(() => {
         state.loadingData = false
       })
+  },
+  async getMunicipalityList ({commit, state}) {
+    axios.get('/municipalities')
+        .then((res) => {
+          state.municipalityList = res.data
+          this.municipalityList.unshift({
+            id: 'canton',
+            name: 'Kanton'
+          })
+        })
+        .catch((ex) => {
+          // todo error handling
+          console.log('fetch error: ' + ex.message)
+        })
   },
   async getPvApplications ({ commit, state }) {
     state.loadingData = true
