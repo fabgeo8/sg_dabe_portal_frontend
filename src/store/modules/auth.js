@@ -38,7 +38,7 @@ const getters = {
     },
 
     getMunicipalityList(state) {
-        return state.persisted.municipalityList
+        return state.municipalityList
     },
 
     getIsLoggedIn (state) {
