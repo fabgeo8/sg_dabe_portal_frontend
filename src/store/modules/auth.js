@@ -79,7 +79,7 @@ const actions = {
             state.activeSettingMunicipality = 'canton'
             state.activeClient = 'Kanton'
             state.settingIsMunicipality = false
-            //commit('updateMunicipality', 0, {root:true})
+            commit('updateMunicipality', 0, {root:true})
         } else {
             console.log("updating to municipality user")
             state.userMunicipality = municipality
@@ -92,7 +92,7 @@ const actions = {
                     state.activeClient = m.name
                 }
             })
-            //commit('updateMunicipality', municipality, {root:true})
+            commit('updateMunicipality', municipality, {root:true})
             console.log("update to municipality user successful")
         }
     },
