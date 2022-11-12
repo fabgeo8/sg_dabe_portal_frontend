@@ -47,7 +47,7 @@ const getters = {
     },
 
     getSettingIsMunicipality (state) {
-        return settingIsMunicipality
+        return state.settingIsMunicipality
     },
 
     getActiveSettingMunicipality(state) {

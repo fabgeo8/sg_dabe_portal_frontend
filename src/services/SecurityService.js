@@ -43,7 +43,7 @@ const auth0Config = {
     audience: "http://localhost:3005",
 }
 
-var mgr = new Oidc.UserManager(secureConnectConfig)
+var mgr = new Oidc.UserManager(auth0Config)
 
 Oidc.Log.logger = console;
 Oidc.Log.level = Oidc.Log.INFO;
