@@ -73,7 +73,7 @@ const actions = {
             state.isMunicipalityUser = false
             state.activeSettingMunicipality = 'canton'
             state.activeClient = 'Kanton'
-            commit('data/updateMunicipality', municipality, {root:true})
+            commit('updateMunicipality', 0, {root:true})
         } else {
             state.userMunicipality = municipality
             state.isMunicipalityUser = true
@@ -84,7 +84,7 @@ const actions = {
                     state.activeClient = m.name
                 }
             })
-            commit('data/updateMunicipality', municipality, {root:true})
+            commit('updateMunicipality', municipality, {root:true})
         }
     },
     getUserApiInfo ({ commit, state, dispatch }) {
