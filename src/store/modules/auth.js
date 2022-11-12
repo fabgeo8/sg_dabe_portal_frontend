@@ -9,8 +9,8 @@ const state = {
     activeSettingMunicipality: '',
     activeClient: 'Kanton',
     isAdmin: true,
-    AccessKey: '',
-    isLoggedIn: false
+    isLoggedIn: false,
+    municipalityList: []
 }
 
 // expiration of user info in sec
@@ -37,6 +37,10 @@ const getters = {
         return state.isAdmin
     },
 
+    getMunicipalityList(state) {
+        return state.persisted.municipalityList
+    },
+
     getIsLoggedIn (state) {
         return state.isLoggedIn
     },
@@ -59,7 +63,28 @@ const getters = {
 }
 
 const actions = {
-    getUserApiInfo ({ commit, state }) {
+    updateUserInfo ({commit, rootState}, municipality) {
+        state.userMunicipality = municipality
+        state.activeSettingMunicipality = municipality
+        state.isMunicipalityUser = true
+
+        // if user municipality is null it's a canton user
+        if (municipality === null) {
+            state.isMunicipalityUser = false
+            state.activeSettingMunicipality = 'canton'
+            state.activeClient = 'Kanton'
+            rootState.persisted.municipality = 0
+        } else {
+            // set municipality for settings and filtering
+            state.municipalityList.forEach((m) => {
+                if (m.id === municipality) {
+                    state.activeClient = m.name
+                }
+            })
+            rootState.persisted.municipality = municipality
+        }
+    },
+    getUserApiInfo ({ commit, state, dispatch }) {
         // get user info if info is not set
         // also get info if user info request is expired
         if (!state.isAuthorized || getters.getUserInfoIsExpired(state)) {
@@ -75,7 +100,7 @@ const actions = {
                             let user = res.data
                             state.isAuthorized = user.is_authorized
                             state.isAdmin = user.role_name === 'admin'
-                            commit("updateUserMunicipality", user.MunicipalityId)
+                            dispatch("updateUserInfo", user.MunicipalityId)
                         } else {
                             state.isAuthorized = false
                         }
@@ -91,13 +116,27 @@ const actions = {
                 .finally(() => {
                 })
         }
-    }
+    },
+    async getMunicipalityList ({commit, state}) {
+        if (state.municipalityList.length === 0) {
+            axios.get('/municipalities')
+                .then((res) => {
+                    state.municipalityList = res.data
+                    this.municipalityList.unshift({
+                        id: 'canton',
+                        name: 'Kanton'
+                    })
+                })
+                .catch((ex) => {
+                    // todo error handling
+                    console.log('fetch error: ' + ex.message)
+                })
+        }
+    },
 
 }
 
 const mutations = {
-    updateUserInfo(state) {
-    },
     userSignedOut(state) {
         state.isLoggedIn = false
         state.isAuthorized = false
@@ -107,17 +146,7 @@ const mutations = {
         state.isLoggedIn = true
     },
     updateUserMunicipality (state, municipality) {
-        state.userMunicipality = municipality
-        state.activeSettingMunicipality = municipality
-        state.isMunicipalityUser = true
-        state.activeClient = 'Thal'
 
-        // if user municipality is null it's a canton user
-        if (municipality === null) {
-            state.isMunicipalityUser = false
-            state.activeSettingMunicipality = 'canton'
-            state.activeClient = 'Kanton'
-        }
     },
     updateIsMunicipalityUser (state, isMunicipalityUser) {
         state.isMunicipalityUser = isMunicipalityUser

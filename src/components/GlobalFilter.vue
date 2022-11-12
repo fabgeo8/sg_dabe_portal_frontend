@@ -11,6 +11,7 @@
           item-value="id"
           item-text="name"
           outlined
+          v-if="canAccessMunicipalitySelection"
           @change="applyFilter()"
       ></v-select>
     </v-col>
@@ -172,6 +173,9 @@ export default {
     }
   },
   computed: {
+    canAccessMunicipalitySelection: {
+      get () { return !this.$store.state.auth.isMunicipalityUser }
+    },
     selectedMunicipality: {
       get () { return this.$store.state.data.persisted.municipality },
       set (value) { this.$store.commit('updateMunicipality', value)}

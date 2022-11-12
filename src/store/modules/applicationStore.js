@@ -6,10 +6,7 @@ const state = {
     municipality: 0,
     dateFrom: new Date(Date.UTC(new Date().getFullYear(), 0, 1)).toISOString().substr(0, 10),
     dateTo: new Date().toISOString().substr(0, 10),
-    applicationType: 'gas',
-    isMunicipalityUser: true,
-    userMunicipality: '',
-    municipalityList: []
+    applicationType: 'gas'
   },
   gasApplications: [],
   pvApplications: [],
@@ -28,9 +25,6 @@ const getters = {
   getApplicationType (state) {
     return state.persisted.applicationType
   },
-  getMunicipalityList(state) {
-    return state.persisted.municipalityList
-  }
 }
 
 const actions = {
@@ -48,20 +42,6 @@ const actions = {
       .finally(() => {
         state.loadingData = false
       })
-  },
-  async getMunicipalityList ({commit, state}) {
-    axios.get('/municipalities')
-        .then((res) => {
-          state.municipalityList = res.data
-          this.municipalityList.unshift({
-            id: 'canton',
-            name: 'Kanton'
-          })
-        })
-        .catch((ex) => {
-          // todo error handling
-          console.log('fetch error: ' + ex.message)
-        })
   },
   async getPvApplications ({ commit, state }) {
     state.loadingData = true
