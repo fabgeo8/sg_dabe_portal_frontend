@@ -135,9 +135,9 @@ export default {
       set(value) {
         if (value === 'canton') {
           this.$store.commit("updateSettingMunicipality", 'canton')
-          this.$store.commit("updateIsMunicipalityUser", false)
+          this.$store.commit("updateSettingIsMunicipality", false)
         } else {
-          this.$store.commit("updateIsMunicipalityUser", true)
+          this.$store.commit("updateSettingIsMunicipality", true)
           this.$store.commit("updateSettingMunicipality", value)
         }
       }

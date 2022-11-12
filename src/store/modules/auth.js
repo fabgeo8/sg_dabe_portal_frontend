@@ -3,6 +3,7 @@ import {showSnack} from "../../globalActions";
 
 const state = {
     isMunicipalityUser: true,
+    settingIsMunicipality: true,
     userMunicipality: '',
     isAuthorized: null,
     lastRequestTimestamp: null,
@@ -22,7 +23,7 @@ const getters = {
     },
 
     getIsMunicipalityUser (state) {
-        return state.isMunicipalityUser
+        return state.settingIsMunicipality
     },
 
     getUserLocation (state) {
@@ -73,10 +74,13 @@ const actions = {
             state.isMunicipalityUser = false
             state.activeSettingMunicipality = 'canton'
             state.activeClient = 'Kanton'
+            state.settingIsMunicipality = false
             commit('updateMunicipality', 0, {root:true})
         } else {
+            console.log("updating to municipality user")
             state.userMunicipality = municipality
             state.isMunicipalityUser = true
+            state.settingIsMunicipality = true
             state.activeSettingMunicipality = municipality
             // set municipality for settings and filtering
             state.municipalityList.forEach((m) => {
@@ -85,6 +89,7 @@ const actions = {
                 }
             })
             commit('updateMunicipality', municipality, {root:true})
+            console.log("update to municipality user successful")
         }
     },
     getUserApiInfo ({ commit, state, dispatch }) {
@@ -151,8 +156,8 @@ const mutations = {
     updateSettingMunicipality(state, municipality) {
         state.activeSettingMunicipality = municipality
     },
-    updateIsMunicipalityUser (state, isMunicipalityUser) {
-        state.isMunicipalityUser = isMunicipalityUser
+    updateSettingIsMunicipality (state, isMunicipalityUser) {
+        state.settingIsMunicipality = isMunicipalityUser
     },
     updateIsAdmin (state, isAdmin) {
         state.isAdmin = isAdmin
