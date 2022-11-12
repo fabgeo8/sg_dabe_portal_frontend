@@ -81,7 +81,7 @@ const actions = {
                     state.activeClient = m.name
                 }
             })
-            rootState.persisted.municipality = municipality
+            rootState.data.persisted.municipality = municipality
         }
     },
     getUserApiInfo ({ commit, state, dispatch }) {
