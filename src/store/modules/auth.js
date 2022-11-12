@@ -46,6 +46,10 @@ const getters = {
         return state.isLoggedIn
     },
 
+    getSettingIsMunicipality (state) {
+        return settingIsMunicipality
+    },
+
     getActiveSettingMunicipality(state) {
         return state.activeSettingMunicipality !== 'canton'
     },

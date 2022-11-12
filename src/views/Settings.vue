@@ -7,7 +7,7 @@
         <h3>Aktiver Mandant: {{ $store.getters.getActiveClient }}</h3>
       </v-col>
       <v-col cols="12" sm="12" md="3">
-        <v-select :items="municipalityItems" outlined item-text="name" item-value="id"
+        <v-select :items="municipalityItems" v-if="!$store.getters.getSettingIsMunicipality" outlined item-text="name" item-value="id"
                   v-model="activeUserMunicipality" label="Gemeinde auswählen" @change="updateUserData()"></v-select>
       </v-col>
       </v-row>
@@ -136,7 +136,7 @@ export default {
         if (value === 'canton') {
           this.$store.commit("updateSettingMunicipality", 'canton')
           this.$store.commit("updateSettingIsMunicipality", false)
-        } else {
+        } else if (value !== null && value !== '') {
           this.$store.commit("updateSettingIsMunicipality", true)
           this.$store.commit("updateSettingMunicipality", value)
         }
