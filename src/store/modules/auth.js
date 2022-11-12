@@ -68,7 +68,7 @@ const getters = {
 }
 
 const actions = {
-    updateUserInfo ({commit, dispatch}, municipality) {
+    updateUserInfo ({commit, dispatch, state}, municipality) {
 
         state.userMunicipality = municipality
         console.log("updating user municipality to: " + municipality)
