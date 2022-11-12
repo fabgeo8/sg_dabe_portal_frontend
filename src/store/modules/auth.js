@@ -63,17 +63,19 @@ const getters = {
 }
 
 const actions = {
-    updateUserInfo ({commit, rootState}, municipality) {
+    updateUserInfo ({commit, dispatch}, municipality) {
         state.userMunicipality = municipality
         state.activeSettingMunicipality = municipality
         state.isMunicipalityUser = true
+
+        console.log("updating user municipality to: " + municipality)
 
         // if user municipality is null it's a canton user
         if (municipality === null) {
             state.isMunicipalityUser = false
             state.activeSettingMunicipality = 'canton'
             state.activeClient = 'Kanton'
-            rootState.persisted.municipality = 0
+            commit('data/updateMunicipality', municipality, {root:true})
         } else {
             // set municipality for settings and filtering
             state.municipalityList.forEach((m) => {
@@ -81,7 +83,7 @@ const actions = {
                     state.activeClient = m.name
                 }
             })
-            rootState.data.persisted.municipality = municipality
+            commit('data/updateMunicipality', municipality, {root:true})
         }
     },
     getUserApiInfo ({ commit, state, dispatch }) {
