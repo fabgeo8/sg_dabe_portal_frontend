@@ -62,7 +62,7 @@ const actions = {
     getUserApiInfo ({ commit, state }) {
         // get user info if info is not set
         // also get info if user info request is expired
-        if (!state.isAuthorized || getters.getUserInfoIsExpired()) {
+        if (!state.isAuthorized || getters.getUserInfoIsExpired(state)) {
             console.log("get user info from api")
             axios.get('users/me', )
                 .then((res) => {
@@ -71,6 +71,7 @@ const actions = {
                         // store user info to state
                         console.log("userinfo is accessed")
                         if (res.data && res.data.fullname) {
+                            state.lastRequestTimestamp = new Date()
                             let user = res.data
                             state.isAuthorized = user.is_authorized
                             state.isAdmin = user.role_name === 'admin'
