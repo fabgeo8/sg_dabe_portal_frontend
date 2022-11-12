@@ -134,11 +134,11 @@ export default {
       },
       set(value) {
         if (value === 'canton') {
-          this.$store.commit("updateUserMunicipality", null)
+          this.$store.commit("updateSettingMunicipality", 'canton')
           this.$store.commit("updateIsMunicipalityUser", false)
         } else {
           this.$store.commit("updateIsMunicipalityUser", true)
-          this.$store.commit("updateUserMunicipality", value)
+          this.$store.commit("updateSettingMunicipality", value)
         }
       }
     },

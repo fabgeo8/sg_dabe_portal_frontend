@@ -64,10 +64,8 @@ const getters = {
 
 const actions = {
     updateUserInfo ({commit, dispatch}, municipality) {
-        state.userMunicipality = municipality
-        state.activeSettingMunicipality = municipality
-        state.isMunicipalityUser = true
 
+        state.userMunicipality = municipality
         console.log("updating user municipality to: " + municipality)
 
         // if user municipality is null it's a canton user
@@ -77,6 +75,9 @@ const actions = {
             state.activeClient = 'Kanton'
             commit('data/updateMunicipality', municipality, {root:true})
         } else {
+            state.userMunicipality = municipality
+            state.isMunicipalityUser = true
+            state.activeSettingMunicipality = municipality
             // set municipality for settings and filtering
             state.municipalityList.forEach((m) => {
                 if (m.id === municipality) {
@@ -147,8 +148,8 @@ const mutations = {
     userSignedIn(state) {
         state.isLoggedIn = true
     },
-    updateUserMunicipality (state, municipality) {
-
+    updateSettingMunicipality(state, municipality) {
+        state.activeSettingMunicipality = municipality
     },
     updateIsMunicipalityUser (state, isMunicipalityUser) {
         state.isMunicipalityUser = isMunicipalityUser
