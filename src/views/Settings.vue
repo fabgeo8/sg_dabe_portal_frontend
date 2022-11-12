@@ -159,8 +159,8 @@ export default {
     },
     updateUserData () {
       console.log("updating data")
-      this.$refs.activeUserList.getUserList()
-      this.$refs.inactiveUserList.getUserList()
+      if (this.$refs.activeUserList) this.$refs.activeUserList.getUserList()
+      if (this.$refs.inactiveUserList) this.$refs.inactiveUserList.getUserList()
     },
   },
 }

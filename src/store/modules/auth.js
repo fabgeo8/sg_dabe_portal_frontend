@@ -124,7 +124,7 @@ const actions = {
             axios.get('/municipalities')
                 .then((res) => {
                     state.municipalityList = res.data
-                    this.municipalityList.unshift({
+                    state.municipalityList.unshift({
                         id: 'canton',
                         name: 'Kanton'
                     })
