@@ -49,7 +49,7 @@ const getters = {
         if (state.lastRequestTimestamp === null) {
             return true
         } else {
-            if (new Date().getMilliseconds() - state.lastRequestTimestamp.getMilliseconds() > userInfoExpiration * 1000) {
+            if (Date.now() - state.lastRequestTimestamp > userInfoExpiration * 1000) {
                 console.log("user info expired, renewing...")
                 return true
             }
@@ -71,7 +71,7 @@ const actions = {
                         // store user info to state
                         console.log("userinfo is accessed")
                         if (res.data && res.data.fullname) {
-                            state.lastRequestTimestamp = new Date()
+                            state.lastRequestTimestamp = Date.now()
                             let user = res.data
                             state.isAuthorized = user.is_authorized
                             state.isAdmin = user.role_name === 'admin'
