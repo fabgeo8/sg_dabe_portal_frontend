@@ -23,7 +23,7 @@ const getters = {
     },
 
     getIsMunicipalityUser (state) {
-        return state.settingIsMunicipality
+        return state.isMunicipalityUser
     },
 
     getUserLocation (state) {
