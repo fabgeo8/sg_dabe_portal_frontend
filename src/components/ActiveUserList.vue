@@ -106,7 +106,6 @@ export default {
   },
   methods: {
     getUserList() {
-
       this.loadingData = true
       axios.get('/users/' + this.$store.getters.getUserLocation)
           .then((res) => {
