@@ -10,6 +10,7 @@
         <v-select :items="municipalityItems" v-if="showMunicipalitySelection" outlined item-text="name" item-value="id"
                   v-model="activeUserMunicipality" label="Gemeinde auswählen" @change="updateUserData()"></v-select>
       </v-col>
+      <v-col>Show selection: {{ showMunicipalitySelection }}</v-col>
       </v-row>
       <v-row>
       <v-col class="py-2 px-0" cols="12" md="3" lg="3" xl="2">
