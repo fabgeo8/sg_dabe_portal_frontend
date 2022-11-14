@@ -7,7 +7,7 @@
         <v-card
             :loading="dataLoading"
             class="mx-auto"
-            color="primary"
+            color="#888"
             dark
         >
           <template slot="progress">
