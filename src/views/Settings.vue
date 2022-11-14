@@ -34,7 +34,7 @@
                     <v-list-item-title v-else>Gemeinden verwalten</v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
-                <v-list-item v-if="!$store.getters.getIsMunicipalityUser">
+                <v-list-item v-if="!$store.getters.getSettingIsMunicipality">
                   <v-list-item-content @click="hideAllSettings(); showGasProviders = true;">
                     <v-list-item-title>Gasversorger verwalten</v-list-item-title>
                   </v-list-item-content>
@@ -69,7 +69,7 @@
               min-height="700"
           >
             <v-card-title>
-              <span v-if="$store.getters.getIsMunicipalityUser">Gemeinde verwalten</span>
+              <span v-if="$store.getters.getSettingIsMunicipality">Gemeinde verwalten</span>
               <span v-else>Gemeinden verwalten</span>
             </v-card-title>
           </v-card>
@@ -78,7 +78,7 @@
               class="mx-auto"
               min-height="700"
               rounded
-              v-if="showGasProviders && !$store.getters.getIsMunicipalityUser"
+              v-if="showGasProviders && !$store.getters.getSettingIsMunicipality"
           >
             <v-card-title>
               Gasversorger verwalten

@@ -63,7 +63,7 @@
 
           </v-card-title>
           <v-card-subtitle>
-            Stichtag Gesuch Bewilligt
+            Stichtag Gesuch Bewilligt gemäss gewähltem Datumsbereich
           </v-card-subtitle>
 
           <v-card-text class="text-h5" v-if="statsObject.granted">
@@ -105,7 +105,7 @@
             <span class="text-h5">Realisierte Gesuche</span>
           </v-card-title>
           <v-card-subtitle>
-            Stichtag Gesuch realisiert
+            Stichtag Gesuch realisiert gemäss gewähltem Datumsbereich (abrechnungsrelevant)
           </v-card-subtitle>
 
           <v-card-text class="text-h5" v-if="statsObject.completed">

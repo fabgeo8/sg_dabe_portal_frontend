@@ -27,7 +27,7 @@ const getters = {
     },
 
     getUserLocation (state) {
-        return state.isMunicipalityUser ? state.userMunicipality : 'canton'
+        return state.settingIsMunicipality ? state.activeSettingMunicipality : 'canton'
     },
 
     getActiveClient (state) {
