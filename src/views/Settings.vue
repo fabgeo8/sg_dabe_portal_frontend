@@ -155,6 +155,7 @@ export default {
     }
   },
   mounted () {
+    this.$store.dispatch('getMunicipalityList')
   },
   methods: {
     hideAllSettings () {

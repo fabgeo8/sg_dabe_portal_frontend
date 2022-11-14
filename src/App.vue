@@ -170,7 +170,7 @@ export default {
     dateTo: null
   }),
   created() {
-    this.$store.dispatch('getMunicipalityList')
+
   },
   methods: {
     changeApplicationType(applicationTypeId) {
