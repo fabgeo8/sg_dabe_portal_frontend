@@ -3,7 +3,7 @@
     <v-col cols="12"
     sm="12" md="12">
         <v-btn color="primary" :loading="dataPushing" @click="pushDataToFormAssistant()" >Daten an Formularsystem übertragen</v-btn>
-        <p>Aktuelle Gemeindeliste und Gasversorgerdaten werden auf das Formularsystem synchronisiert.</p>
+        <p class="mt-3">Aktuelle Gemeindeliste und Gasversorgerdaten werden auf das Formularsystem synchronisiert.</p>
     </v-col>
   </v-row>
 </template>

@@ -61,7 +61,7 @@
               Systemeinstellungen
             </v-card-title>
             <v-card-text>
-              <admin-system-settings v-if="$store.getters.getActiveSettingMunicipality"></admin-system-settings>
+              <admin-system-settings v-if="!$store.getters.getActiveSettingMunicipality"></admin-system-settings>
             </v-card-text>
           </v-card>
 
@@ -87,7 +87,6 @@
               Gasversorger verwalten
             </v-card-title>
             <v-card-text>
-            <h3>Aktive Benutzer:</h3>
               <gas-operator-list class="mb-4"></gas-operator-list>
             </v-card-text>
           </v-card>
