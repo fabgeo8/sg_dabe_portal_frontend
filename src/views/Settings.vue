@@ -25,7 +25,7 @@
               >
                 <v-list-item>
                   <v-list-item-content @click="hideAllSettings(); showGeneral = true;">
-                    <v-list-item-title>Allgemein</v-list-item-title>
+                    <v-list-item-title>Systemeinstellungen</v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
                 <v-list-item>
@@ -58,8 +58,11 @@
               min-height="700"
           >
             <v-card-title>
-              Allgemeine Einstellungen
+              Systemeinstellungen
             </v-card-title>
+            <v-card-text>
+              <admin-system-settings v-if="$store.getters.getActiveSettingMunicipality"></admin-system-settings>
+            </v-card-text>
           </v-card>
 
           <v-card
@@ -83,6 +86,10 @@
             <v-card-title>
               Gasversorger verwalten
             </v-card-title>
+            <v-card-text>
+            <h3>Aktive Benutzer:</h3>
+              <gas-operator-list class="mb-4"></gas-operator-list>
+            </v-card-text>
           </v-card>
 
           <v-card
@@ -113,13 +120,16 @@ import ActiveUserList from "../components/ActiveUserList";
 import InactiveUserList from "../components/InactiveUserList";
 import axios from "axios";
 import {showSnack} from "../globalActions";
+import AdminSystemSettings from "../components/AdminSystemSettings";
 
 export default {
   name: 'Settings',
   props: [],
   components: {
     'inactive-user-list': InactiveUserList,
-    'active-user-list': ActiveUserList
+    'active-user-list': ActiveUserList,
+    'admin-system-settings': AdminSystemSettings,
+    'gas-operator-list': GasOperatorList
   },
   data: () => ({
     showGeneral: true,
