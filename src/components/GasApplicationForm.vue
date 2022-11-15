@@ -91,7 +91,6 @@
                           v-model="formattedStatusDate"
                           label="Statusänderung"
                           :error-messages="errors"
-                          :disabled="disableDateChange"
                           readonly
                           v-bind="attrs"
                           v-on="on"
@@ -178,7 +177,7 @@
                     name="municipality"
                     rules=""
                 >
-                  <v-select :items="municipalityItems" item-value="id" item-text="name" v-model="form.application.municipality" label="Gemeinde" :error-messages="errors"></v-select>
+                  <v-select :items="municipalityItems" :disabled="$store.getters.getIsMunicipalityUser" item-value="id" item-text="name" v-model="form.application.municipality" label="Gemeinde" :error-messages="errors"></v-select>
                 </validation-provider>
               </v-col>
             </v-row>
@@ -187,6 +186,27 @@
                   <v-text-field disabled   v-model="form.application.generator_area" label="EBF">
                     <template slot="append">m&sup2;</template>
                   </v-text-field>
+              </v-col>
+              <v-col cols="6" sm="12" md="6">
+                <v-text-field disabled v-model="form.application.fuel_type" label="Art des Brennstoff">
+                </v-text-field>
+              </v-col>
+              </v-row>
+            <v-row>
+              <v-col cols="12" sm="12" md="12">
+                <v-text-field disabled v-model="form.application.gas_operator" label="Gasversorger">
+                  <template slot="append">m&sup2;</template>
+                </v-text-field>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="6" sm="12" md="6">
+                <v-text-field disabled v-model="form.application.year_of_construction" label="Baujahr">
+                </v-text-field>
+              </v-col>
+              <v-col cols="6" sm="12" md="6">
+                <v-text-field disabled v-model="form.application.boiler_replacement_year" label="Datum Ersatz Heizkessel">
+                </v-text-field>
               </v-col>
             </v-row>
             <v-row>
@@ -333,10 +353,13 @@ export default {
             this.form.application.generator_area = this.editedApplication.generator_area
             this.form.application.remark = this.editedApplication.remark
             this.form.application.status = this.editedApplication.status
+            this.form.application.gas_operator = this.editedApplication.gas_operator
             this.form.application.status_date = this.editedApplication.last_status_date
             this.form.application.municipality = this.editedApplication.MunicipalityId
+            this.form.application.fuel_type = this.editedApplication.fuel_type
+            this.form.application.year_of_construction = this.editedApplication.year_of_construction
+            this.form.application.boiler_replacement_year = this.editedApplication.boiler_replacement_year
             this.statusDates = this.editedApplication.status_changed_dates
-
             this.formatStatusDate()
           } else {
             showSnack({ message: 'Fehler beim Abrufen der Gesuchsdaten.', color: 'red' })

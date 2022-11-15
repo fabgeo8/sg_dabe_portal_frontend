@@ -91,7 +91,6 @@
                           v-model="formattedStatusDate"
                           label="Statusänderung"
                           :error-messages="errors"
-                          :disabled="disableDateChange"
                           readonly
                           v-bind="attrs"
                           v-on="on"
@@ -178,7 +177,7 @@
                     name="municipality"
                     rules=""
                 >
-                  <v-select :items="municipalityItems" item-value="id" item-text="name" v-model="form.application.municipality" label="Gemeinde" :error-messages="errors"></v-select>
+                  <v-select :items="municipalityItems" :disabled="$store.getters.getIsMunicipalityUser" item-value="id" item-text="name" v-model="form.application.municipality" label="Gemeinde" :error-messages="errors"></v-select>
                 </validation-provider>
               </v-col>
             </v-row>
