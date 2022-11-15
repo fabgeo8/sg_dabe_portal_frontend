@@ -8,6 +8,7 @@ const state = {
     isAuthorized: null,
     lastRequestTimestamp: null,
     activeSettingMunicipality: '',
+    activeSettingClient: 'Kanton',
     activeClient: 'Kanton',
     isAdmin: true,
     isLoggedIn: false,
@@ -32,6 +33,10 @@ const getters = {
 
     getActiveClient (state) {
         return state.activeClient
+    },
+
+    getActiveSettingClient (state) {
+        return state.activeSettingClient
     },
 
     getIsAdmin (state) {
@@ -74,7 +79,7 @@ const actions = {
         console.log("updating user municipality to: " + municipality)
 
         // if user municipality is null it's a canton user
-        if (municipality === null) {
+        if (municipality === null || municipality === '') {
             state.isMunicipalityUser = false
             state.activeSettingMunicipality = 'canton'
             state.activeClient = 'Kanton'
@@ -159,6 +164,16 @@ const mutations = {
     },
     updateSettingMunicipality(state, municipality) {
         state.activeSettingMunicipality = municipality
+
+        if (municipality === 'canton') {
+            state.activeSettingClient = 'Kanton'
+        } else {
+            state.municipalityList.forEach((m) => {
+                if (m.id === municipality) {
+                    state.activeSettingClient = m.name
+                }
+            })
+        }
     },
     updateSettingIsMunicipality (state, isMunicipalityUser) {
         state.settingIsMunicipality = isMunicipalityUser

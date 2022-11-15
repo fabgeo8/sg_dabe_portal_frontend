@@ -42,7 +42,7 @@
                       Benutzer aktivieren
                     </v-card-title>
                     <v-card-text class="mt-2">
-                      <span v-if="$store.getters.getActiveSettingMunicipality">Der Benutzer wird aus der aktiviert und zur Benutzerliste der <strong>Gemeinde {{ $store.getters.getActiveClient }}</strong> der als 'user' hinzugefügt. Der Benutzer hat somit <strong>Zugriff auf Gesuchsdaten der Gemeinde {{ $store.getters.getActiveClient }}</strong>.</span>
+                      <span v-if="$store.getters.getActiveSettingMunicipality">Der Benutzer wird aus der aktiviert und zur Benutzerliste der <strong>Gemeinde {{ $store.getters.getActiveSettingClient }}</strong> der als 'user' hinzugefügt. Der Benutzer hat somit <strong>Zugriff auf Gesuchsdaten der Gemeinde {{ $store.getters.getActiveSettingClient }}</strong>.</span>
                       <span v-else>Der Benutzer wird aus der aktiviert und zur Benutzerliste des <strong>Kanton</strong> der als 'user' hinzugefügt. Der Benutzer hat somit <strong>Zugriff auf Gesuchsdaten aller Gemeinden</strong>.</span>
                     </v-card-text>
                     <v-divider></v-divider>
