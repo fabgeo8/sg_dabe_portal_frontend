@@ -121,6 +121,7 @@ import InactiveUserList from "../components/InactiveUserList";
 import axios from "axios";
 import {showSnack} from "../globalActions";
 import AdminSystemSettings from "../components/AdminSystemSettings";
+import GasOperatorList from "../components/GasOperatorList";
 
 export default {
   name: 'Settings',
