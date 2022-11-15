@@ -195,7 +195,6 @@
             <v-row>
               <v-col cols="12" sm="12" md="12">
                 <v-text-field disabled v-model="form.application.gas_operator" label="Gasversorger">
-                  <template slot="append">m&sup2;</template>
                 </v-text-field>
               </v-col>
             </v-row>
