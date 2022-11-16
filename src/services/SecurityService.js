@@ -3,7 +3,8 @@ import Oidc from 'oidc-client';
 import store from '../store'
 import axios from "axios";
 
-const OIDC_DOMAIN = process.env.VUE_APP_AUTH_HOST;
+const OIDC_DOMAIN = process.env.VUE_APP_AUTH_HOST
+const BASE_URI = process.env.VUE_APP_BASE_URL
 
 const secureConnectConfig = {
     userStore: new Oidc.WebStorageStateStore(),
@@ -12,7 +13,7 @@ const secureConnectConfig = {
     redirect_uri: process.env.VUE_APP_AUTH_REDIRECT_URL,
     response_type: "token id_token",
     scope: "openid profile email urn:abraxas:iam:hosted_domain:sg",
-    post_logout_redirect_uri: "/login",
+    post_logout_redirect_uri: BASE_URI + "/login",
     //silent_redirect_uri: window.location.origin + '/static/silent-renew.html',
     accessTokenExpiringNotificationTime: 10,
     automaticSilentRenew: false,
