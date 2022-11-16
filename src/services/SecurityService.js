@@ -13,7 +13,7 @@ const secureConnectConfig = {
     response_type: "token id_token",
     scope: "openid profile email urn:abraxas:iam:hosted_domain:sg",
     post_logout_redirect_uri: "/login",
-    silent_redirect_uri: window.location.origin + '/static/silent-renew.html',
+    //silent_redirect_uri: window.location.origin + '/static/silent-renew.html',
     accessTokenExpiringNotificationTime: 10,
     automaticSilentRenew: false,
     filterProtocolClaims: false,
@@ -155,6 +155,8 @@ export default class SecurityService {
             console.log('signed out', resp);
         }).catch(function (err) {
             console.log(err)
+        }).finally(() => {
+            store.commit("signOutUser")
         })
     }
 

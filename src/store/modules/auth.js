@@ -1,6 +1,9 @@
 import axios from 'axios'
 import {showSnack} from "../../globalActions";
 
+import Mgr from '../../services/SecurityService'
+const auth = new Mgr()
+
 const state = {
     isMunicipalityUser: true,
     settingIsMunicipality: true,
@@ -127,6 +130,13 @@ const actions = {
                 })
                 .catch((ex) => {
                     console.log('fetch userinfo failed: ' + ex.message)
+
+                    // if token is expired, singout user
+                    if (ex.response.data.message === 'jwt expired') {
+                        showSnack({ message: 'Benutzersession ist abgeloffen, bitte neu anmelden.', color: 'red' })
+                        auth.signOut()
+                    }
+
                     state.isAuthorized = false
                     // showSnack({ message: 'Benutzer konnte nicht geladen werden.', color: 'red' })
                 })
