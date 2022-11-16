@@ -9,8 +9,6 @@
 <body>
 <script src="js/oidc-client.min.js"></script>
 <script>
-    const OIDC_DOMAIN = "https://accounts.abraxas.ch";
-
     var mgr = new Oidc.UserManager({
         userStore: new Oidc.WebStorageStateStore(),
         filterProtocolClaims: false,

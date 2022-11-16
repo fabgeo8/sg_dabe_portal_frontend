@@ -133,7 +133,7 @@ const actions = {
 
                     // if token is expired, singout user
                     if (ex.response.data.message === 'jwt expired') {
-                        showSnack({ message: 'Benutzersession ist abgeloffen, bitte neu anmelden.', color: 'red' })
+                        showSnack({ message: 'Benutzersession ist abgelaufen, bitte neu anmelden.', color: 'red' })
                         auth.signOut()
                     }
 
