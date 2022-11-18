@@ -75,8 +75,10 @@
               <span v-if="$store.getters.getSettingIsMunicipality">Gemeinde verwalten</span>
               <span v-else>Gemeinden verwalten</span>
             </v-card-title>
+            <v-card-text>
+              <municipality-addresses v-if="$store.getters.getSettingIsMunicipality"></municipality-addresses>
+            </v-card-text>
           </v-card>
-
           <v-card
               class="mx-auto"
               min-height="700"
@@ -103,7 +105,6 @@
             <v-card-text>
               <h3>Aktive Benutzer:</h3>
               <active-user-list ref="activeUserList" @updateUsers="updateUserData()" active-municipality="" class="mb-4"></active-user-list>
-
               <h3>Nicht zugewiesene Benutzer:</h3>
               <inactive-user-list ref="inactiveUserList" @updateUsers="updateUserData()"></inactive-user-list>
             </v-card-text>
@@ -121,11 +122,13 @@ import axios from "axios";
 import {showSnack} from "../globalActions";
 import AdminSystemSettings from "../components/AdminSystemSettings";
 import GasOperatorList from "../components/GasOperatorList";
+import MunicipalityAddresses from "../components/MunicipalityAddresses";
 
 export default {
   name: 'Settings',
   props: [],
   components: {
+    'municipality-addresses': MunicipalityAddresses,
     'inactive-user-list': InactiveUserList,
     'active-user-list': ActiveUserList,
     'admin-system-settings': AdminSystemSettings,
