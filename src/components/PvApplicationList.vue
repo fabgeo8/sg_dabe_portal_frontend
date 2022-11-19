@@ -44,6 +44,7 @@ import PvApplicationForm from '../components/PvApplicationForm'
 // import { showSnack } from '@/globalActions'
 import StatusChips from '../utils/statusChipsPv'
 import { json2excel } from 'js2excel'
+import ExportToExcel from "../utils/exportToExcel";
 
 export default {
   props: ['searchText', 'statusFilter'],
@@ -86,60 +87,7 @@ export default {
     exportDataset () {
       // select filtered ids to select filtered set from whole application dataset
       const filteredIds = this.filteredList.map(a => a.id);
-      let dataToExport = []
-
-      // push all matching applications to list
-      this.applicationList.forEach((a) => {
-        if (filteredIds.includes(a.id)) {
-          dataToExport.push(a)
-        }
-      })
-
-      //build formatted list for excel export, excel will be exported with these headers
-      let formattedData = []
-      dataToExport.forEach((a) => {
-        let entry = {
-          'Gesuch-ID': a.identifier,
-          'Status': this.statusChips[a.status].text,
-          'Statusänderung': new Date(a.last_status_date).toLocaleDateString(),
-          'Variante': a.version,
-          'EGID': a.object_egid,
-          'Parzelle': a.object_plot,
-          'Strasse': a.object_street,
-          'Hausnummer': a.object_streetnumber,
-          'PLZ': a.object_zip,
-          'Ort': a.object_city,
-          'EBF': a.generator_area,
-          'Abgabe': a.fee,
-          'Gemeinde': a.Municipality.name
-        }
-
-        // add status change dates
-        for (const s in this.statusChips) {
-          if (a.status_changed_dates[s]) {
-            entry['Datum ' + this.statusChips[s].text] = new Date(a.status_changed_dates[s]).toLocaleDateString()
-          } else {
-            entry['Datum ' + this.statusChips[s].text] = ''
-          }
-        }
-
-        entry['Bemerkung'] = a.remark
-        entry['System-ID'] = a.id
-
-        formattedData.push(entry)
-      })
-
-      const data = formattedData
-
-      try {
-        json2excel({
-          data,
-          name: 'export-pv',
-          formateDate: 'yyyy.mm.dd'
-        });
-      } catch (e) {
-        console.error('export error', e);
-      }
+      ExportToExcel.exportPvApplication(filteredIds, 'export-pv')
     }
   },
   computed: {

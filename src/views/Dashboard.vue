@@ -35,7 +35,7 @@
                   align="center"
                   justify="end"
               >
-                <v-btn text>
+                <v-btn text @click="exportDataset('open')">
                   <v-icon class="mr-1">
                     mdi-microsoft-excel
                   </v-icon>
@@ -78,7 +78,7 @@
                   align="center"
                   justify="end"
               >
-                <v-btn text>
+                <v-btn @click="exportDataset('granted')" text>
                   <v-icon class="mr-1">
                     mdi-microsoft-excel
                   </v-icon>
@@ -120,7 +120,7 @@
                   align="center"
                   justify="end"
               >
-                <v-btn text>
+                <v-btn text @click="exportDataset('completed')">
                   <v-icon class="mr-1">
                     mdi-microsoft-excel
                   </v-icon>
@@ -173,6 +173,8 @@
 import GlobalFilter from '../components/GlobalFilter'
 import { showSnack } from "../globalActions"
 import axios from 'axios'
+import {json2excel} from "js2excel";
+import ExportToExcel from "../utils/exportToExcel";
 
 export default {
   components: {
@@ -235,6 +237,13 @@ export default {
         return ''
       }
     },
+    exportDataset (key) {
+      // select filtered ids to select filtered set from whole application dataset
+      const filteredIds = this.statsObject[key].applicationIds
+
+      console.log('exported id list', filteredIds)
+      ExportToExcel.exportGasApplications(filteredIds, 'export-gas')
+    }
   },
   computed: {}
 }
