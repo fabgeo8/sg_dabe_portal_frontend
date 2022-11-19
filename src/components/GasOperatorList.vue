@@ -14,11 +14,13 @@
             :items-per-page="10"
             :loading="loadingData"
             :headers="headers"
+            locale="de-CH"
             loading-text="Gasversorger werden geladen."
             class="elevation-1">
           <template v-slot:item="props">
             <tr>
               <td nowrap="true">{{ props.item.name }}</td>
+              <td nowrap="true">{{ props.item.short_name }}</td>
               <td></td>
             </tr>
           </template>
@@ -69,6 +71,12 @@ export default {
             align: 'start',
             filterable: false,
             value: 'name'
+          },
+          {
+            text: 'Kurzname',
+            align: 'start',
+            filterable: false,
+            value: 'short_name'
           },
           {
             text: '',

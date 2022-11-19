@@ -63,7 +63,7 @@
 
           </v-card-title>
           <v-card-subtitle>
-            Stichtag Gesuch Bewilligt gemäss gewähltem Datumsbereich
+            Stichtag Gesuch bewilligt gemäss gewähltem Datumsbereich
           </v-card-subtitle>
 
           <v-card-text class="text-h5" v-if="statsObject.granted">

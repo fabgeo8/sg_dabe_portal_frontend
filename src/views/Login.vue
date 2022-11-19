@@ -15,7 +15,7 @@
           <v-card-text>
             Name: {{userInfo.name}}<br>
             Email: {{userInfo.email}}<br>
-            Gemeinde: {{ userMunicipality }}
+            Gemeinde: {{ $store.getters.getActiveClient }}
           </v-card-text>
           <v-divider></v-divider>
           <v-card-actions>

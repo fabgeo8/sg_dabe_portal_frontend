@@ -71,6 +71,7 @@ export default {
     }
   },
   created () {
+    this.$store.dispatch('updateData')
     this.updateAppliedFilters()
   },
   methods: {

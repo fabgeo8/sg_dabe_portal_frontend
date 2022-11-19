@@ -1,17 +1,18 @@
 <template>
   <div>
     <v-row class="my-0">
-    <v-col>
+    <v-col class="pt-0">
       <!-- Application List Table -->
       <v-data-table
           :items="applicationList"
           :items-per-page="30"
           :loading="loadingData"
           :headers="headers"
+          locale="de-CH"
           :search="searchText"
           @current-items="setFilteredList"
           loading-text="Gesuchsdaten werden geladen."
-          class="elevation-1 mt-6">
+          class="elevation-1">
         <template v-slot:item="props">
           <tr>
             <td nowrap="true">{{ new Date(props.item.createdAt).toLocaleDateString(undefined, {day: '2-digit', month: '2-digit', year: 'numeric'}) }}</td>
@@ -83,11 +84,57 @@ export default {
       }
     },
     exportDataset () {
-      const data = this.filteredList
+      // select filtered ids to select filtered set from whole application dataset
+      const filteredIds = this.filteredList.map(a => a.id);
+      let dataToExport = []
+
+      // push all matching applications to list
+      this.applicationList.forEach((a) => {
+        if (filteredIds.includes(a.id)) {
+          dataToExport.push(a)
+        }
+      })
+
+      //build formatted list for excel export, excel will be exported with these headers
+      let formattedData = []
+      dataToExport.forEach((a) => {
+        let entry = {
+          'Gesuch-ID': a.identifier,
+          'Status': this.statusChips[a.status].text,
+          'Statusänderung': new Date(a.last_status_date).toLocaleDateString(),
+          'Variante': a.version,
+          'EGID': a.object_egid,
+          'Parzelle': a.object_plot,
+          'Strasse': a.object_street,
+          'Hausnummer': a.object_streetnumber,
+          'PLZ': a.object_zip,
+          'Ort': a.object_city,
+          'EBF': a.generator_area,
+          'Abgabe': a.fee,
+          'Gemeinde': a.Municipality.name
+        }
+
+        // add status change dates
+        for (const s in this.statusChips) {
+          if (a.status_changed_dates[s]) {
+            entry['Datum ' + this.statusChips[s].text] = new Date(a.status_changed_dates[s]).toLocaleDateString()
+          } else {
+            entry['Datum ' + this.statusChips[s].text] = ''
+          }
+        }
+
+        entry['Bemerkung'] = a.remark
+        entry['System-ID'] = a.id
+
+        formattedData.push(entry)
+      })
+
+      const data = formattedData
+
       try {
         json2excel({
           data,
-          name: 'pv_gesuche',
+          name: 'export-pv',
           formateDate: 'yyyy.mm.dd'
         });
       } catch (e) {
@@ -164,7 +211,7 @@ export default {
             value: 'Municipality.name'
           },
           {
-            text: 'Gesuchs-ID',
+            text: 'Gesuch-ID',
             align: 'start',
             filterable: true,
             value: 'identifier'

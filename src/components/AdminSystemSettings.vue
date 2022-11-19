@@ -19,8 +19,6 @@ export default {
 
   }),
   created () {
-    this.getMunicipalities()
-    this.formatDate()
   },
   methods: {
     pushDataToFormAssistant () {

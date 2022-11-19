@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row class="my-0">
-    <v-col>
+    <v-col class="pt-0">
       <!-- Application List Table -->
       <v-data-table
           :items="applicationList"
@@ -9,9 +9,10 @@
           :loading="loadingData"
           :headers="headers"
           :search="searchText"
+          locale="de-CH"
           @current-items="setFilteredList"
           loading-text="Gesuchsdaten werden geladen."
-          class="elevation-1 mt-6">
+          class="elevation-1">
         <template v-slot:item="props">
           <tr>
             <td nowrap="true">{{ new Date(props.item.createdAt).toLocaleDateString(undefined, {day: '2-digit', month: '2-digit', year: 'numeric'}) }}</td>
@@ -21,7 +22,7 @@
             <td nowrap="true">{{ props.item.object_egid }}</td>
             <td nowrap="true">{{ props.item.address }}</td>
             <td nowrap="true">{{ props.item.generator_area }} m&sup2;</td>
-            <td nowrap="true">{{ props.item.gas_operator }}</td>
+            <td nowrap="true">{{ gasOperatorShortNames[props.item.gas_operator] ? gasOperatorShortNames[props.item.gas_operator] : props.item.gas_operator  }}</td>
             <td nowrap="true">{{ props.item.Municipality.name }}</td>
             <td>{{ props.item.identifier }}</td>
             <td nowrap="true">
@@ -53,10 +54,12 @@ export default {
     selectedId: '',
     applicationDialog: false,
     statusChips: StatusChips,
-    filteredList: []
+    filteredList: [],
+    gasOperatorShortNames: {}
   }),
   mounted () {
     this.getApplicationList()
+    this.buildGasOperatorShortNames()
   },
   created () {
     this.$store.dispatch('getGasApplications')
@@ -69,6 +72,13 @@ export default {
       this.selectedId = application.id
       this.applicationDialog = true
       this.$refs.gasForm.setApplication(application.id)
+    },
+    buildGasOperatorShortNames() {
+      let gasOperatorList = this.$store.getters.getGasOperatorList
+
+      gasOperatorList.forEach((o) => {
+        this.gasOperatorShortNames[o.name] = o.short_name
+      })
     },
     closeApplicationDialog () {
       this.applicationDialog = false
@@ -84,11 +94,61 @@ export default {
       }
     },
     exportDataset () {
-      const data = this.filteredList
+      // select filtered ids to select filtered set from whole application dataset
+      const filteredIds = this.filteredList.map(a => a.id);
+      let dataToExport = []
+
+      // push all matching applications to list
+      this.applicationList.forEach((a) => {
+        if (filteredIds.includes(a.id)) {
+          dataToExport.push(a)
+        }
+      })
+
+      //build formatted list for excel export, excel will be exported with these headers
+      let formattedData = []
+      dataToExport.forEach((a) => {
+        let entry = {
+          'Gesuch-ID': a.identifier,
+          'Status': this.statusChips[a.status].text,
+          'Statusänderung': new Date(a.last_status_date).toLocaleDateString(),
+          'Variante': a.version,
+          'EGID': a.object_egid,
+          'Parzelle': a.object_plot,
+          'Strasse': a.object_street,
+          'Hausnummer': a.object_streetnumber,
+          'PLZ': a.object_zip,
+          'Ort': a.object_city,
+          'EBF': a.generator_area,
+          'Gasversorger': a.gas_operator,
+          'Art des Brennstoff': a.fuel_type,
+          'Baujahr': a.year_of_construction,
+          'Datum Ersatz Heizkessel': a.boiler_replacement_year,
+          'Gemeinde': a.Municipality.name
+        }
+
+        // add status change dates
+        for (const s in this.statusChips) {
+          if (a.status_changed_dates[s]) {
+            entry['Datum ' + this.statusChips[s].text] = new Date(a.status_changed_dates[s]).toLocaleDateString()
+          } else {
+            entry['Datum ' + this.statusChips[s].text] = ''
+          }
+        }
+
+        entry['Bemerkung'] = a.remark
+        entry['System-ID'] = a.id
+
+        formattedData.push(entry)
+      })
+
+      // export to excel only works if variable is called 'data'!
+      const data = formattedData
+
       try {
         json2excel({
           data,
-          name: 'gas_gesuche',
+          name: 'export-biobrennstoffe',
           formateDate: 'yyyy.mm.dd'
         });
       } catch (e) {
@@ -165,7 +225,7 @@ export default {
             value: 'Municipality.name'
           },
           {
-            text: 'Gesuchs-ID',
+            text: 'Gesuch-ID',
             align: 'start',
             filterable: true,
             value: 'identifier'

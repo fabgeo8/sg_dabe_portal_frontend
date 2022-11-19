@@ -9,6 +9,7 @@
             :items-per-page="10"
             :loading="loadingData"
             :headers="headers"
+            locale="de-CH"
 
             loading-text="Benutzerdaten werden geladen."
             class="elevation-1">

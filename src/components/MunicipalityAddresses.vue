@@ -165,6 +165,8 @@ export default {
       if (!this.$store.state.auth.activeSettingMunicipality) {
         return
       }
+      this.loading = true
+      this.editedDataset = null
       axios
           .get('/municipalities/' + this.$store.state.auth.activeSettingMunicipality)
           .then((response) => {
@@ -194,7 +196,7 @@ export default {
               axios.patch('/municipalities/' + this.$store.state.auth.activeSettingMunicipality + '/addresses/' + this.editedDataset.id, this.form.address)
                   .then((response) => {
                     if (response.status === 200) {
-                      showSnack({ message: 'Adresse wurde erfolgreich aktualisert', color: 'success' })
+                      showSnack({ message: 'Adresse wurde erfolgreich aktualisiert', color: 'success' })
                       this.getAddress()
                     } else {
                       showSnack({ message: 'Adresse konnte nicht aktualisiert werden', color: 'red' })

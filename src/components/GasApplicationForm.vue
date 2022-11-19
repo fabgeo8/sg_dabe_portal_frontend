@@ -84,8 +84,8 @@
                   <template v-slot:activator="{ on, attrs }">
                     <validation-provider
                         v-slot="{ errors }"
-                        name="status1_date"
-                        :rules="{ required_if: { target: 'status1', values: [true, 'true'] } }"
+                        name="status_date"
+                        rules="required"
                     >
                       <v-text-field
                           v-model="formattedStatusDate"
@@ -99,6 +99,7 @@
                   </template>
                   <v-date-picker
                       no-title
+                      locale="de-CH"
                       v-model="form.application.status_date"
                       @input="datePicker.state1 = false; formatStatusDate()"
                   ></v-date-picker>
@@ -107,7 +108,7 @@
             </v-row>
             <v-row>
               <v-col cols="12" sm="12" md="12">
-                <v-text-field v-model="form.application.identifier" disabled label="Gesuchs-ID"></v-text-field>
+                <v-text-field v-model="form.application.identifier" disabled label="Gesuch-ID"></v-text-field>
               </v-col>
             </v-row>
             <v-row>
@@ -188,23 +189,23 @@
                   </v-text-field>
               </v-col>
               <v-col cols="6" sm="12" md="6">
-                <v-text-field disabled v-model="form.application.fuel_type" label="Art des Brennstoff">
-                </v-text-field>
+                <v-select :items="['Biogas','Bioöl']" v-model="form.application.fuel_type" label="Art des Brennstoff">
+                </v-select>
               </v-col>
               </v-row>
             <v-row>
               <v-col cols="12" sm="12" md="12">
-                <v-text-field disabled v-model="form.application.gas_operator" label="Gasversorger">
-                </v-text-field>
+                <v-select :items="$store.getters.getGasOperatorList" item-text="name" item-value="name"  v-model="form.application.gas_operator" label="Gasversorger">
+                </v-select>
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="6" sm="12" md="6">
-                <v-text-field disabled v-model="form.application.year_of_construction" label="Baujahr">
+                <v-text-field v-model="form.application.year_of_construction" label="Baujahr">
                 </v-text-field>
               </v-col>
               <v-col cols="6" sm="12" md="6">
-                <v-text-field disabled v-model="form.application.boiler_replacement_year" label="Datum Ersatz Heizkessel">
+                <v-text-field v-model="form.application.boiler_replacement_year" label="Datum Ersatz Heizkessel">
                 </v-text-field>
               </v-col>
             </v-row>

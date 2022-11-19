@@ -6,7 +6,8 @@ const state = {
     municipality: 0,
     dateFrom: new Date(Date.UTC(new Date().getFullYear(), 0, 1)).toISOString().substr(0, 10),
     dateTo: new Date().toISOString().substr(0, 10),
-    applicationType: 'gas'
+    applicationType: 'gas',
+    gasOperatorList: []
   },
   gasApplications: [],
   pvApplications: [],
@@ -25,9 +26,19 @@ const getters = {
   getApplicationType (state) {
     return state.persisted.applicationType
   },
+  getGasOperatorList (state) {
+    return state.persisted.gasOperatorList
+  }
 }
 
 const actions = {
+  updateData({dispatch, state}) {
+    if (axios.defaults.headers.common['Authorization']) {
+      if (state.persisted.gasOperatorList.length === 0 || !state.persisted.gasOperatorList) {
+        dispatch('getGasOperators')
+      }
+    }
+  },
   async getGasApplications ({ commit, state }) {
     state.loadingData = true
     const params = new URLSearchParams([['municipality', state.persisted.municipality], ['dateFrom', state.persisted.dateFrom], ['dateTo', state.persisted.dateTo]])
@@ -57,6 +68,18 @@ const actions = {
       .finally(() => {
         state.loadingData = false
       })
+  },
+  async getGasOperators ({ commit, state }) {
+    axios.get('/settings/gas_operators')
+        .then((res) => {
+          commit('setGasOperatorList', res.data)
+        })
+        .catch((ex) => {
+          console.log('fetch gasoperator failed: ' + ex.message)
+          showSnack({ message: 'Gasversorgerliste konnte nicht geladen werden.', color: 'red' })
+        })
+        .finally(() => {
+        })
   }
 }
 
@@ -78,6 +101,9 @@ const mutations = {
   },
   updateApplicationType (state, value) {
     state.persisted.applicationType = value
+  },
+  setGasOperatorList (state, value) {
+    state.persisted.gasOperatorList = value
   }
 }
 

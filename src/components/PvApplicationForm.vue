@@ -99,6 +99,7 @@
                   </template>
                   <v-date-picker
                       no-title
+                      locale="de-CH"
                       v-model="form.application.status_date"
                       @input="datePicker.state1 = false; formatStatusDate()"
                   ></v-date-picker>
@@ -107,7 +108,7 @@
             </v-row>
             <v-row>
               <v-col cols="12" sm="12" md="12">
-                <v-text-field   v-model="form.application.identifier" disabled label="Gesuchs-ID"></v-text-field>
+                <v-text-field   v-model="form.application.identifier" disabled label="Gesuch-ID"></v-text-field>
               </v-col>
             </v-row>
             <v-row>

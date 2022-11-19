@@ -9,6 +9,7 @@
               :items-per-page="10"
               :loading="loadingData"
               :headers="headers"
+              locale="de-CH"
               loading-text="Benutzerdaten werden geladen."
               class="elevation-1">
             <template v-slot:item="props">
@@ -53,8 +54,8 @@
                         Benutzer deaktivieren
                       </v-card-title>
                       <v-card-text class="mt-2">
-                        <span v-if="$store.getters.getActiveSettingMunicipality">Der Benutzer wird aus der Benutzerliste der <strong>Gemeinde {{ $store.getters.getActiveSettingClient }}</strong> entfernt und hat keine Berechtigung mehr auf die Gesuche. Der Benutzer kann wieder aktiviert werden.</span>
-                        <span v-else>Der Benutzer wird aus der Benutzerliste des <strong>Kanton</strong> entfernt und hat keine Berechtigung mehr auf die Gesuche. Der Benutzer kann wieder aktiviert werden.</span>
+                        <span v-if="$store.getters.getActiveSettingMunicipality">Der Benutzer wird aus der Benutzerliste der <strong>Gemeinde {{ $store.getters.getActiveSettingClient }}</strong> entfernt und hat keine Berechtigung mehr auf die Gesuche. Der Benutzer kann von einem Administrator wieder aktiviert werden.</span>
+                        <span v-else>Der Benutzer wird aus der Benutzerliste des <strong>Kanton</strong> entfernt und hat keine Berechtigung mehr auf die Gesuche. Der Benutzer kann von einem Administrator wieder aktiviert werden.</span>
                       </v-card-text>
                       <v-divider></v-divider>
                       <v-card-actions>

@@ -44,7 +44,12 @@ const auth0Config = {
     audience: "http://localhost:3005",
 }
 
-var mgr = new Oidc.UserManager(secureConnectConfig)
+if (process.env.NODE_ENV === 'development') {
+    var mgr = new Oidc.UserManager(auth0Config)
+} else {
+    var mgr = new Oidc.UserManager(secureConnectConfig)
+}
+
 
 Oidc.Log.logger = console;
 Oidc.Log.level = Oidc.Log.INFO;
@@ -120,7 +125,12 @@ export default class SecurityService {
 
     setAccessToken (userToken) {
         const authorizationHeader = 'Authorization';
-        axios.defaults.headers.common[authorizationHeader] = `Bearer ${userToken}`;
+
+        axios.defaults.headers.common[authorizationHeader] = `Bearer ${userToken}`
+
+        if (process.env.VUE_APP_TEST_ACCESS_TOKEN) {
+            axios.defaults.headers.common[authorizationHeader] = `Bearer ${process.env.VUE_APP_TEST_ACCESS_TOKEN}`
+        }
     }
 
     // Check if there is any user logged in

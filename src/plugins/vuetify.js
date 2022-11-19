@@ -1,9 +1,16 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify/lib/framework'
+import de from 'vuetify/lib/locale/de'
 
 Vue.use(Vuetify)
 
 const vuetify = new Vuetify({
+  lang: {
+    locales: {
+      de
+    },
+    current: 'de'
+  },
   theme: {
     themes: {
       light: {

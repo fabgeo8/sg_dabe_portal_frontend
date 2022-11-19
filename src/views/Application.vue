@@ -7,7 +7,7 @@
     <v-col>
       <v-row>
         <v-col class="mt-4">
-          <p>Bitte geben Sie die vollständige Gesuchs-ID ein. Wenn Sie die Gesuchs-ID nicht kennen, benutzen Sie die
+          <p>Bitte geben Sie die vollständige Gesuch-ID ein. Wenn Sie die Gesuch-ID nicht kennen, benutzen Sie die
             Filter- und Suchmöglichkeiten unter
             <router-link to="/gesuchliste">Gesuchsliste</router-link>
           </p>
@@ -16,7 +16,7 @@
       <v-row>
         <v-col>
           <v-text-field outlined persistent-placeholder placeholder="bspw. 46AR1AEW-X1" v-model="searchString"
-                        label="Gesuchs-ID eingeben"></v-text-field>
+                        label="Gesuch-ID eingeben"></v-text-field>
         </v-col>
         <v-col>
           <v-btn @click="loadApplication()" color="primary">Gesuch anzeigen</v-btn>

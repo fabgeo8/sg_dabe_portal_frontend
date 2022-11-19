@@ -76,7 +76,7 @@
               <span v-else>Gemeinden verwalten</span>
             </v-card-title>
             <v-card-text>
-              <municipality-addresses v-if="$store.getters.getSettingIsMunicipality"></municipality-addresses>
+              <municipality-addresses ref="municipalityAddresses" v-if="$store.getters.getSettingIsMunicipality"></municipality-addresses>
             </v-card-text>
           </v-card>
           <v-card
@@ -105,7 +105,7 @@
             <v-card-text>
               <h3>Aktive Benutzer:</h3>
               <active-user-list ref="activeUserList" @updateUsers="updateUserData()" active-municipality="" class="mb-4"></active-user-list>
-              <h3>Nicht zugewiesene Benutzer:</h3>
+              <h3>Nicht zugewiesene Benutzer (bitte fügen Sie nur die Benutzer ihrer eigenen Gemeinde hinzu): </h3>
               <inactive-user-list ref="inactiveUserList" @updateUsers="updateUserData()"></inactive-user-list>
             </v-card-text>
           </v-card>
@@ -180,6 +180,7 @@ export default {
       console.log("updating data")
       if (this.$refs.activeUserList) this.$refs.activeUserList.getUserList()
       if (this.$refs.inactiveUserList) this.$refs.inactiveUserList.getUserList()
+      if (this.$refs.municipalityAddresses) this.$refs.municipalityAddresses.getAddress()
     },
   },
 }

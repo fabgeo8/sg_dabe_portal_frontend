@@ -69,6 +69,7 @@
               <v-col>
                 <v-date-picker
                     no-title
+                    locale="de-CH"
                     v-model="dateFrom"
                     @input="formatDate()"
                 ></v-date-picker>
@@ -76,6 +77,7 @@
               <v-col>
                 <v-date-picker
                     no-title
+                    locale="de-CH"
                     v-model="dateTo"
                     @input="formatDate()"
                 ></v-date-picker>
