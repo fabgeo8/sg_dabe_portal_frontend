@@ -222,6 +222,16 @@
             </v-row>
             <v-row>
               <v-col>
+                <p class="subtitle-1 mb-0">Aktivitäten für dieses Gesuch:</p>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <activity-list :activityList="activityList"></activity-list>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
                 <h6 class="text--secondary">System-ID: {{ form.application.id }}</h6>
               </v-col>
             </v-row>
@@ -260,6 +270,7 @@ import { showSnack } from '../globalActions'
 import { required, regex , required_if } from 'vee-validate/dist/rules'
 import { extend, ValidationProvider, ValidationObserver, setInteractionMode } from 'vee-validate'
 import ApplicationStatus from '../utils/statusGas'
+import ActivityList from "./ActivityList";
 
 setInteractionMode('eager')
 
@@ -291,6 +302,7 @@ export default {
     }
   },
   components: {
+    ActivityList,
     ValidationProvider,
     ValidationObserver
   },
@@ -314,6 +326,7 @@ export default {
       formattedStatusDate: null,
       loader: null,
       municipalityItems: [],
+      activityList: [],
       showDialog: false,
       editedApplication: null,
       editedApplicationId: null,
@@ -359,6 +372,7 @@ export default {
             this.form.application.fuel_type = this.editedApplication.fuel_type
             this.form.application.year_of_construction = this.editedApplication.year_of_construction
             this.form.application.boiler_replacement_year = this.editedApplication.boiler_replacement_year
+            this.activityList = this.editedApplication.activities
             this.statusDates = this.editedApplication.status_changed_dates
             this.formatStatusDate()
           } else {

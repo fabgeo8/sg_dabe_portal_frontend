@@ -144,24 +144,7 @@
 
             </div>
 
-            <v-timeline
-                align-top
-                dense
-            >
-              <v-timeline-item
-                  v-for="message in messages"
-                  :key="message.from"
-                  :color="message.color"
-                  small
-              >
-                <div>
-                  <div class="font-weight-normal">
-                    <strong>{{ message.from }}</strong> @{{ message.time }}
-                  </div>
-                  <div>{{ message.message }}</div>
-                </div>
-              </v-timeline-item>
-            </v-timeline>
+            <activity-list :activityList="activities"></activity-list>
           </v-card-text>
         </v-card>
       </v-col>
@@ -173,16 +156,20 @@
 import GlobalFilter from '../components/GlobalFilter'
 import { showSnack } from "../globalActions"
 import axios from 'axios'
-import {json2excel} from "js2excel";
-import ExportToExcel from "../utils/exportToExcel";
+import {json2excel} from "js2excel"
+import ExportToExcel from "../utils/exportToExcel"
+import store from "../store";
+import ActivityList from "../components/ActivityList"
 
 export default {
   components: {
+    ActivityList,
     GlobalFilter
   },
   data: () => ({
     dataLoading: false,
     statsObject: {},
+    activities: [],
     messages: [
       {
         from: '243ADADG-B1',
@@ -213,9 +200,10 @@ export default {
       const params = new URLSearchParams([
         ['municipality', this.$store.state.data.persisted.municipality],
         ['dateFrom', this.$store.state.data.persisted.dateFrom],
-        ['dateTo', this.$store.state.data.persisted.dateTo]])
+        ['dateTo', this.$store.state.data.persisted.dateTo],
+        ['limit', 5]])
 
-      axios.get('applications/' + this.$store.state.data.persisted.applicationType + '/stats', {params})
+      axios.get('applications/' + this.applicationType + '/stats', {params})
           .then((response) => {
             if (response.status === 200) {
               this.statsObject = response.data
@@ -225,6 +213,22 @@ export default {
           })
           .catch((ex) => {
             showSnack({message: 'Daten konnten nicht geladen werden.', color: 'red'})
+          })
+          .finally(() => {
+            this.dataLoading = false
+          })
+
+      axios.get('applications/' + this.applicationType + '/activities', {params})
+          .then((response) => {
+            if (response.status === 200) {
+              this.activities = response.data
+              console.log(this.activities)
+            } else {
+              showSnack({message: 'Aktivitäts-Daten konnten nicht geladen werden.', color: 'red'})
+            }
+          })
+          .catch((ex) => {
+            showSnack({message: 'Aktivitäts-Daten konnten nicht geladen werden.', color: 'red'})
           })
           .finally(() => {
             this.dataLoading = false
@@ -239,13 +243,22 @@ export default {
     },
     exportDataset (key) {
       // select filtered ids to select filtered set from whole application dataset
-      const filteredIds = this.statsObject[key].applicationIds
+      const filteredApplications = this.statsObject[key].applicationIds
 
-      console.log('exported id list', filteredIds)
-      ExportToExcel.exportGasApplications(filteredIds, 'export-gas')
+      if (this.$store.getters.getApplicationType === 'gas') {
+        ExportToExcel.exportGasApplications(filteredApplications, 'export-gas')
+      } else if (this.$store.getters.getApplicationType === 'pv') {
+        ExportToExcel.exportPvApplication(filteredApplications, 'export-pv')
+      }
     }
   },
-  computed: {}
+  computed: {
+    applicationType: {
+      get() {
+        return this.$store.state.data.persisted.applicationType
+      }
+    }
+  }
 }
 
 </script>

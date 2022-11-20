@@ -2,23 +2,14 @@ import {json2excel} from "js2excel"
 import store from "../store"
 import StatusChipsGas from "./statusChipsGas"
 import StatusChipsPv from "./statusChipsPv"
+import {showSnack} from "../globalActions";
 
 export default class ExportToExcel {
-    static exportGasApplications(applicationIds, filename) {
-        let dataToExport = []
-
-        // push all matching applications to list
-        let applicationList = store.getters.getGasApplications
-
-        applicationList.forEach((a) => {
-            if (applicationIds.includes(a.id)) {
-                dataToExport.push(a)
-            }
-        })
+    static exportGasApplications(applications, filename) {
 
         //build formatted list for excel export, excel will be exported with these headers
         let formattedData = []
-        dataToExport.forEach((a) => {
+        applications.forEach((a) => {
             let entry = {
                 'Gesuch-ID': a.identifier,
                 'Status': StatusChipsGas[a.status].text,
@@ -56,6 +47,11 @@ export default class ExportToExcel {
         // export to excel only works if variable is called 'data'!
         const data = formattedData
 
+        if (data.length === 0) {
+            showSnack({message: "Ein leerer Datensatz kann nicht exportiert werden", color: 'red'})
+            return
+        }
+
         try {
             json2excel({
                 data,
@@ -67,21 +63,10 @@ export default class ExportToExcel {
         }
     }
 
-    static exportPvApplication(applicationIds, filename) {
-        let dataToExport = []
-
-        // push all matching applications to list
-        let applicationList = store.getters.getPvApplications
-
-        applicationList.forEach((a) => {
-            if (applicationIds.includes(a.id)) {
-                dataToExport.push(a)
-            }
-        })
-
+    static exportPvApplication(applications, filename) {
         //build formatted list for excel export, excel will be exported with these headers
         let formattedData = []
-        dataToExport.forEach((a) => {
+        applications.forEach((a) => {
             let entry = {
                 'Gesuch-ID': a.identifier,
                 'Status': StatusChipsPv[a.status].text,
@@ -115,6 +100,11 @@ export default class ExportToExcel {
 
         // export to excel only works if variable is called 'data'!
         const data = formattedData
+
+        if (data.length === 0) {
+            showSnack({message: "Ein leerer Datensatz kann nicht exportiert werden", color: 'red'})
+            return
+        }
 
         try {
             json2excel({

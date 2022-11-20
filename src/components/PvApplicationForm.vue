@@ -210,6 +210,16 @@
             </v-row>
             <v-row>
               <v-col>
+                <p class="subtitle-1 mb-0">Aktivitäten für dieses Gesuch:</p>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <activity-list :activityList="activityList"></activity-list>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
                 <h6 class="text--secondary">System-ID: {{ form.application.id }}</h6>
               </v-col>
             </v-row>
@@ -248,6 +258,7 @@ import { showSnack } from '../globalActions'
 import { required, regex } from 'vee-validate/dist/rules'
 import { extend, ValidationProvider, ValidationObserver, setInteractionMode } from 'vee-validate'
 import ApplicationStatus from '../utils/statusPv'
+import ActivityList from "./ActivityList";
 
 setInteractionMode('eager')
 
@@ -275,7 +286,8 @@ export default {
   },
   components: {
     ValidationProvider,
-    ValidationObserver
+    ValidationObserver,
+    ActivityList
   },
   data: function () {
     return {
@@ -297,6 +309,7 @@ export default {
       isSaving: false,
       loader: null,
       municipalityItems: [],
+      activityList: [],
       showDialog: false,
       editedApplication: null,
       editedApplicationId: null,
@@ -337,6 +350,7 @@ export default {
             this.form.application.fee = this.editedApplication.fee
             this.form.application.generator_area = this.editedApplication.generator_area
             this.form.application.remark = this.editedApplication.remark
+            this.activityList = this.editedApplication.activities
             this.form.application.municipality = this.editedApplication.MunicipalityId
             this.form.application.status_date = this.editedApplication.last_status_date
             this.statusDates = this.editedApplication.status_changed_dates

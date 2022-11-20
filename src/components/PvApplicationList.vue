@@ -45,6 +45,7 @@ import PvApplicationForm from '../components/PvApplicationForm'
 import StatusChips from '../utils/statusChipsPv'
 import { json2excel } from 'js2excel'
 import ExportToExcel from "../utils/exportToExcel";
+import store from "../store";
 
 export default {
   props: ['searchText', 'statusFilter'],
@@ -87,6 +88,17 @@ export default {
     exportDataset () {
       // select filtered ids to select filtered set from whole application dataset
       const filteredIds = this.filteredList.map(a => a.id);
+
+      let dataToExport = []
+
+      // push all matching applications to list
+      let applicationList = store.getters.getPvApplications
+
+      applicationList.forEach((a) => {
+        if (filteredIds.includes(a.id)) {
+          dataToExport.push(a)
+        }
+      })
       ExportToExcel.exportPvApplication(filteredIds, 'export-pv')
     }
   },

@@ -1,37 +1,37 @@
 <template>
   <div>
     <v-row class="my-0">
-    <v-col class="pt-0">
-      <!-- Application List Table -->
-      <v-data-table
-          :items="applicationList"
-          :items-per-page="30"
-          :loading="loadingData"
-          :headers="headers"
-          :search="searchText"
-          locale="de-CH"
-          @current-items="setFilteredList"
-          loading-text="Gesuchsdaten werden geladen."
-          class="elevation-1">
-        <template v-slot:item="props">
-          <tr>
-            <td nowrap="true">{{ new Date(props.item.createdAt).toLocaleDateString(undefined, {day: '2-digit', month: '2-digit', year: 'numeric'}) }}</td>
-            <td nowrap="true"><v-chip v-if="props.item.status" small pill :color="statusChips[props.item.status].color">{{ statusChips[props.item.status].text }}</v-chip></td>
-            <td nowrap="true">{{ new Date(props.item.last_status_date).toLocaleDateString(undefined, {day: '2-digit', month: '2-digit', year: 'numeric'}) }}</td>
-            <td nowrap="true">{{ props.item.version }}</td>
-            <td nowrap="true">{{ props.item.object_egid }}</td>
-            <td nowrap="true">{{ props.item.address }}</td>
-            <td nowrap="true">{{ props.item.generator_area }} m&sup2;</td>
-            <td nowrap="true">{{ gasOperatorShortNames[props.item.gas_operator] ? gasOperatorShortNames[props.item.gas_operator] : props.item.gas_operator  }}</td>
-            <td nowrap="true">{{ props.item.Municipality.name }}</td>
-            <td>{{ props.item.identifier }}</td>
-            <td nowrap="true">
-              <v-icon small @click="editApplication(props.item)" class="mr-2">mdi-pencil</v-icon>
-            </td>
-          </tr>
-        </template>
-      </v-data-table>
-    </v-col>
+      <v-col class="pt-0">
+        <!-- Application List Table -->
+        <v-data-table
+            :items="applicationList"
+            :items-per-page="30"
+            :loading="loadingData"
+            :headers="headers"
+            :search="searchText"
+            locale="de-CH"
+            @current-items="setFilteredList"
+            loading-text="Gesuchsdaten werden geladen."
+            class="elevation-1">
+          <template v-slot:item="props">
+            <tr>
+              <td nowrap="true">{{ new Date(props.item.createdAt).toLocaleDateString(undefined, {day: '2-digit', month: '2-digit', year: 'numeric'}) }}</td>
+              <td nowrap="true"><v-chip v-if="props.item.status" small pill :color="statusChips[props.item.status].color">{{ statusChips[props.item.status].text }}</v-chip></td>
+              <td nowrap="true">{{ new Date(props.item.last_status_date).toLocaleDateString(undefined, {day: '2-digit', month: '2-digit', year: 'numeric'}) }}</td>
+              <td nowrap="true">{{ props.item.version }}</td>
+              <td nowrap="true">{{ props.item.object_egid }}</td>
+              <td nowrap="true">{{ props.item.address }}</td>
+              <td nowrap="true">{{ props.item.generator_area }} m&sup2;</td>
+              <td nowrap="true">{{ gasOperatorShortNames[props.item.gas_operator] ? gasOperatorShortNames[props.item.gas_operator] : props.item.gas_operator  }}</td>
+              <td nowrap="true">{{ props.item.Municipality.name }}</td>
+              <td>{{ props.item.identifier }}</td>
+              <td nowrap="true">
+                <v-icon small @click="editApplication(props.item)" class="mr-2">mdi-pencil</v-icon>
+              </td>
+            </tr>
+          </template>
+        </v-data-table>
+      </v-col>
       <v-dialog v-model="applicationDialog" eager persistent max-width="960">
         <gas-application-form ref="gasForm" @getApplications="getApplicationList()" @closeDialog="applicationDialog = false;" ></gas-application-form>
       </v-dialog>
@@ -45,6 +45,7 @@ import GasApplicationForm from '../components/GasApplicationForm'
 import StatusChips from '../utils/statusChipsGas'
 import { json2excel } from 'js2excel'
 import ExportToExcel from "../utils/exportToExcel";
+import store from "../store";
 
 export default {
   props: ['searchText', 'statusFilter'],
@@ -97,7 +98,19 @@ export default {
     exportDataset () {
       // select filtered ids to select filtered set from whole application dataset
       const filteredIds = this.filteredList.map(a => a.id);
-      ExportToExcel.exportGasApplications(filteredIds, 'export-biobrennstoffe')
+
+      let dataToExport = []
+
+      // push all matching applications to list
+      let applicationList = store.getters.getGasApplications
+
+      applicationList.forEach((a) => {
+        if (filteredIds.includes(a.id)) {
+          dataToExport.push(a)
+        }
+      })
+
+      ExportToExcel.exportGasApplications(dataToExport, 'export-biobrennstoffe')
     }
   },
   computed: {
