@@ -44,11 +44,9 @@ const auth0Config = {
     audience: "http://localhost:3005",
 }
 
-if (process.env.NODE_ENV === 'development') {
-    var mgr = new Oidc.UserManager(auth0Config)
-} else {
-    var mgr = new Oidc.UserManager(secureConnectConfig)
-}
+
+var mgr = new Oidc.UserManager(secureConnectConfig)
+
 
 
 Oidc.Log.logger = console;
