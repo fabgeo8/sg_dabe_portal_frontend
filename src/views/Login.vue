@@ -1,9 +1,22 @@
 <template>
-  <div>
-    <v-row v-if="!isLoggedIn">
-      <v-col class="mt-4">
-        <h3>Sie sind nicht angemeldet. Bitte authentifizieren Sie sich über SECURE Connect</h3>
+  <div class="h-100">
+    <v-row class="h-100" v-if="!isLoggedIn">
+      <v-col cols="12" md="7" class="d-none d-md-flex" height="100%"
+             width="100%">
+        <v-img
+            class="mx-auto"
+            src="@/assets/images/Logo_KT_SG_3.svg"
+            max-width="60%"
+            contain
+        ></v-img>
+      </v-col>
+      <v-col cols="12" md="5" class="my-auto">
+
+        <h2>Portal Formularsystem</h2>
+
+        <h4>Sie sind nicht angemeldet. Bitte authentifizieren Sie sich über SECURE Connect</h4>
         <v-btn class="mt-5" @click="login" v-if="!isLoggedIn" color="primary">Login</v-btn>
+
       </v-col>
     </v-row>
     <v-row v-if="isLoggedIn">
@@ -81,3 +94,8 @@ export default {
 }
 
 </script>
+<style>
+  .h-100 {
+    height: 100%;
+  }
+</style>

@@ -84,7 +84,13 @@
         <router-view></router-view>
       </v-container>
       <v-container v-else fluid class="px-md-12">
-        <h1 class="">Sie sind nicht berechtigt für den Zugriff auf diese Applikation. Der Benutzer muss für diese Applikation konfiguriert werden.</h1>
+        <v-alert
+            prominent
+            type="error"
+            class="mt-4"
+        >
+          Sie sind nicht berechtigt für den Zugriff auf diese Applikation. Der Benutzer muss für diese Applikation konfiguriert werden.
+        </v-alert>
       </v-container>
     </v-main>
 

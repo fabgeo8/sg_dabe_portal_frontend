@@ -1,13 +1,47 @@
 h1 {
-  color: $deafult;
+  //color: $default;
 }
 
 .v-application {
-  font-family: $default-font-family !important;
+  //font-family: $default-font-family !important;
 }
 
 .theme--light {
+  p {
+    font-family: "Epilogue", sans-serif;
+  }
+
+  .v-btn {
+    //font-weight: 400;
+    //text-transform: none;
+    //letter-spacing: 0.02em;
+  };
+
+  a {
+    text-decoration: none !important;
+  }
+
+  h1, h2, h3, h4, h5, h6, a, .v-btn, button, label{
+    //font-family: "Epilogue", sans-serif;
+  }
+
+  body {
+   //font-family: "Epilogue", sans-serif;
+  }
+
   a.nav-btn-active {
     color: $primary;
+  }
+
+  .grey-dark {
+    background-color: #404040 !important;
+  }
+
+  .grey-light {
+    background-color: #f2f2f2 !important;
+  }
+
+  .font-grey-dark {
+    color: #404040 !important;
   }
 }
