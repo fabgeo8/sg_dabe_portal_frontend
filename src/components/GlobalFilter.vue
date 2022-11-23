@@ -122,13 +122,13 @@ export default {
       axios.get('/municipalities')
         .then((res) => {
           this.municipalityItems = res.data
+          if (Array.isArray(this.municipalityItems))
           this.municipalityItems.unshift({
             id: 0,
             name: 'alle Gemeinden'
           })
         })
         .catch((ex) => {
-          // todo error handling
           console.log('fetch error: ' + ex.message)
         })
     },
