@@ -2,51 +2,61 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '../store'
 import Mgr from '../services/SecurityService'
+import Layout from "../views/Layout";
 const auth = new Mgr()
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
-    path: '/',
-    name: 'Dashboard',
-    component: () => import('../views/Dashboard')
-  },
-  {
-    path: '/gesuch/:identifier',
-    name: 'Application',
-    props: true,
-    component: () => import('../views/Application')
-  },
-  {
-    path: '/gesuch',
-    name: 'Application',
-    component: () => import('../views/Application')
-  },
-  {
-    path: '/gesuchliste',
-    name: 'Applicationlist',
-    component: () => import('../views/Applicationlist')
-  },
-  {
-    path: '/aktivitaet',
-    name: 'Activities',
-    component: () => import('../views/Activities')
-  },
+const routes = [{
+  path: '/',
+  component: Layout,
+  children: [
+    {
+      path: '/',
+      name: 'Dashboard',
+      component: () => import('../views/Dashboard')
+    },
+    {
+      path: '/gesuch/:identifier',
+      name: 'Application',
+      props: true,
+      component: () => import('../views/Application')
+    },
+    {
+      path: '/gesuch',
+      name: 'Application',
+      component: () => import('../views/Application')
+    },
+    {
+      path: '/gesuchliste',
+      name: 'Applicationlist',
+      component: () => import('../views/Applicationlist')
+    },
+    {
+      path: '/aktivitaet',
+      name: 'Activities',
+      component: () => import('../views/Activities')
+    },
+    {
+      path: '/me',
+      name: 'Me',
+      component: () => import('../views/Me')
+    },
+    {
+      path: '/einstellungen',
+      name: 'Settings',
+      component: () => import('../views/Settings')
+    },
+    {
+      path: '/error',
+      name: 'Error',
+      component: () => import('../views/Error')
+    }
+  ]},
   {
     path: '/login',
     name: 'Login',
     component: () => import('../views/Login')
-  },
-  {
-    path: '/einstellungen',
-    name: 'Settings',
-    component: () => import('../views/Settings')
-  },
-  {
-    path: '/error',
-    name: 'Error',
-    component: () => import('../views/Error')
   }
 ]
 

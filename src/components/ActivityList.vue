@@ -11,7 +11,7 @@
     >
       <div>
         <div class="font-weight-normal">
-          <strong>{{ activity.changed_by }} <a :href="'/gesuch/' + activity.identifier">{{ activity.identifier }}</a></strong> @{{ new Date(activity.createdAt).toLocaleDateString() }}
+          <strong>{{ activity.changed_by }} <a :href="'/gesuch/' + activity.identifier">{{ activity.identifier }}</a></strong> @{{ new Date(activity.createdAt).toLocaleTimeString(undefined, {day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'}) }}
         </div>
         <div>{{ activity.activity_text }}</div>
       </div>

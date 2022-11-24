@@ -51,7 +51,6 @@ Oidc.Log.level = Oidc.Log.INFO;
 
 mgr.events.addUserLoaded(function (user) {
     console.log('New User Loaded：', arguments);
-    //console.log('Acess_token: ', user.access_token)
 });
 
 mgr.events.addAccessTokenExpiring(function () {
@@ -60,7 +59,7 @@ mgr.events.addAccessTokenExpiring(function () {
 
 mgr.events.addAccessTokenExpired(function () {
     // access token is expired, logging user out
-    store.commit("signOutUser")
+    store.commit("userSignedOut")
     mgr.signoutRedirect().then(function (resp) {
 
     }).catch(function (err) {
@@ -74,7 +73,7 @@ mgr.events.addSilentRenewError(function () {
 
 mgr.events.addUserSignedOut(function () {
     console.log('UserSignedOut：', arguments);
-    store.commit("signOutUser")
+    store.commit("userSignedOut")
     mgr.signoutRedirect().then(function (resp) {
         console.log('signed out', resp);
     }).catch(function (err) {
@@ -158,7 +157,7 @@ export default class SecurityService {
         }).catch(function (err) {
             console.log(err)
         }).finally(() => {
-            store.commit("signOutUser")
+            store.commit("userSignedOut")
         })
     }
 

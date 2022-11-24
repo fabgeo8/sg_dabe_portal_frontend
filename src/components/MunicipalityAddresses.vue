@@ -60,6 +60,17 @@
               </validation-provider>
             </v-col>
           </v-row>
+        <v-row>
+          <v-col cols="12" sm="12" md="12">
+            <validation-provider
+                v-slot="{ errors }"
+                name="line_4"
+                rules=""
+            >
+              <v-text-field   v-model="form.address.line_4" label="Adresszeile 4" :error-messages="errors"></v-text-field>
+            </validation-provider>
+          </v-col>
+        </v-row>
           <v-row>
             <v-col cols="6" sm="12" md="6">
               <validation-provider
@@ -145,6 +156,7 @@ export default {
           line_1: '',
           line_2: '',
           line_3: '',
+          line_4: '',
           zip: '',
           city: ''
         }
@@ -177,6 +189,7 @@ export default {
               this.form.address.line_1 = this.editedDataset.line_1
               this.form.address.line_2 = this.editedDataset.line_2
               this.form.address.line_3 = this.editedDataset.line_3
+              this.form.address.line_4 = this.editedDataset.line_4
               this.form.address.zip = this.editedDataset.zip
               this.form.address.city = this.editedDataset.city
             } else {

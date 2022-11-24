@@ -8,7 +8,7 @@ const state = {
     isMunicipalityUser: true,
     settingIsMunicipality: true,
     userMunicipality: '',
-    isAuthorized: null,
+    isAuthorized: true,
     lastRequestTimestamp: null,
     activeSettingMunicipality: '',
     activeSettingClient: 'Kanton',
