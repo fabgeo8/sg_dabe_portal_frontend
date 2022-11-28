@@ -10,8 +10,8 @@
         <v-select :items="municipalityItems" v-if="showMunicipalitySelection" outlined item-text="name" item-value="id"
                   v-model="activeUserMunicipality" label="Gemeinde auswählen" @change="updateUserData()"></v-select>
       </v-col>
-      </v-row>
-      <v-row>
+    </v-row>
+    <v-row>
       <v-col class="py-2 px-0" cols="12" md="3" lg="3" xl="2">
         <v-sheet class="lighten-5 grey" rounded >
           <v-card
@@ -23,7 +23,7 @@
               <v-list-item-group
                   color="primary"
               >
-                <v-list-item>
+                <v-list-item v-if="!$store.getters.getSettingIsMunicipality">
                   <v-list-item-content @click="hideAllSettings(); showGeneral = true;">
                     <v-list-item-title>Systemeinstellungen</v-list-item-title>
                   </v-list-item-content>
@@ -52,9 +52,9 @@
       <v-col cols="12" md="9" lg="9" xl="10" class="py-2 pl-10">
         <v-sheet class="lighten-5 grey" rounded >
           <v-card
+              v-if="!$store.getters.getSettingIsMunicipality && showGeneral"
               class="mx-auto"
               rounded
-              v-if="showGeneral"
               min-height="700"
           >
             <v-card-title>

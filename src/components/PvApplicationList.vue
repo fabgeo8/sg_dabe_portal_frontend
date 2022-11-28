@@ -99,7 +99,7 @@ export default {
           dataToExport.push(a)
         }
       })
-      ExportToExcel.exportPvApplication(filteredIds, 'export-pv')
+      ExportToExcel.exportPvApplication(dataToExport, 'export-pv')
     }
   },
   computed: {
