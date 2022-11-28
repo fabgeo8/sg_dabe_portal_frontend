@@ -25,7 +25,7 @@ export default class ExportToExcel {
                 'Gasversorger': a.gas_operator,
                 'Art des Brennstoff': a.fuel_type,
                 'Baujahr': a.year_of_construction,
-                'Datum Ersatz Heizkessel': a.boiler_replacement_year,
+                'Ersatz Heizkessel': a.boiler_replacement_year,
                 'Gemeinde': a.Municipality.name
             }
 

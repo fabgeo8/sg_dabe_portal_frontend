@@ -79,12 +79,14 @@
       </v-btn>
     </v-container>
   </v-app-bar>
-  <v-main class="">
+  <v-main class="" style="padding-bottom: 60px;">
     <v-container v-if="isAuthorized || $route.name === 'Login' " fluid class="h-100 px-md-12">
       <router-view></router-view>
     </v-container>
-    <v-container v-if="!isAuthorized" fluid class="px-md-12">
+    <v-container v-if="!isAuthorized" fluid class="px-md-12 h-100">
+      <v-progress-linear v-if="userInfoLoading" indeterminate color="primary"></v-progress-linear>
       <v-alert
+          v-else
           prominent
           type="error"
           class="mt-4"
@@ -165,6 +167,11 @@ export default {
         }
       }
     },
+    userInfoLoading: {
+      get () {
+        return this.$store.state.auth.userInfoLoading
+      }
+    },
     isLoggedIn: {
       get() {
         try {
@@ -188,5 +195,7 @@ export default {
 </script>
 
 <style scoped>
-
+ .h-100 {
+   min-height: 100%;
+ }
 </style>

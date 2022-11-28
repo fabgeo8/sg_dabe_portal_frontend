@@ -15,6 +15,7 @@ const state = {
     activeClient: 'Kanton',
     isAdmin: true,
     isLoggedIn: false,
+    userInfoLoading: true,
     municipalityList: []
 }
 
@@ -107,6 +108,7 @@ const actions = {
         // get user info if info is not set
         // also get info if user info request is expired
         if (!state.isAuthorized || getters.getUserInfoIsExpired(state)) {
+            state.userInfoLoading = true
             console.log("get user info from api")
             axios.get('users/me', )
                 .then((res) => {
@@ -140,6 +142,7 @@ const actions = {
                     // showSnack({ message: 'Benutzer konnte nicht geladen werden.', color: 'red' })
                 })
                 .finally(() => {
+                    state.userInfoLoading = false
                 })
         }
     },

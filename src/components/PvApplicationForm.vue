@@ -156,7 +156,7 @@
                 <validation-provider
                     v-slot="{ errors }"
                     name="zip"
-                    rules=""
+                    :rules="{regex: /[0-9]{4}$/}"
                 >
                   <v-text-field   v-model="form.application.object_zip" label="PLZ" :error-messages="errors"></v-text-field>
                 </validation-provider>
@@ -353,7 +353,7 @@ export default {
             this.activityList = this.editedApplication.activities
             this.form.application.municipality = this.editedApplication.MunicipalityId
             this.form.application.status_date = this.editedApplication.last_status_date
-            this.statusDates = this.editedApplication.status_changed_dates
+            this.statusDates = JSON.parse(this.editedApplication.status_changed_dates)
 
             this.formatStatusDate()
           } else {

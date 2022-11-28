@@ -156,7 +156,7 @@
                 <validation-provider
                     v-slot="{ errors }"
                     name="zip"
-                    rules=""
+                    :rules="{regex: /[0-9]{4}$/}"
                 >
                   <v-text-field   v-model="form.application.object_zip" label="PLZ" :error-messages="errors"></v-text-field>
                 </validation-provider>
@@ -201,12 +201,23 @@
             </v-row>
             <v-row>
               <v-col cols="6" sm="12" md="6">
-                <v-text-field v-model="form.application.year_of_construction" label="Baujahr">
-                </v-text-field>
+                <validation-provider
+                    v-slot="{ errors }"
+                    name="yearOfConstruction"
+                    :rules="{regex: /^(19|20)\d{2}$/}"
+                >
+                  <v-text-field v-model="form.application.year_of_construction" :error-messages="errors" label="Baujahr">
+                  </v-text-field>
+                </validation-provider>
               </v-col>
               <v-col cols="6" sm="12" md="6">
-                <v-text-field v-model="form.application.boiler_replacement_year" label="Datum Ersatz Heizkessel">
-                </v-text-field>
+                <validation-provider
+                v-slot="{ errors }"
+                name="boilerReplacementYear"
+                :rules="{regex: /[0-9]{2}\/[0-9]{4}$/}">
+                  <v-text-field v-model="form.application.boiler_replacement_year" :error-messages="errors" label="Ersatz Heizkessel (Monat/Jahr)">
+                  </v-text-field>
+                </validation-provider>
               </v-col>
             </v-row>
             <v-row>
@@ -373,7 +384,7 @@ export default {
             this.form.application.year_of_construction = this.editedApplication.year_of_construction
             this.form.application.boiler_replacement_year = this.editedApplication.boiler_replacement_year
             this.activityList = this.editedApplication.activities
-            this.statusDates = this.editedApplication.status_changed_dates
+            this.statusDates = JSON.parse(this.editedApplication.status_changed_dates)
             this.formatStatusDate()
           } else {
             showSnack({ message: 'Fehler beim Abrufen der Gesuchsdaten.', color: 'red' })

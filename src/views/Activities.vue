@@ -29,7 +29,7 @@
             <!-- Application List Table -->
             <v-data-table
                 :items="activityList"
-                :items-per-page="30"
+                :items-per-page="10"
                 :loading="loadingData"
                 :headers="headers"
                 :search="searchText"
