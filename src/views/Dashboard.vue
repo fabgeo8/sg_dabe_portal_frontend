@@ -7,8 +7,9 @@
         <v-card
             :loading="dataLoading"
             class="mx-auto"
-            color="#888"
-            dark
+            outlined
+            style="border-color: #008334;"
+            color=""
         >
           <template slot="progress">
             <v-progress-linear
@@ -17,15 +18,15 @@
                 indeterminate
             ></v-progress-linear>
           </template>
-          <v-card-title>
-            <span class="text-h5">Offene Gesuche</span>
+          <v-card-title color="" class="">
+            <span class="text-h5 primary--text">Offene Gesuche</span>
           </v-card-title>
 
-          <v-card-subtitle>
+          <v-card-subtitle class="primary--text text--lighten-2">
             aktueller Stand
           </v-card-subtitle>
 
-          <v-card-text class="text-h5" v-if="statsObject.open">
+          <v-card-text class="text-h5 primary--text text--lighten-2" v-if="statsObject.open">
             Offene Gesuche: {{ statsObject.open.count }}
           </v-card-text>
 
@@ -35,7 +36,7 @@
                   align="center"
                   justify="end"
               >
-                <v-btn text @click="exportDataset('open')">
+                <v-btn text @click="exportDataset('open')" color="primary">
                   <v-icon class="mr-1">
                     mdi-microsoft-excel
                   </v-icon>
@@ -47,8 +48,7 @@
         </v-card>
         <v-card
             class="mx-auto mt-4"
-            color="primary"
-            dark
+            color="primary lighten-4"
             :loading="dataLoading"
         >
           <template slot="progress">
@@ -60,7 +60,6 @@
           </template>
           <v-card-title>
             <span class="text-h5">Bewilligte Gesuche</span>
-
           </v-card-title>
           <v-card-subtitle>
             Stichtag Gesuch bewilligt gemäss gewähltem Datumsbereich
@@ -90,6 +89,7 @@
         </v-card>
         <v-card
             class="mx-auto mt-4"
+            outlined
             color="primary"
             dark
             :loading="dataLoading"
@@ -169,30 +169,12 @@ export default {
   data: () => ({
     dataLoading: false,
     statsObject: {},
-    activities: [],
-    messages: [
-      {
-        from: '243ADADG-B1',
-        message: `Status angepasst`,
-        time: new Date().toLocaleDateString(),
-        color: 'primary',
-      },
-      {
-        from: '243AD4DF-B1',
-        message: 'Status angepasst',
-        time: new Date().toLocaleDateString(),
-        color: 'primary',
-      },
-      {
-        from: '2433DADF-B1',
-        message: 'Status angepasst',
-        time: new Date().toLocaleDateString(),
-        color: 'primary',
-      },
-    ],
+    activities: []
   }),
   mounted () {
     this.getDashboardStats()
+  },
+  created() {
   },
   methods: {
     getDashboardStats() {

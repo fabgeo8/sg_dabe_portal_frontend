@@ -1,14 +1,13 @@
 <template>
-<!--  <v-dialog v-model="showDialog" max-width="960" persistent>-->
-    <v-card :class="{ collapse: collapse }">
+    <v-card :class="{ collapse: collapse }" max-width="960">
       <v-card-title class="pr-4">
-        <span class="headline">Gesuchsdetail</span>
+        <span class="headline">Gesuchdetails</span>
 
         <v-spacer></v-spacer>
-        <v-card-actions class="pa-0">
+        <v-card-actions class="pr-3 pt-3">
           <v-btn
               color=""
-              :class="{ collapse: isSingleForm }"
+              :class="{ collapse: isSingleForm, 'mr-3': true  }"
               @click="closeDialog()"
               depressed
           >
@@ -20,7 +19,7 @@
               :loading="isSaving"
               :disabled="isSaving"
               depressed
-              :class="{ collapse: isSingleForm }"
+              :class="{ collapse: isSingleForm || !editedApplication }"
           >
             Speichern
           </v-btn>
@@ -249,11 +248,19 @@
           </v-container>
         </validation-observer>
       </v-card-text>
-      <v-card-actions>
+      <v-card-actions class="pb-6 pr-6">
         <v-spacer></v-spacer>
         <v-btn
             color=""
-            :class="{ collapse: isSingleForm }"
+            :class="{ collapse: !isSingleForm || !editedApplication, 'mr-3': true }"
+            @click="editedApplication = null; $emit('reset');"
+            depressed
+        >
+          Schliessen
+        </v-btn>
+        <v-btn
+            color=""
+            :class="{ collapse: isSingleForm || !editedApplication, 'mr-3': true }"
             @click="closeDialog()"
             depressed
         >
@@ -265,7 +272,7 @@
             :loading="isSaving"
             :disabled="isSaving"
             depressed
-            :class="{ collapse: !editedApplication }"
+            :class="{ collapse: !editedApplication || !editedApplication }"
         >
           Speichern
         </v-btn>

@@ -9,12 +9,13 @@
           <v-card-text>
             Name: {{userInfo.name}}<br>
             Email: {{userInfo.email}}<br>
-            Gemeinde: {{ $store.getters.getActiveClient }}
+            Gemeinde: {{ $store.getters.getActiveClient }}<br>
+            Benutzerrolle: {{ $store.getters.getIsAdmin ? 'Admin' : 'Benutzer'  }}
           </v-card-text>
           <v-divider></v-divider>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn @click="logout" v-if="isLoggedIn" color="primary">Logout</v-btn>
+            <v-btn @click="logout" block v-if="isLoggedIn" color="primary">Abmelden</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>

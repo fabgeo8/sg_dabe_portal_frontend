@@ -25,7 +25,7 @@
         <v-divider></v-divider>
         <v-row>
           <v-col class="px-6 py-6">
-            <v-btn @click="resetFilter()" text block>Filter zurücksetzen</v-btn>
+            <v-btn color="primary" @click="resetFilter()" text block>Filter zurücksetzen</v-btn>
           </v-col>
         </v-row>
         </v-sheet>

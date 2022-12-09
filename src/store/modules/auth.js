@@ -4,19 +4,23 @@ import {showSnack} from "../../globalActions";
 import Mgr from '../../services/SecurityService'
 const auth = new Mgr()
 
-const state = {
-    isMunicipalityUser: true,
-    settingIsMunicipality: true,
-    userMunicipality: '',
-    isAuthorized: true,
-    lastRequestTimestamp: null,
-    activeSettingMunicipality: '',
-    activeSettingClient: 'Kanton',
-    activeClient: 'Kanton',
-    isAdmin: true,
-    isLoggedIn: false,
-    userInfoLoading: true,
-    municipalityList: []
+const state = defaultState()
+
+function defaultState () {
+    return {
+        isMunicipalityUser: true,
+        settingIsMunicipality: true,
+        userMunicipality: '',
+        isAuthorized: true,
+        lastRequestTimestamp: null,
+        activeSettingMunicipality: '',
+        activeSettingClient: 'Kanton',
+        activeClient: 'Kanton',
+        isAdmin: true,
+        isLoggedIn: false,
+        userInfoLoading: true,
+        municipalityList: []
+    }
 }
 
 // expiration of user info in sec
@@ -170,6 +174,9 @@ const mutations = {
         state.isLoggedIn = false
         state.isAuthorized = false
         state.isAdmin = false
+    },
+    resetLogin(state) {
+        state = defaultState()
     },
     userSignedIn(state) {
         state.isLoggedIn = true

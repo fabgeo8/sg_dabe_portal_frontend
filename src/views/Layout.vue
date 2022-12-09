@@ -51,7 +51,7 @@
           :key="link.path"
           :to="link.path"
           text
-          class="mx-1"
+          class="ml-3"
           active-class="nav-btn-active"
       >
         {{ link.name }}
@@ -59,7 +59,6 @@
       <v-spacer></v-spacer>
       <v-btn
           text
-          class=""
           active-class="nav-btn-active"
           to="/me"
           icon
@@ -69,11 +68,12 @@
       </v-btn>
       <v-btn
           text
-          class=""
+          class="ml-2"
           active-class="nav-btn-active"
           to="/einstellungen"
           icon
           large
+          v-if="isSettingAuthorized"
       >
         <v-icon>mdi-cog</v-icon>
       </v-btn>
@@ -91,7 +91,8 @@
           type="error"
           class="mt-4"
       >
-        Sie sind nicht berechtigt für den Zugriff auf diese Applikation. Der Benutzer muss für diese Applikation konfiguriert werden.
+        Sie sind nicht berechtigt für den Zugriff auf diese Applikation. Der Benutzer muss für diese Applikation konfiguriert werden.<br>
+        Bitte informieren Sie verantwortliche Person, damit Sie freigeschaltet werden.
       </v-alert>
     </v-container>
   </v-main>
@@ -165,6 +166,11 @@ export default {
         } catch {
           return ''
         }
+      }
+    },
+    isSettingAuthorized: {
+      get () {
+        return !this.$store.state.auth.isMunicipalityUser || (this.$store.state.auth.isMunicipalityUser && this.$store.state.auth.isAdmin)
       }
     },
     userInfoLoading: {

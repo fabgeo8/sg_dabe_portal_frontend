@@ -145,6 +145,9 @@ export default class SecurityService {
 
     // Redirect of the current window to the authorization endpoint.
     signIn () {
+        // user signing in
+        store.commit("resetLogin")
+        store.commit("resetData")
         mgr.signinRedirect().catch(function (err) {
             console.log(err)
         })

@@ -2,18 +2,22 @@ import axios from 'axios'
 import { showSnack } from '@/globalActions'
 
 const state = {
-  persisted: {
-    municipality: 0,
-    dateFrom: new Date(Date.UTC(new Date().getFullYear(), 0, 1)).toISOString().substr(0, 10),
-    dateTo: new Date().toISOString().substr(0, 10),
-    applicationType: 'gas',
-    gasOperatorList: []
-  },
+  persisted: defaultState(),
   gasApplications: [],
   pvApplications: [],
   pvDashboardStats: {},
   gasDashboardStats: {},
   loadingData: false
+}
+
+function defaultState () {
+  return {
+    municipality: 0,
+    dateFrom: new Date(Date.UTC(new Date().getFullYear(), 0, 1)).toISOString().substr(0, 10),
+    dateTo: new Date().toISOString().substr(0, 10),
+    applicationType: 'gas',
+    gasOperatorList: []
+  }
 }
 
 const getters = {
@@ -86,6 +90,9 @@ const actions = {
 const mutations = {
   updateMunicipality (state, municipality) {
     state.persisted.municipality = municipality
+  },
+  resetData (state) {
+    state.persisted = defaultState()
   },
   updateDateFrom (state, date) {
     state.persisted.dateFrom = date

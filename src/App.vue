@@ -31,7 +31,7 @@
     <div class="">
     </div>
     <!-- global snackbar for alerts -->
-    <v-snackbar v-model="snackbar" timeout="2500" :color="snackbarColor"
+    <v-snackbar v-model="snackbar" timeout="3500" class="mb-16" :color="snackbarColor"
     >{{ snackbarMessage }}
     </v-snackbar
     >
@@ -41,6 +41,9 @@
 <script>
 import EventBus, {ACTIONS} from './events/index'
 import {showSnack} from "@/globalActions";
+import store from "./store";
+import Mgr from './services/SecurityService'
+const auth = new Mgr()
 
 export default {
   components: {},
@@ -53,7 +56,22 @@ export default {
 
   },
   methods: {
+    getSigninStatus () {
+      auth.getSignedIn()
+          .then((isSignedIn) => {
+            console.log("user is signed in " + isSignedIn)
 
+            if (isSignedIn === false) {
+              store.commit("userSignedOut")
+            } else {
+              store.commit('userSignedIn')
+              store.dispatch('getUserApiInfo')
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+    }
   },
   mounted() {
     EventBus.$on(ACTIONS.SNACKBAR, message => {
@@ -61,6 +79,8 @@ export default {
       this.snackbarColor = message.color
       this.snackbar = true
     })
+
+    this.getSigninStatus()
   },
   computed: {
   }

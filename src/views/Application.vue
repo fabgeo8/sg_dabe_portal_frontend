@@ -6,26 +6,28 @@
     </v-col>
     <v-col>
       <v-row>
-        <v-col class="mt-4">
-          <p>Bitte geben Sie die vollständige Gesuch-ID ein. Wenn Sie die Gesuch-ID nicht kennen, benutzen Sie die
+        <v-col class="mt-0">
+          <p>Bitte geben Sie die vollständige <span class="font-weight-bold">Gesuch-ID</span> ein.<br> Wenn Sie die Gesuch-ID nicht kennen, benutzen Sie die
             Filter- und Suchmöglichkeiten unter
             <router-link to="/gesuchliste">Gesuchsliste</router-link>
           </p>
         </v-col>
       </v-row>
       <v-row>
-        <v-col>
-          <v-text-field outlined persistent-placeholder placeholder="bspw. 46AR1AEW-X1" v-model="searchString"
-                        label="Gesuch-ID eingeben"></v-text-field>
+        <v-col cols="12" md="12">
+          <v-text-field outlined append-icon="mdi-magnify" persistent-placeholder placeholder="bspw. 46AR1AEW-X1" v-model="searchString"
+                        label="Gesuch-ID eingeben" style="max-width: 960px" @change="loadApplication()"></v-text-field>
         </v-col>
-        <v-col>
-          <v-btn @click="loadApplication()" color="primary">Gesuch anzeigen</v-btn>
+      </v-row>
+      <v-row v-if="false">
+        <v-col cols="12" md="7" >
+          <v-btn class="float-right" @click="loadApplication()" color="primary">Gesuch anzeigen</v-btn>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12">
-          <gas-application-form ref="gasForm" :collapse="!showApplication || activeApplicationType !== 'gas'" :isSingleForm="true"></gas-application-form>
-          <pv-application-form ref="pvForm" :collapse="!showApplication || activeApplicationType !== 'pv'" :isSingleForm="true"></pv-application-form>
+          <gas-application-form ref="gasForm" @reset="resetApplication" :collapse="!showApplication || activeApplicationType !== 'gas'" :isSingleForm="true"></gas-application-form>
+          <pv-application-form ref="pvForm" @reset="resetApplication" :collapse="!showApplication || activeApplicationType !== 'pv'" :isSingleForm="true"></pv-application-form>
         </v-col>
       </v-row>
     </v-col>
@@ -46,7 +48,8 @@ export default {
   props: ['identifier'],
   data: () => ({
     searchString: '',
-    showApplication: false
+    showApplication: false,
+    applicationLoading: false
   }),
   mounted() {
     if (this.identifier) {
@@ -58,8 +61,14 @@ export default {
       this.$router.push('/gesuch/' + this.searchString)
       this.searchApplication(this.searchString)
     },
+    resetApplication () {
+      this.$router.push('/gesuch/')
+      this.searchString = ''
+      this.showApplication = false
+    },
     searchApplication(identifier) {
       this.showApplication = true
+      this.applicationLoading = true
       axios
           .get('/applications/' + this.activeApplicationType + '/by_identifier/' + identifier)
           .then((response) => {
@@ -89,6 +98,9 @@ export default {
               color: 'red'
             })
             this.showApplication = false
+          })
+          .finally(() => {
+            this.applicationLoading = false
           })
     }
   },

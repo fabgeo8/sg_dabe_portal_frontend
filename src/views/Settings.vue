@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="isSettingAuthorized">
     <v-row class="mt-3">
       <v-col cols="12"
              sm="12" md="9">
@@ -153,6 +153,11 @@ export default {
           this.$store.commit("updateSettingIsMunicipality", true)
           this.$store.commit("updateSettingMunicipality", value)
         }
+      }
+    },
+    isSettingAuthorized: {
+      get () {
+        return !this.$store.state.auth.isMunicipalityUser || (this.$store.state.auth.isMunicipalityUser && this.$store.state.auth.isAdmin)
       }
     },
     showMunicipalitySelection: {

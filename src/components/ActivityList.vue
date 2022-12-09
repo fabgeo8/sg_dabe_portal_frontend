@@ -4,9 +4,9 @@
       dense
   >
     <v-timeline-item
-        v-for="activity in activityList"
+        v-for="(activity, index) in activityList"
         :key="activity.id"
-        color="primary"
+        :color="'rgba(0,131,52,' + (1 - (index / (activityList.length))).toString() + ')'"
         small
     >
       <div>
