@@ -19,7 +19,8 @@ function defaultState () {
         isAdmin: true,
         isLoggedIn: false,
         userInfoLoading: true,
-        municipalityList: []
+        municipalityList: [],
+        currentUser: null
     }
 }
 
@@ -65,6 +66,10 @@ const getters = {
 
     getActiveSettingMunicipality(state) {
         return state.activeSettingMunicipality !== 'canton'
+    },
+
+    getCurrentUser(state) {
+        return state.currentUser
     },
 
     getUserInfoIsExpired (state) {
@@ -137,7 +142,7 @@ const actions = {
                     console.log('fetch userinfo failed: ' + ex.message)
 
                     // if token is expired, singout user
-                    if (ex.response.data.message === 'jwt expired') {
+                    if (ex.response.data.message === 'jwt expired' || ex.response.data.message === 'authentication_error') {
                         showSnack({ message: 'Benutzersession ist abgelaufen, bitte neu anmelden.', color: 'red' })
                         auth.signOut()
                     }
@@ -180,6 +185,9 @@ const mutations = {
     },
     userSignedIn(state) {
         state.isLoggedIn = true
+    },
+    updateCurrentUser(state, user) {
+        state.currentUser = user.profile.name
     },
     updateSettingMunicipality(state, municipality) {
         state.activeSettingMunicipality = municipality

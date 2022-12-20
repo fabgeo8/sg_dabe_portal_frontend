@@ -95,7 +95,7 @@ export default {
         return ''
       }
     },
-    exportDataset () {
+    exportDataset (activeFilters) {
       // select filtered ids to select filtered set from whole application dataset
       const filteredIds = this.filteredList.map(a => a.id);
 
@@ -110,7 +110,26 @@ export default {
         }
       })
 
-      ExportToExcel.exportGasApplications(dataToExport, 'export-biobrennstoffe')
+      const metaData = [
+        {
+          info: 'Exportiert von',
+          value: this.$store.getters.getCurrentUser
+        },
+        {
+          info: 'Gemeinde',
+          value: this.municipalityItems[this.municipalityItems.map(object => object.id).indexOf(this.$store.state.data.persisted.municipality)].name
+        },
+        {
+          info: 'Aktive Filterung',
+          value: activeFilters
+        },
+        {
+          info: 'Ausgewählter Zeitraum',
+          value: new Date(this.$store.state.data.persisted.dateFrom).toLocaleDateString() + ' - ' + new Date(this.$store.state.data.persisted.dateTo).toLocaleDateString()
+        }
+      ]
+
+      ExportToExcel.exportGasApplications(dataToExport, 'export-biobrennstoffe', metaData)
     }
   },
   computed: {
@@ -119,6 +138,9 @@ export default {
     },
     loadingData: {
       get () { return this.$store.state.data.loadingData }
+    },
+    municipalityItems: {
+      get () { return this.$store.state.data.municipalityItems }
     },
     headers: {
       get () {

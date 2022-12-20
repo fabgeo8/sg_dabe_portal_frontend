@@ -109,7 +109,6 @@ export default {
   name: 'GlobalFilter.vue',
   props: ['title'],
   data: () => ({
-    municipalityItems: [],
     showDatePicker: false,
     dateRangeFormatted: ''
   }),
@@ -119,18 +118,7 @@ export default {
   },
   methods: {
     getMunicipalities () {
-      axios.get('/municipalities')
-        .then((res) => {
-          this.municipalityItems = res.data
-          if (Array.isArray(this.municipalityItems))
-          this.municipalityItems.unshift({
-            id: 0,
-            name: 'alle Gemeinden'
-          })
-        })
-        .catch((ex) => {
-          console.log('fetch error: ' + ex.message)
-        })
+      this.$store.dispatch('getMunicipalityList')
     },
     formatDate () {
       if (new Date(this.dateFrom) > new Date(this.dateTo)) {
@@ -189,6 +177,9 @@ export default {
     dateTo: {
       get () { return this.$store.state.data.persisted.dateTo },
       set (value) { this.$store.commit('updateDateTo', value) }
+    },
+    municipalityItems: {
+      get () { return this.$store.state.data.municipalityItems }
     }
   }
 }

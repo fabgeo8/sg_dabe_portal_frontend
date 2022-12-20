@@ -1,12 +1,12 @@
-import {json2excel} from "js2excel"
 import store from "../store"
 import StatusChipsGas from "./statusChipsGas"
 import StatusChipsPv from "./statusChipsPv"
 import {showSnack} from "../globalActions";
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 
 export default class ExportToExcel {
-    static exportGasApplications(applications, filename) {
-
+    static exportGasApplications(applications, filename, metaData) {
         //build formatted list for excel export, excel will be exported with these headers
         let formattedData = []
         applications.forEach((a) => {
@@ -44,26 +44,39 @@ export default class ExportToExcel {
             formattedData.push(entry)
         })
 
-        // export to excel only works if variable is called 'data'!
-        const data = formattedData
-
-        if (data.length === 0) {
+        if (formattedData.length === 0) {
             showSnack({message: "Ein leerer Datensatz kann nicht exportiert werden", color: 'red'})
             return
         }
 
-        try {
-            json2excel({
-                data,
-                name: filename,
-                formateDate: 'yyyy.mm.dd'
-            });
-        } catch (e) {
-            console.error('export error', e);
-        }
+        let metaJson = this.buildMetaData( 'Gewährleistung Biobrennstoffe', metaData)
+
+        this.generateXlsx(formattedData, metaJson, filename)
     }
 
-    static exportPvApplication(applications, filename) {
+    static generateXlsx(applicationJson, metaDataJson, filename) {
+        /* create a new blank workbook */
+        let wb = XLSX.utils.book_new();
+
+        /* create a worksheet for books */
+        let wsMeta = XLSX.utils.json_to_sheet(metaDataJson, {skipHeader:true});
+
+        /* Add the worksheet to the workbook */
+        XLSX.utils.book_append_sheet(wb, wsMeta, "Fileinfo");
+
+        /* create a worksheet for person details */
+        let wsApplicationList = XLSX.utils.json_to_sheet(applicationJson);
+
+        /* Add the worksheet to the workbook */
+        XLSX.utils.book_append_sheet(wb, wsApplicationList, "Gesuchliste");
+
+        const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        const data1 = new Blob([excelBuffer], { type: fileType });
+        FileSaver.saveAs(data1, filename);
+    }
+
+    static exportPvApplication(applications, filename, metaData) {
         //build formatted list for excel export, excel will be exported with these headers
         let formattedData = []
         applications.forEach((a) => {
@@ -92,6 +105,10 @@ export default class ExportToExcel {
                 }
             }
 
+            entry['Abgerechnet'] = a.cleared ? 'Ja' : 'Nein'
+
+            entry['Abrechnungsdatum'] = a.cleared_date ? new Date(a.cleared_date).toLocaleDateString() : ''
+
             entry['Bemerkung'] = a.remark
             entry['System-ID'] = a.id
 
@@ -99,21 +116,36 @@ export default class ExportToExcel {
         })
 
         // export to excel only works if variable is called 'data'!
-        const data = formattedData
 
-        if (data.length === 0) {
+        if (formattedData.length === 0) {
             showSnack({message: "Ein leerer Datensatz kann nicht exportiert werden", color: 'red'})
             return
         }
 
-        try {
-            json2excel({
-                data,
-                name: filename,
-                formateDate: 'yyyy.mm.dd'
-            });
-        } catch (e) {
-            console.error('export error', e);
-        }
+        let metaJson = this.buildMetaData( 'PV-Ersatzabgabe', metaData)
+
+        this.generateXlsx(formattedData, metaJson, filename)
     }
+
+    static buildMetaData(title, existingMetaInformation) {
+        let data = [
+            {
+                info: 'Export Gesuche',
+                value: title
+            },
+            {
+                info: 'Exportdatum',
+                value: new Date().toLocaleDateString()
+            },
+            {
+                info: 'Exportzeit',
+                value: new Date().toLocaleTimeString()
+            }
+        ]
+
+        existingMetaInformation.forEach((i) => data.push(i))
+
+        return data
+    }
+
 }

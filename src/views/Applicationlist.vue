@@ -89,10 +89,22 @@ export default {
       })
     },
     exportDataToCsv() {
+
+      let filterString = []
+      this.appliedStatusFilters.forEach((f) => {
+        filterString.push(this.filters.statusFilter[this.filters.statusFilter.map(object => object.value).indexOf(f)].textVerbose)
+      })
+
+      if (filterString.length > 0) {
+        filterString = filterString.join(', ')
+      } else {
+        filterString = ' - '
+      }
+
       if (this.showGasApplicationList) {
-        this.$refs.gasApplicationList.exportDataset()
+        this.$refs.gasApplicationList.exportDataset(filterString)
       } else if (this.showPvApplicationList) {
-        this.$refs.pvApplicationList.exportDataset()
+        this.$refs.pvApplicationList.exportDataset(filterString)
       }
     }
   }

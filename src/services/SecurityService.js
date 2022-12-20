@@ -134,6 +134,7 @@ export default class SecurityService {
                 } else{
                     // user signed in, set authorization token for requests
                     self.setAccessToken(user.access_token)
+                    store.commit('updateCurrentUser', user)
                     return resolve(true)
                 }
             }).catch(function (err) {

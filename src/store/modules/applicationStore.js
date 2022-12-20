@@ -5,6 +5,7 @@ const state = {
   persisted: defaultState(),
   gasApplications: [],
   pvApplications: [],
+  municipalityItems: [],
   pvDashboardStats: {},
   gasDashboardStats: {},
   loadingData: false
@@ -72,6 +73,20 @@ const actions = {
       .finally(() => {
         state.loadingData = false
       })
+  },
+  async getMunicipalityList ({ commit, state}) {
+    axios.get('/municipalities')
+        .then((res) => {
+          state.municipalityItems = res.data
+          if (Array.isArray(state.municipalityItems))
+            state.municipalityItems.unshift({
+              id: 0,
+              name: 'alle Gemeinden'
+            })
+        })
+        .catch((ex) => {
+          console.log('fetch error: ' + ex.message)
+        })
   },
   async getGasOperators ({ commit, state }) {
     axios.get('/settings/gas_operators')

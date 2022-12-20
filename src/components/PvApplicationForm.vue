@@ -106,6 +106,56 @@
               </v-col>
             </v-row>
             <v-row>
+              <v-col cols="12" sm="6" md="6">
+                <validation-provider
+                    v-slot="{ errors }"
+                    name="cleared"
+                    rules=""
+                >
+                  <v-checkbox
+                      v-model="form.application.cleared"
+                      label="Gesuch ist abgerechnet"
+                      :disabled="!canEditClearedStatus"
+                      @change="updateClearedStatus()"
+                  ></v-checkbox>
+                </validation-provider>
+              </v-col>
+              <v-col cols="12" sm="6" md="6">
+                <v-menu
+                    v-model="datePicker.clearedDate"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    transition="scale-transition"
+                    offset-y
+                    min-width="auto"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <validation-provider
+                        v-slot="{ errors }"
+                        name="cleared_date"
+                        :rules="{ required: form.application.cleared }"
+                    >
+                      <v-text-field
+                          v-model="formattedClearedDate"
+                          label="Abrechnungsdatum"
+                          :error-messages="errors"
+                          readonly
+                          :disabled="!form.application.cleared || !canEditClearedStatus"
+                          v-bind="attrs"
+                          v-on="on"
+                      ></v-text-field>
+                    </validation-provider>
+                  </template>
+                  <v-date-picker
+                      no-title
+                      locale="de-CH"
+                      v-model="form.application.cleared_date"
+                      @input="datePicker.clearedDate = false; formatClearedDate()"
+                  ></v-date-picker>
+                </v-menu>
+              </v-col>
+            </v-row>
+            <v-row>
               <v-col cols="12" sm="12" md="12">
                 <v-text-field   v-model="form.application.identifier" disabled label="Gesuch-ID"></v-text-field>
               </v-col>
@@ -312,6 +362,7 @@ export default {
         state1: false,
       },
       formattedStatusDate: null,
+      formattedClearedDate: null,
       statusDates: [],
       isSaving: false,
       loader: null,
@@ -360,9 +411,12 @@ export default {
             this.activityList = this.editedApplication.activities
             this.form.application.municipality = this.editedApplication.MunicipalityId
             this.form.application.status_date = this.editedApplication.last_status_date
+            this.form.application.cleared_date = this.editedApplication.cleared_date
+            this.form.application.cleared = this.editedApplication.cleared
             this.statusDates = JSON.parse(this.editedApplication.status_changed_dates)
 
             this.formatStatusDate()
+            this.formatClearedDate()
           } else {
             showSnack({ message: 'Fehler beim Abrufen der Gesuchsdaten.', color: 'red' })
           }
@@ -441,11 +495,39 @@ export default {
     },
     formatStatusDate () {
       this.formattedStatusDate = new Date(this.form.application.status_date).toLocaleDateString()
+    },
+    formatClearedDate () {
+      if (this.form.application.cleared_date) {
+        this.formattedClearedDate = new Date(this.form.application.cleared_date).toLocaleDateString()
+      } else {
+        this.formattedClearedDate = ''
+      }
+    },
+    updateClearedStatus () {
+      if (this.form.application.cleared === true) {
+        if (this.editedApplication.cleared_date) {
+          this.form.application.cleared_date = new Date(this.editedApplication.cleared_date).toISOString().substring(0, 10)
+        } else {
+          this.form.application.cleared_date = new Date().toISOString().substring(0, 10)
+        }
+
+        this.formatClearedDate()
+      } else {
+        this.form.application.cleared_date = null
+        this.formattedClearedDate = ''
+      }
     }
   },
   watch: {
     visible: function () {
       this.showDialog = this.visible
+    }
+  },
+  computed: {
+    canEditClearedStatus: {
+      get () {
+        return !this.$store.getters.getIsMunicipalityUser
+      }
     }
   }
 }

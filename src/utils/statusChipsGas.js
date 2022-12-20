@@ -1,18 +1,18 @@
 export default {
   1: {
     text: 'Offen',
-    color: 'primary lighten-1',
-    outlined: true
+    color: 'orange lighten-1',
+    outlined: false
   },
   2: {
     text: 'Bewilligt',
-    color: 'primary lighten-4',
+    color: 'blue lighten-1',
     textColor: '#272727'
   },
   3: {
     text: 'Realisiert',
-    color: 'primary',
-    dark: true
+    color: 'green lighten-2',
+    dark: false
   },
   4: {
     text: 'Sistiert',
