@@ -43,7 +43,6 @@
 import GasApplicationForm from '../components/GasApplicationForm'
 // import { showSnack } from '@/globalActions'
 import StatusChips from '../utils/statusChipsGas'
-import { json2excel } from 'js2excel'
 import ExportToExcel from "../utils/exportToExcel";
 import store from "../store";
 

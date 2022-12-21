@@ -43,7 +43,6 @@
 import PvApplicationForm from '../components/PvApplicationForm'
 // import { showSnack } from '@/globalActions'
 import StatusChips from '../utils/statusChipsPv'
-import { json2excel } from 'js2excel'
 import ExportToExcel from "../utils/exportToExcel";
 import store from "../store";
 

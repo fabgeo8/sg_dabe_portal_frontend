@@ -250,7 +250,6 @@
 import GlobalFilter from '../components/GlobalFilter'
 import {showSnack} from "../globalActions"
 import axios from 'axios'
-import {json2excel} from "js2excel"
 import ExportToExcel from "../utils/exportToExcel"
 import store from "../store";
 import ActivityList from "../components/ActivityList"
