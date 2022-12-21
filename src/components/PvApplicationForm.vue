@@ -401,7 +401,7 @@
             <v-btn
                 color="success"
                 text
-                @click="overwriteAddress()">
+                @click="overwriteFormAddress()">
               Überschreiben
             </v-btn>
           </v-card-actions>
@@ -617,6 +617,15 @@ export default {
           // todo error handling
           console.log('fetch error: ' + ex.message)
         })
+    },
+    overwriteFormAddress () {
+      this.form.application.object_plot = this.overwriteAddress.object_plot
+      this.form.application.object_street = this.overwriteAddress.object_street
+      this.form.application.object_streetnumber = this.overwriteAddress.object_streetnumber
+      this.form.application.object_city = this.overwriteAddress.object_city
+      this.form.application.object_zip = this.overwriteAddress.object_zip
+
+      this.dialog.confirmAddressOverwrite = false
     },
     numberWithDelimiter(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
