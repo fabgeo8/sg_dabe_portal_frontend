@@ -1,7 +1,7 @@
 <template>
   <div class="h-100">
     <v-row v-if="isLoggedIn">
-      <v-col>
+      <v-col cols="12" md="4">
         <v-card class="mt-4">
           <v-card-title>
             Benutzerinfo

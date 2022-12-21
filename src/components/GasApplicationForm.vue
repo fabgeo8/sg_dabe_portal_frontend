@@ -1,53 +1,53 @@
 <template>
-    <v-card :class="{ collapse: collapse }" max-width="960">
-      <v-card-title class="pr-4">
-        <span class="headline">Gesuchdetails</span>
-
-        <v-spacer></v-spacer>
-        <v-card-actions class="pr-3 pt-3">
-          <v-btn
-              color=""
-              :class="{ collapse: isSingleForm, 'mr-3': true  }"
-              @click="closeDialog()"
-              depressed
-          >
-            Abbrechen
-          </v-btn>
-          <v-btn
-              color="primary lighten-1"
-              @click="save()"
-              :loading="isSaving"
-              :disabled="isSaving"
-              depressed
-              :class="{ collapse: isSingleForm || !editedApplication }"
-          >
-            Speichern
-          </v-btn>
-        </v-card-actions>
-      </v-card-title>
-      <v-container v-if="!editedApplication" style="height: 400px;">
-        <v-row
-            class="fill-height"
-            align-content="center"
-            justify="center"
+  <v-card :class="{ collapse: collapse }" max-width="960">
+    <v-card-title class="pr-4">
+      <span class="headline">Gesuchdetails</span>
+      <v-spacer></v-spacer>
+      <v-card-actions class="pr-3 pt-3">
+        <v-btn
+            color=""
+            :class="{ collapse: isSingleForm, 'mr-3': true  }"
+            @click="closeDialog()"
+            depressed
         >
-          <v-col
-              class="text-subtitle-1 text-center"
-              cols="12"
-          >
-            Gesuch wird geladen
-          </v-col>
-          <v-col cols="6">
-            <v-progress-linear
-                color="primary accent-4"
-                indeterminate
-                rounded
-                height="6"
-            ></v-progress-linear>
-          </v-col>
-        </v-row>
-      </v-container>
-      <v-card-text v-else>
+          Abbrechen
+        </v-btn>
+        <v-btn
+            color="primary lighten-1"
+            @click="save()"
+            :loading="isSaving"
+            :disabled="isSaving"
+            depressed
+            :class="{ collapse: isSingleForm || !editedApplication }"
+        >
+          Speichern
+        </v-btn>
+      </v-card-actions>
+    </v-card-title>
+    <v-container v-if="!editedApplication" style="height: 400px;">
+      <v-row
+          class="fill-height"
+          align-content="center"
+          justify="center"
+      >
+        <v-col
+            class="text-subtitle-1 text-center"
+            cols="12"
+        >
+          Gesuch wird geladen
+        </v-col>
+        <v-col cols="6">
+          <v-progress-linear
+              color="primary accent-4"
+              indeterminate
+              rounded
+              height="6"
+          ></v-progress-linear>
+        </v-col>
+      </v-row>
+    </v-container>
+    <div v-else>
+      <v-card-text>
         <validation-observer
             ref="applicationFormObserver"
             v-slot="{ }"
@@ -117,7 +117,8 @@
                     name="egid"
                     rules=""
                 >
-                  <v-text-field   v-model="form.application.object_egid" label="EGID" :error-messages="errors"></v-text-field>
+                  <v-text-field v-model="form.application.object_egid" label="EGID"
+                                :error-messages="errors"></v-text-field>
                 </validation-provider>
               </v-col>
               <v-col cols="6" sm="12" md="6">
@@ -126,7 +127,8 @@
                     name="plot"
                     rules=""
                 >
-                  <v-text-field   v-model="form.application.object_plot" disabled label="Parzelle" :error-messages="errors"></v-text-field>
+                  <v-text-field v-model="form.application.object_plot" disabled label="Parzelle"
+                                :error-messages="errors"></v-text-field>
                 </validation-provider>
               </v-col>
             </v-row>
@@ -137,7 +139,8 @@
                     name="street"
                     rules=""
                 >
-                  <v-text-field   v-model="form.application.object_street" label="Strasse" :error-messages="errors"></v-text-field>
+                  <v-text-field v-model="form.application.object_street" label="Strasse"
+                                :error-messages="errors"></v-text-field>
                 </validation-provider>
               </v-col>
               <v-col cols="6" sm="12" md="6">
@@ -146,7 +149,8 @@
                     name="streetnumber"
                     rules=""
                 >
-                  <v-text-field   v-model="form.application.object_streetnumber" label="Hausnummer" :error-messages="errors"></v-text-field>
+                  <v-text-field v-model="form.application.object_streetnumber" label="Hausnummer"
+                                :error-messages="errors"></v-text-field>
                 </validation-provider>
               </v-col>
             </v-row>
@@ -157,7 +161,8 @@
                     name="zip"
                     :rules="{regex: /[0-9]{4}$/}"
                 >
-                  <v-text-field   v-model="form.application.object_zip" label="PLZ" :error-messages="errors"></v-text-field>
+                  <v-text-field v-model="form.application.object_zip" label="PLZ"
+                                :error-messages="errors"></v-text-field>
                 </validation-provider>
               </v-col>
               <v-col cols="6" sm="12" md="6">
@@ -166,7 +171,8 @@
                     name="city"
                     rules=""
                 >
-                  <v-text-field   v-model="form.application.object_city" label="Ort" :error-messages="errors"></v-text-field>
+                  <v-text-field v-model="form.application.object_city" label="Ort"
+                                :error-messages="errors"></v-text-field>
                 </validation-provider>
               </v-col>
             </v-row>
@@ -177,24 +183,27 @@
                     name="municipality"
                     rules=""
                 >
-                  <v-select :items="municipalityItems" :disabled="$store.getters.getIsMunicipalityUser" item-value="id" item-text="name" v-model="form.application.municipality" label="Gemeinde" :error-messages="errors"></v-select>
+                  <v-select :items="municipalityItems" :disabled="$store.getters.getIsMunicipalityUser" item-value="id"
+                            item-text="name" v-model="form.application.municipality" label="Gemeinde"
+                            :error-messages="errors"></v-select>
                 </validation-provider>
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="6" sm="12" md="6">
-                  <v-text-field v-model="form.application.generator_area" label="EBF">
-                    <template slot="append">m&sup2;</template>
-                  </v-text-field>
+                <v-text-field v-model="form.application.generator_area" label="EBF">
+                  <template slot="append">m&sup2;</template>
+                </v-text-field>
               </v-col>
               <v-col cols="6" sm="12" md="6">
                 <v-select :items="['Biogas','Bioöl']" v-model="form.application.fuel_type" label="Art des Brennstoff">
                 </v-select>
               </v-col>
-              </v-row>
+            </v-row>
             <v-row>
               <v-col cols="12" sm="12" md="12">
-                <v-select :items="$store.getters.getGasOperatorList" item-text="name" item-value="name"  v-model="form.application.gas_operator" label="Gasversorger">
+                <v-select :items="$store.getters.getGasOperatorList" item-text="name" item-value="name"
+                          v-model="form.application.gas_operator" label="Gasversorger">
                 </v-select>
               </v-col>
             </v-row>
@@ -205,16 +214,18 @@
                     name="yearOfConstruction"
                     :rules="{regex: /^(19|20)\d{2}$/}"
                 >
-                  <v-text-field v-model="form.application.year_of_construction" :error-messages="errors" label="Baujahr">
+                  <v-text-field v-model="form.application.year_of_construction" :error-messages="errors"
+                                label="Baujahr">
                   </v-text-field>
                 </validation-provider>
               </v-col>
               <v-col cols="6" sm="12" md="6">
                 <validation-provider
-                v-slot="{ errors }"
-                name="boilerReplacementYear"
-                :rules="{regex: /[0-9]{2}\/[0-9]{4}$/}">
-                  <v-text-field v-model="form.application.boiler_replacement_year" :error-messages="errors" label="Ersatz Heizkessel (Monat/Jahr)">
+                    v-slot="{ errors }"
+                    name="boilerReplacementYear"
+                    :rules="{regex: /[0-9]{2}\/[0-9]{4}$/}">
+                  <v-text-field v-model="form.application.boiler_replacement_year" :error-messages="errors"
+                                label="Ersatz Heizkessel (Monat/Jahr)">
                   </v-text-field>
                 </validation-provider>
               </v-col>
@@ -226,23 +237,9 @@
                     name="remarks"
                     rules=""
                 >
-                  <v-textarea v-model="form.application.remark" label="Interne Bemerkung" :error-messages="errors" counter="2048" ></v-textarea>
+                  <v-textarea v-model="form.application.remark" label="Interne Bemerkung" :error-messages="errors"
+                              counter="2048"></v-textarea>
                 </validation-provider>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col>
-                <p class="subtitle-1 mb-0">Aktivitäten für dieses Gesuch:</p>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col>
-                <activity-list :activityList="activityList"></activity-list>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col>
-                <h6 class="text--secondary">System-ID: {{ form.application.id }}</h6>
               </v-col>
             </v-row>
           </v-container>
@@ -277,16 +274,36 @@
           Speichern
         </v-btn>
       </v-card-actions>
-    </v-card>
-<!--  </v-dialog>-->
+      <v-card-text>
+        <v-container>
+          <v-row>
+            <v-col>
+              <p class="subtitle-1 mb-0">Aktivitäten für dieses Gesuch:</p>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <activity-list :activityList="activityList"></activity-list>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <h6 class="text--secondary">System-ID: {{ form.application.id }}</h6>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card-text>
+    </div>
+  </v-card>
+  <!--  </v-dialog>-->
 </template>
 
 <script>
 import axios from 'axios'
-import { showSnack } from '../globalActions'
+import {showSnack} from '../globalActions'
 // eslint-disable-next-line camelcase
-import { required, regex , required_if } from 'vee-validate/dist/rules'
-import { extend, ValidationProvider, ValidationObserver, setInteractionMode } from 'vee-validate'
+import {required, regex, required_if} from 'vee-validate/dist/rules'
+import {extend, ValidationProvider, ValidationObserver, setInteractionMode} from 'vee-validate'
 import ApplicationStatus from '../utils/statusGas'
 import ActivityList from "./ActivityList";
 
@@ -327,8 +344,7 @@ export default {
   data: function () {
     return {
       form: {
-        application: {
-        }
+        application: {}
       },
       status: {
         1: 'Offen',
@@ -352,87 +368,87 @@ export default {
       applicationStatusItems: ApplicationStatus
     }
   },
-  created () {
+  created() {
     this.getMunicipalities()
   },
-  mounted () {
+  mounted() {
   },
   methods: {
-    setApplication (id) {
+    setApplication(id) {
       this.editedApplicationId = id
       this.getApplication()
     },
-    getApplication () {
+    getApplication() {
       if (!this.editedApplicationId) {
         return
       }
       axios
-        .get('/applications/gas/' + this.editedApplicationId)
-        .then((response) => {
-          if (response.data) {
-            this.editedApplication = response.data
-            this.form.application = {}
-            this.form.application.id = this.editedApplication.id
-            this.form.application.object_egid = this.editedApplication.object_egid
-            this.form.application.object_plot = this.editedApplication.object_plot
-            this.form.application.identifier = this.editedApplication.identifier
-            this.form.application.status = this.editedApplication.status
-            this.form.application.object_street = this.editedApplication.object_street
-            this.form.application.object_streetnumber = this.editedApplication.object_streetnumber
-            this.form.application.object_city = this.editedApplication.object_city
-            this.form.application.object_zip = this.editedApplication.object_zip
-            this.form.application.generator_area = this.editedApplication.generator_area
-            this.form.application.remark = this.editedApplication.remark
-            this.form.application.status = this.editedApplication.status
-            this.form.application.gas_operator = this.editedApplication.gas_operator
-            this.form.application.status_date = this.editedApplication.last_status_date
-            this.form.application.municipality = this.editedApplication.MunicipalityId
-            this.form.application.fuel_type = this.editedApplication.fuel_type
-            this.form.application.year_of_construction = this.editedApplication.year_of_construction
-            this.form.application.boiler_replacement_year = this.editedApplication.boiler_replacement_year
-            this.activityList = this.editedApplication.activities
-            this.statusDates = JSON.parse(this.editedApplication.status_changed_dates)
-            this.formatStatusDate()
-          } else {
-            showSnack({ message: 'Fehler beim Abrufen der Gesuchsdaten.', color: 'red' })
-          }
-        })
+          .get('/applications/gas/' + this.editedApplicationId)
+          .then((response) => {
+            if (response.data) {
+              this.editedApplication = response.data
+              this.form.application = {}
+              this.form.application.id = this.editedApplication.id
+              this.form.application.object_egid = this.editedApplication.object_egid
+              this.form.application.object_plot = this.editedApplication.object_plot
+              this.form.application.identifier = this.editedApplication.identifier
+              this.form.application.status = this.editedApplication.status
+              this.form.application.object_street = this.editedApplication.object_street
+              this.form.application.object_streetnumber = this.editedApplication.object_streetnumber
+              this.form.application.object_city = this.editedApplication.object_city
+              this.form.application.object_zip = this.editedApplication.object_zip
+              this.form.application.generator_area = this.editedApplication.generator_area
+              this.form.application.remark = this.editedApplication.remark
+              this.form.application.status = this.editedApplication.status
+              this.form.application.gas_operator = this.editedApplication.gas_operator
+              this.form.application.status_date = this.editedApplication.last_status_date
+              this.form.application.municipality = this.editedApplication.MunicipalityId
+              this.form.application.fuel_type = this.editedApplication.fuel_type
+              this.form.application.year_of_construction = this.editedApplication.year_of_construction
+              this.form.application.boiler_replacement_year = this.editedApplication.boiler_replacement_year
+              this.activityList = this.editedApplication.activities
+              this.statusDates = JSON.parse(this.editedApplication.status_changed_dates)
+              this.formatStatusDate()
+            } else {
+              showSnack({message: 'Fehler beim Abrufen der Gesuchsdaten.', color: 'red'})
+            }
+          })
     },
-    save () {
+    save() {
       this.$refs.applicationFormObserver.validate()
-        .then((valid) => {
-          if (valid) {
-            this.isSaving = true
-            this.loader = 'loading'
-            axios.patch('/applications/gas/' + this.editedApplicationId, this.form.application)
-              .then((response) => {
-                if (response.status === 200) {
-                  showSnack({ message: 'Gesucht wurde erfolgreich aktualisert', color: 'success' })
-                  if (!this.isSingleForm) {
-                    this.resetApplicationDialog()
-                    this.$emit('getApplications')
-                    this.$emit('closeDialog')
-                  }
-                } else {
-                  showSnack({ message: 'Gesuch konnte nicht aktualisiert werden', color: 'red' })
-                }
-              })
-              .catch((ex) => {
-                showSnack({ message: 'Gesuch konnte nicht aktualisiert werden', color: 'red' })
-              })
-              .finally(() => {
-                this.isSaving = false
-                this.loader = null
-              })
-          } else {
-            showSnack({ message: 'Das Formular ist nicht korrekt ausgefüllt' })
-          }
-        })
+          .then((valid) => {
+            if (valid) {
+              this.isSaving = true
+              this.loader = 'loading'
+              axios.patch('/applications/gas/' + this.editedApplicationId, this.form.application)
+                  .then((response) => {
+                    if (response.status === 200) {
+                      showSnack({message: 'Gesucht wurde erfolgreich aktualisert', color: 'success'})
+                      if (!this.isSingleForm) {
+                        this.resetApplicationDialog()
+                        this.$emit('getApplications')
+                        this.$emit('closeDialog')
+                      }
+                    } else {
+                      showSnack({message: 'Gesuch konnte nicht aktualisiert werden', color: 'red'})
+                    }
+                  })
+                  .catch((ex) => {
+                    showSnack({message: 'Gesuch konnte nicht aktualisiert werden', color: 'red'})
+                  })
+                  .finally(() => {
+                    this.isSaving = false
+                    this.loader = null
+                  })
+            } else {
+              showSnack({message: 'Das Formular ist nicht korrekt ausgefüllt'})
+            }
+          })
     },
-    updateApplication () {
+    updateApplication() {
 
     },
-    resetApplicationDialog () {
+    resetApplicationDialog() {
       this.form.application = null
       this.editedApplication = null
       this.editedApplicationId = null
@@ -442,17 +458,17 @@ export default {
       this.$emit('getApplications')
       this.$emit('closeDialog')
     },
-    getMunicipalities () {
+    getMunicipalities() {
       axios.get('/municipalities')
-        .then((res) => {
-          this.municipalityItems = res.data
-        })
-        .catch((ex) => {
-          // todo error handling
-          console.log('fetch error: ' + ex.message)
-        })
+          .then((res) => {
+            this.municipalityItems = res.data
+          })
+          .catch((ex) => {
+            // todo error handling
+            console.log('fetch error: ' + ex.message)
+          })
     },
-    updateStatusDate () {
+    updateStatusDate() {
       // check if date is already in used status dates
       if (this.statusDates[this.form.application.status]) {
         this.form.application.status_date = new Date(this.statusDates[this.form.application.status]).toISOString().substring(0, 10)
@@ -469,7 +485,7 @@ export default {
 
       this.formatStatusDate()
     },
-    formatStatusDate () {
+    formatStatusDate() {
       this.formattedStatusDate = new Date(this.form.application.status_date).toLocaleDateString()
     }
   },
@@ -478,9 +494,7 @@ export default {
       this.showDialog = this.visible
     }
   },
-  computed: {
-
-  }
+  computed: {}
 }
 </script>
 
