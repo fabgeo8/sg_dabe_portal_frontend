@@ -183,7 +183,7 @@
             </v-row>
             <v-row>
               <v-col cols="6" sm="12" md="6">
-                  <v-text-field disabled   v-model="form.application.generator_area" label="EBF">
+                  <v-text-field v-model="form.application.generator_area" label="EBF">
                     <template slot="append">m&sup2;</template>
                   </v-text-field>
               </v-col>

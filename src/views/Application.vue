@@ -16,7 +16,7 @@
       <v-row>
         <v-col cols="12" md="12">
           <v-text-field outlined append-icon="mdi-magnify" persistent-placeholder placeholder="bspw. 46AR1AEW-X1" v-model="searchString"
-                        label="Gesuch-ID eingeben" style="max-width: 960px" @change="loadApplication()"></v-text-field>
+                        label="Gesuch-ID eingeben" @click:append="loadApplication()" style="max-width: 960px" @change="loadApplication()"></v-text-field>
         </v-col>
       </v-row>
       <v-row v-if="false">
@@ -94,7 +94,7 @@ export default {
           .catch((err) => {
             showSnack({
               message: 'Fehler beim Abrufen des gewünschten Gesuch. ' +
-                  'Sie haben keine Berechtigung den Datensatz abzurufen oder es gab einen Serverfehler.',
+                  'Das Gesuch existiert nicht oder Sie haben keine Berechtigung den Datensatz abzurufen.',
               color: 'red'
             })
             this.showApplication = false

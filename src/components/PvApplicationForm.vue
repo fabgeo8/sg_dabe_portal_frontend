@@ -15,7 +15,7 @@
           </v-btn>
           <v-btn
               color="primary lighten-1"
-              @click="save()"
+              @click="confirmSave()"
               :loading="isSaving"
               :disabled="isSaving"
               depressed
@@ -67,6 +67,7 @@
                       v-model="form.application.status"
                       @change="updateStatusDate()"
                       label="Status" :error-messages="errors"
+                      :disabled="formDisabled"
                   >
                   </v-select>
                 </validation-provider>
@@ -78,6 +79,7 @@
                     :nudge-right="40"
                     transition="scale-transition"
                     offset-y
+                    :disabled="formDisabled"
                     min-width="auto"
                 >
                   <template v-slot:activator="{ on, attrs }">
@@ -91,6 +93,7 @@
                           label="Statusänderung"
                           :error-messages="errors"
                           readonly
+                          :disabled="formDisabled"
                           v-bind="attrs"
                           v-on="on"
                       ></v-text-field>
@@ -115,7 +118,7 @@
                   <v-checkbox
                       v-model="form.application.cleared"
                       label="Gesuch ist abgerechnet"
-                      :disabled="!canEditClearedStatus"
+                      :disabled="!canEditClearedStatus || formDisabled || !isClearable"
                       @change="updateClearedStatus()"
                   ></v-checkbox>
                 </validation-provider>
@@ -127,20 +130,21 @@
                     :nudge-right="40"
                     transition="scale-transition"
                     offset-y
+                    :disabled="formDisabled"
                     min-width="auto"
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <validation-provider
                         v-slot="{ errors }"
                         name="cleared_date"
-                        :rules="{ required: form.application.cleared }"
+                        rules="required_if:cleared"
                     >
                       <v-text-field
                           v-model="formattedClearedDate"
                           label="Abrechnungsdatum"
                           :error-messages="errors"
                           readonly
-                          :disabled="!form.application.cleared || !canEditClearedStatus"
+                          :disabled="!form.application.cleared || !canEditClearedStatus || formDisabled"
                           v-bind="attrs"
                           v-on="on"
                       ></v-text-field>
@@ -157,7 +161,7 @@
             </v-row>
             <v-row>
               <v-col cols="12" sm="12" md="12">
-                <v-text-field   v-model="form.application.identifier" disabled label="Gesuch-ID"></v-text-field>
+                <v-text-field  :disabled="formDisabled"  v-model="form.application.identifier" disabled label="Gesuch-ID"></v-text-field>
               </v-col>
             </v-row>
             <v-row>
@@ -167,7 +171,7 @@
                     name="egid"
                     rules=""
                 >
-                  <v-text-field   v-model="form.application.object_egid" label="EGID" :error-messages="errors"></v-text-field>
+                  <v-text-field :loading="loadingMaddData" append-icon="mdi-sync" @click:append="getMaddDataByEgid" :disabled="formDisabled"   v-model="form.application.object_egid" label="EGID" :error-messages="errors"></v-text-field>
                 </validation-provider>
               </v-col>
               <v-col cols="6" sm="12" md="6">
@@ -176,7 +180,7 @@
                     name="plot"
                     rules=""
                 >
-                  <v-text-field   v-model="form.application.object_plot" disabled label="Parzelle" :error-messages="errors"></v-text-field>
+                  <v-text-field :disabled="formDisabled"  v-model="form.application.object_plot" disabled label="Parzelle" :error-messages="errors"></v-text-field>
                 </validation-provider>
               </v-col>
             </v-row>
@@ -187,7 +191,7 @@
                     name="street"
                     rules=""
                 >
-                  <v-text-field   v-model="form.application.object_street" label="Strasse" :error-messages="errors"></v-text-field>
+                  <v-text-field :disabled="formDisabled"  v-model="form.application.object_street" label="Strasse" :error-messages="errors"></v-text-field>
                 </validation-provider>
               </v-col>
               <v-col cols="6" sm="12" md="6">
@@ -196,7 +200,7 @@
                     name="streetnumber"
                     rules=""
                 >
-                  <v-text-field   v-model="form.application.object_streetnumber" label="Hausnummer" :error-messages="errors"></v-text-field>
+                  <v-text-field :disabled="formDisabled"  v-model="form.application.object_streetnumber" label="Hausnummer" :error-messages="errors"></v-text-field>
                 </validation-provider>
               </v-col>
             </v-row>
@@ -207,7 +211,7 @@
                     name="zip"
                     :rules="{regex: /[0-9]{4}$/}"
                 >
-                  <v-text-field   v-model="form.application.object_zip" label="PLZ" :error-messages="errors"></v-text-field>
+                  <v-text-field :disabled="formDisabled"  v-model="form.application.object_zip" label="PLZ" :error-messages="errors"></v-text-field>
                 </validation-provider>
               </v-col>
               <v-col cols="6" sm="12" md="6">
@@ -216,7 +220,7 @@
                     name="city"
                     rules=""
                 >
-                  <v-text-field   v-model="form.application.object_city" label="Ort" :error-messages="errors"></v-text-field>
+                  <v-text-field :disabled="formDisabled"  v-model="form.application.object_city" label="Ort" :error-messages="errors"></v-text-field>
                 </validation-provider>
               </v-col>
             </v-row>
@@ -225,7 +229,7 @@
                 <validation-provider
                     v-slot="{ errors }"
                     name="municipality"
-                    rules=""
+                    :rules="{required: true}"
                 >
                   <v-select :items="municipalityItems" :disabled="$store.getters.getIsMunicipalityUser" item-value="id" item-text="name" v-model="form.application.municipality" label="Gemeinde" :error-messages="errors"></v-select>
                 </validation-provider>
@@ -233,9 +237,15 @@
             </v-row>
             <v-row>
               <v-col cols="6" sm="12" md="6">
-                  <v-text-field disabled   v-model="form.application.generator_area" label="EBF">
+                <validation-provider
+                    v-slot="{ errors }"
+                    name="generator_area"
+                    :rules="{required: true, integer: true}"
+                >
+                  <v-text-field @change="updateGeneratorAreaFee()" @focus="generatorAreaActive = true;" @blur="generatorAreaActive = false;updateGeneratorAreaFee();" :disabled="formDisabled" v-model="form.application.generator_area"  :error-messages="errors" label="EBF">
                     <template slot="append">m&sup2;</template>
                   </v-text-field>
+                </validation-provider>
               </v-col>
               <v-col cols="6" sm="12" md="6">
                   <v-text-field
@@ -244,6 +254,12 @@
                                 v-model="form.application.fee"
                                 label="Abgabe">
                   </v-text-field>
+              </v-col>
+              <v-col cols="12" class="pt-0">
+                <v-alert class="mt-0 white--text" v-if="generatorAreaChanged || generatorAreaActive" border="left"  dense color="warning">
+                  <b>Achtung!</b> Beim Ändern der Energiebezugsfläche wird automatisch auch die Ersatzabgabe neuberechnet.
+                  Die ursprünglichen Werte werden überschrieben.
+                  Es wird empfohlen, die ursprünglichen Werte bei «Interne Bemerkungen» festzuhalten.</v-alert>
               </v-col>
             </v-row>
             <v-row>
@@ -295,7 +311,7 @@
         </v-btn>
         <v-btn
             color="primary lighten-1"
-            @click="save()"
+            @click="confirmSave()"
             :loading="isSaving"
             :disabled="isSaving"
             depressed
@@ -304,6 +320,93 @@
           Speichern
         </v-btn>
       </v-card-actions>
+
+      <v-dialog
+          v-model="dialog.confirmSave"
+          width="500"
+      >
+        <v-card>
+          <v-card-title class="text-h5">
+            PV-Ersatzabgabe wurde geändert
+          </v-card-title>
+          <v-card-text class="mt-2">
+            <span v-if="form.application && editedApplication">
+              Sie haben die Energiebezugsfläche geändert und damit auch die Höhe der Ersatzabgabe. Wenn Sie fortfahren wird die PV-Ersatzabgabe für dieses Gesuch von
+              <b>CHF {{ numberWithDelimiter(parseFloat(editedApplication.fee)) }}</b> auf <b>CHF {{ numberWithDelimiter(parseFloat(form.application.fee)) }}</b> angepasst.
+              Möchten Sie die Änderungen speichern?</span>
+            </v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="default"
+                text
+                @click="dialog.confirmSave = false"
+            >
+              Abbrechen
+            </v-btn>
+            <v-btn
+                color="success"
+                text
+                :loading="isSaving"
+                :disabled="isSaving"
+                @click="save()">
+              Speichern
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog
+          v-model="dialog.confirmAddressOverwrite"
+          width="500"
+      >
+        <v-card>
+          <v-card-title class="text-h5">
+            GWR Adresse für diese EGID
+          </v-card-title>
+          <v-card-text class="mt-2">
+            <span v-if="form.application && editedApplication">
+              Für die angegebende EGID wurden folgende Adressdaten aus dem GWR gefunden.<br/>
+              <br/>
+              <b>GWR-Adresse:</b><br/>
+              Strasse: {{overwriteAddress.object_street }} <br/>
+              Hausnummer: {{overwriteAddress.object_streetnumber }} <br/>
+              Ort: {{overwriteAddress.object_city }} <br/>
+              PLZ: {{overwriteAddress.object_zip }} <br/>
+              Parzelle: {{overwriteAddress.object_plot}} <br/>
+              <br/>
+
+              <b>Bestehende-Adresse:</b><br/>
+              Strasse: {{form.application.object_street }} <br/>
+              Hausnummer: {{form.application.object_streetnumber }} <br/>
+              Ort: {{form.application.object_city }} <br/>
+              PLZ: {{form.application.object_zip }} <br/>
+              Parzelle: {{form.application.object_plot}} <br/>
+              <br/>
+              Wollen Sie die bestehenden Adressdaten mit den GWR-Adressdaten überschreiben?
+              <br>
+            </span>
+          </v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="default"
+                text
+                @click="dialog.confirmAddressOverwrite = false"
+            >
+              Abbrechen
+            </v-btn>
+            <v-btn
+                color="success"
+                text
+                @click="overwriteAddress()">
+              Überschreiben
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-card>
 <!--  </v-dialog>-->
 </template>
@@ -312,15 +415,25 @@
 import axios from 'axios'
 import { showSnack } from '../globalActions'
 // eslint-disable-next-line camelcase
-import { required, regex } from 'vee-validate/dist/rules'
+import { required, regex, integer, required_if } from 'vee-validate/dist/rules'
 import { extend, ValidationProvider, ValidationObserver, setInteractionMode } from 'vee-validate'
 import ApplicationStatus from '../utils/statusPv'
 import ActivityList from "./ActivityList";
+import PvFeeCalculation from '../utils/pvFeeCalculation'
 
 setInteractionMode('eager')
 
 extend('required', {
   ...required,
+  message: 'Dies ist ein Pflichtfeld'
+})
+extend('integer', {
+  ...integer,
+  message: 'Es werden nur Ganzzahlen akzeptiert.'
+})
+
+extend('required_if', {
+  ...required_if,
   message: 'Dies ist ein Pflichtfeld'
 })
 
@@ -352,6 +465,13 @@ export default {
         application: {
         }
       },
+      overwriteAddress: {
+        object_street: '',
+        object_streetnumber: '',
+        object_city : '',
+        object_zip: '',
+        object_plot: ''
+      },
       status: {
         1: 'Offen',
         2: 'Bewilligt',
@@ -372,7 +492,14 @@ export default {
       editedApplication: null,
       editedApplicationId: null,
       disableDateChange: true,
-      applicationStatusItems: ApplicationStatus
+      applicationStatusItems: ApplicationStatus,
+      generatorAreaActive: false,
+      generatorAreaChanged: false,
+      loadingMaddData: false,
+      dialog: {
+        confirmSave: false,
+        confirmAddressOverwrite: false
+      }
     }
   },
   created () {
@@ -422,6 +549,14 @@ export default {
           }
         })
     },
+    confirmSave () {
+      if (this.generatorAreaChanged) {
+        // show modal to confirm save, otherwise save directly
+        this.dialog.confirmSave = true
+      } else {
+        this.save()
+      }
+    },
     save () {
       this.$refs.applicationFormObserver.validate()
         .then((valid) => {
@@ -456,10 +591,17 @@ export default {
     updateApplication () {
 
     },
+    updateGeneratorAreaFee () {
+      this.generatorAreaChanged = parseFloat(this.editedApplication.generator_area) !== parseFloat(this.form.application.generator_area)
+      this.form.application.fee = PvFeeCalculation.getPVFeeAsFloat(this.form.application.generator_area)
+    },
     resetApplicationDialog () {
       this.form.application = null
       this.editedApplication = null
       this.editedApplicationId = null
+      this.generatorAreaChanged = false
+      this.generatorAreaActive = false
+      this.loadingMaddData = false
     },
     closeDialog() {
       this.resetApplicationDialog()
@@ -475,6 +617,9 @@ export default {
           // todo error handling
           console.log('fetch error: ' + ex.message)
         })
+    },
+    numberWithDelimiter(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
     },
     updateStatusDate () {
       // check if date is already in used status dates
@@ -516,21 +661,67 @@ export default {
         this.form.application.cleared_date = null
         this.formattedClearedDate = ''
       }
+    },
+    getMaddDataByEgid () {
+      this.loadingMaddData = true
+        axios
+          .get('https://api3.geo.admin.ch/rest/services/api/MapServer/find?layer=ch.bfs.gebaeude_wohnungs_register&searchText=' + this.form.application.object_egid + '&searchField=egid&returnGeometry=false')
+          .then((response) => {
+            console.log(response.data)
+            let featureAttributes = null
+            if (response.data && response.data.results?.length > 0) {
+              response.data.results.forEach(feature => {
+                if (feature.attributes.egid === this.form.application.object_egid) {
+                  // found feature with searched egid
+                  featureAttributes = feature.attributes
+
+                  this.overwriteAddress.object_street = featureAttributes.strname[0]
+                  this.overwriteAddress.object_streetnumber = featureAttributes.deinr
+                  this.overwriteAddress.object_city = featureAttributes.dplzname
+                  this.overwriteAddress.object_zip = featureAttributes.dplz4
+                  this.overwriteAddress.object_plot = featureAttributes.lparz
+
+                  this.dialog.confirmAddressOverwrite = true
+                }
+              })
+              if (!featureAttributes) {
+                showSnack({message: 'Kein GWR Eintrag für diese EGID gefunden.'})
+              }
+            }
+          }).catch(error => {
+            console.log(error)
+          }).finally(() => {
+            this.loadingMaddData = false
+        })
     }
   },
   watch: {
     visible: function () {
       this.showDialog = this.visible
-    }
+    },
   },
   computed: {
     canEditClearedStatus: {
       get () {
         return !this.$store.getters.getIsMunicipalityUser
       }
+    },
+    isClearable: {
+      get () {
+          let dates = JSON.parse(this.editedApplication.status_changed_dates)
+          return !!dates[3];
+      }
+    },
+    formDisabled: {
+      get () {
+        return (this.editedApplication.cleared === true && this.$store.getters.getIsMunicipalityUser)
+      }
     }
   }
 }
+
+
+
 </script>
 
 <style scoped>
