@@ -10,6 +10,11 @@
             <v-row>
               <v-col>
                 <v-text-field class="mb-5" label="Suchen..." v-model="searchText" outlined clearable hide-details full-width></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <p class="caption mb-1">Statusfilterung</p>
                 <v-checkbox v-for="status in filters.statusFilter"
                             :key="status.value"
                             :label="status.textVerbose"
@@ -18,6 +23,12 @@
                             @change="updateAppliedFilters()"
                             class="my-1">
                 </v-checkbox>
+              </v-col>
+            </v-row>
+            <v-row v-if="showPvApplicationList">
+              <v-col>
+                <p class="caption mb-1">Abgerechnete Gesuche anzeigen</p>
+                <v-select v-model="appliedClearedFilter" :items="filters.clearedFilter" item-value="value" item-text="text" outlined full-width></v-select>
               </v-col>
             </v-row>
           </v-col>
@@ -37,7 +48,7 @@
       </v-col>
       <v-col cols="12" md="9" lg="9" xl="10" class="pt-0 pl-8 pl-md-12">
       <gas-application-list v-if="showGasApplicationList" :searchText="searchText" ref="gasApplicationList" :statusFilter="appliedStatusFilters"></gas-application-list>
-      <pv-application-list v-if="showPvApplicationList" :searchText="searchText" ref="pvApplicationList" :statusFilter="appliedStatusFilters"></pv-application-list>
+      <pv-application-list v-if="showPvApplicationList" :searchText="searchText" ref="pvApplicationList" :clearedFilter="appliedClearedFilter"  :statusFilter="appliedStatusFilters"></pv-application-list>
       </v-col>
     </v-row>
   </div>
@@ -58,9 +69,11 @@ export default {
   data: () => ({
     searchText: '',
     filters: {
-      statusFilter: Status
+      statusFilter: Status,
+      clearedFilter: [{value: 0, text: 'alle anzeigen'}, {value: 1, text: 'nur abgerechnete anzeigen'}, {value: 2, text: 'nur nicht abgerechnete anzeigen'}]
     },
-    appliedStatusFilters: []
+    appliedStatusFilters: [],
+    appliedClearedFilter: 0
   }),
   computed: {
     showGasApplicationList: {
@@ -78,6 +91,7 @@ export default {
     resetFilter () {
       this.searchText = ''
       this.filters.statusFilter.forEach((el) => { el.active = false })
+      this.appliedClearedFilter = 0
       this.updateAppliedFilters()
     },
     updateAppliedFilters () {
@@ -89,11 +103,16 @@ export default {
       })
     },
     exportDataToCsv() {
-
       let filterString = []
       this.appliedStatusFilters.forEach((f) => {
         filterString.push(this.filters.statusFilter[this.filters.statusFilter.map(object => object.value).indexOf(f)].textVerbose)
       })
+
+      if (this.appliedClearedFilter === 1) {
+        filterString.push('nur abgerechnete Gesuche')
+      } else if (this.appliedClearedFilter === 2) {
+        filterString.push('nur nicht abgerechnete Gesuche')
+      }
 
       if (filterString.length > 0) {
         filterString = filterString.join(', ')
@@ -112,5 +131,4 @@ export default {
 
 </script>
 <style>
-
 </style>

@@ -18,6 +18,7 @@
             <td nowrap="true">{{ new Date(props.item.createdAt).toLocaleDateString(undefined, {day: '2-digit', month: '2-digit', year: 'numeric'}) }}</td>
             <td nowrap="true"><v-chip v-if="props.item.status" small pill :dark="statusChips[props.item.status].dark" :text-color="statusChips[props.item.status].textColor"  :outlined="statusChips[props.item.status].outlined" :color="statusChips[props.item.status].color">{{ statusChips[props.item.status].text }}</v-chip></td>
             <td nowrap="true">{{ new Date(props.item.last_status_date).toLocaleDateString(undefined, {day: '2-digit', month: '2-digit', year: 'numeric'}) }}</td>
+            <td nowrap="true">{{ props.item.cleared ? 'Ja' : 'Nein' }}</td>
             <td nowrap="true">{{ props.item.version }}</td>
             <td nowrap="true">{{ props.item.object_egid }}</td>
             <td nowrap="true">{{ props.item.address }}</td>
@@ -47,7 +48,7 @@ import ExportToExcel from "../utils/exportToExcel";
 import store from "../store";
 
 export default {
-  props: ['searchText', 'statusFilter'],
+  props: ['searchText', 'statusFilter', 'clearedFilter'],
   components: {
     'pv-application-form': PvApplicationForm
   },
@@ -155,6 +156,18 @@ export default {
             align: 'start',
             filterable: true,
             value: 'last_status_date'
+          },
+          {
+            text: 'Abgerechnet',
+            align: 'start',
+            filterable: true,
+            value: 'cleared',
+            filter: value => {
+              if (this.clearedFilter === 0) return true
+              if (this.clearedFilter === 1 && value === true) {
+                return true
+              } else return this.clearedFilter === 2 && (value === null || value === false);
+            }
           },
           {
             text: 'Variante',

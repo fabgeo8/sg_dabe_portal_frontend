@@ -1,11 +1,26 @@
 <template>
-  <v-row class="mt-3 mb-2 ">
-    <v-col cols="12"
-    sm="12" md="12">
+  <div class="pr-4">
+    <v-row>
+      <v-col>
+        <h3>Formularspezifische Einstellungen</h3>
+      </v-col>
+      </v-row>
+    <v-row>
+      <v-col md="6">
+        <v-text-field label="PV-Ersatzabgabe Anteil Gemeinde" outlined></v-text-field>
+      </v-col>
+    </v-row>
+    <v-row class="mb-1">
+      <v-col>
+        <h3>Einstellungen an Formularsystem übertragen</h3>
+      </v-col>
+      <v-col cols="12"
+             sm="12" md="12">
         <v-btn color="primary" :loading="dataPushing" @click="pushDataToFormAssistant()" >Daten an Formularsystem übertragen</v-btn>
         <p class="mt-3">Aktuelle Gemeindeliste und Gasversorgerdaten werden auf das Formularsystem synchronisiert.</p>
-    </v-col>
-  </v-row>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>

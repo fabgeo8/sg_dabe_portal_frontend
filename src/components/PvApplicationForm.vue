@@ -174,10 +174,10 @@
                   rules=""
               >
                 <v-text-field :loading="loadingMaddData" append-icon="mdi-sync" :disabled="formDisabled"
-                              v-model="form.application.object_egid" label="EGID" :error-messages="errors">
+                              v-model="form.application.object_egid" label="EGID" ref="objectEgid" :error-messages="errors">
                   <v-tooltip top slot="append">
                     <template v-slot:activator="{ on }">
-                      <v-icon id="syncIcon" v-on="on" color="grey" @click="getMaddDataByEgid()" dark>
+                      <v-icon id="syncIcon" v-on="on" color="grey" @click="$refs.addressOverwriteDialog.getMaddDataByEgid()" dark>
                         mdi-sync
                       </v-icon>
                     </template>
@@ -280,8 +280,8 @@
               <v-alert class="mt-0 white--text" v-if="generatorAreaChanged || generatorAreaActive" border="left" dense
                        color="warning">
                 <b>Achtung!</b> Beim Ändern der Energiebezugsfläche wird automatisch auch die Ersatzabgabe neuberechnet.
-                Die ursprünglichen Werte werden überschrieben.
-                Es wird empfohlen, die ursprünglichen Werte bei «Interne Bemerkungen» festzuhalten.
+                Die ursprünglichen Werte werden überschrieben. Es wird empfohlen,
+                die ursprünglichen Werte (EBF und PV-Ersatzabgabe) unter «Interne Bemerkungen» festzuhalten.
               </v-alert>
             </v-col>
           </v-row>
@@ -359,7 +359,8 @@
         </v-card-title>
         <v-card-text class="mt-2">
             <span v-if="form.application && editedApplication">
-              Sie haben die Energiebezugsfläche geändert und damit auch die Höhe der Ersatzabgabe. Wenn Sie fortfahren wird die PV-Ersatzabgabe für dieses Gesuch von
+             Sie haben die Energiebezugsfläche geändert. Dadurch wurde auch die Höhe der PV-Ersatzabgabe angepasst.
+              Wenn Sie fortfahren wird die PV-Ersatzabgabe für dieses Gesuch von
               <b>CHF {{
                   numberWithDelimiter(parseFloat(editedApplication.fee))
                 }}</b> auf <b>CHF {{ numberWithDelimiter(parseFloat(form.application.fee)) }}</b> angepasst.
@@ -386,57 +387,18 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
-    <v-dialog
-        v-model="dialog.confirmAddressOverwrite"
-        width="500"
-    >
-      <v-card>
-        <v-card-title class="text-h5">
-          GWR Adresse für diese EGID
-        </v-card-title>
-        <v-card-text class="mt-2">
-            <span v-if="form.application && editedApplication">
-              Für die angegebene EGID wurden folgende Adressdaten im GWR gefunden.<br/>
-              <br/>
-              <b>Adresse gemäss GWR</b><br/>
-              Strasse: {{ overwriteAddress.object_street }} <br/>
-              Hausnummer: {{ overwriteAddress.object_streetnumber }} <br/>
-              Ort: {{ overwriteAddress.object_city }} <br/>
-              PLZ: {{ overwriteAddress.object_zip }} <br/>
-              Parzelle: {{ overwriteAddress.object_plot }} <br/>
-              <br/>
-
-              <b>Aktuell erfasste Adresse</b><br/>
-              Strasse: {{ form.application.object_street }} <br/>
-              Hausnummer: {{ form.application.object_streetnumber }} <br/>
-              Ort: {{ form.application.object_city }} <br/>
-              PLZ: {{ form.application.object_zip }} <br/>
-              Parzelle: {{ form.application.object_plot }} <br/>
-              <br/>
-              Wollen Sie die aktuell erfasste Adresse mit den Adressdaten aus dem GWR überschreiben?
-              <br>
-            </span>
-        </v-card-text>
-        <v-divider></v-divider>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-              color="default"
-              text
-              @click="dialog.confirmAddressOverwrite = false"
-          >
-            Abbrechen
-          </v-btn>
-          <v-btn
-              color="success"
-              text
-              @click="overwriteFormAddress()">
-            Überschreiben
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+     <address-overwrite
+         v-if="editedApplication"
+         @overwriteAddress="overwriteFormAddress"
+         @toggleLoading="toggleMaddLoading"
+         :form_city="editedApplication.object_city"
+         :form_plot="editedApplication.object_plot"
+         :form_street="editedApplication.object_street"
+         :form_streetnumber="editedApplication.object_streetnumber"
+         :form_zip="editedApplication.object_city"
+         :form_egid="editedApplication.object_egid"
+     ref="addressOverwriteDialog">
+     </address-overwrite>
   </v-card>
   <!--  </v-dialog>-->
 </template>
@@ -450,6 +412,7 @@ import {extend, ValidationProvider, ValidationObserver, setInteractionMode} from
 import ApplicationStatus from '../utils/statusPv'
 import ActivityList from "./ActivityList";
 import PvFeeCalculation from '../utils/pvFeeCalculation'
+import AddressOverwrite from '../components/AddressOverwrite'
 
 setInteractionMode('eager')
 
@@ -485,6 +448,7 @@ export default {
     }
   },
   components: {
+    AddressOverwrite,
     ValidationProvider,
     ValidationObserver,
     ActivityList
@@ -493,13 +457,6 @@ export default {
     return {
       form: {
         application: {}
-      },
-      overwriteAddress: {
-        object_street: '',
-        object_streetnumber: '',
-        object_city: '',
-        object_zip: '',
-        object_plot: ''
       },
       status: {
         1: 'Offen',
@@ -527,7 +484,6 @@ export default {
       loadingMaddData: false,
       dialog: {
         confirmSave: false,
-        confirmAddressOverwrite: false
       }
     }
   },
@@ -647,14 +603,17 @@ export default {
             console.log('fetch error: ' + ex.message)
           })
     },
-    overwriteFormAddress() {
-      this.form.application.object_plot = this.overwriteAddress.object_plot
-      this.form.application.object_street = this.overwriteAddress.object_street
-      this.form.application.object_streetnumber = this.overwriteAddress.object_streetnumber
-      this.form.application.object_city = this.overwriteAddress.object_city
-      this.form.application.object_zip = this.overwriteAddress.object_zip
-
-      this.dialog.confirmAddressOverwrite = false
+    overwriteFormAddress(newAddress) {
+      this.form.application.object_plot = newAddress.object_plot
+      this.form.application.object_street = newAddress.object_street
+      this.form.application.object_streetnumber = newAddress.object_streetnumber
+      this.form.application.object_city = newAddress.object_city
+      this.form.application.object_zip = newAddress.object_zip
+      // remove focus from egid field
+      this.$refs.objectEgid.blur()
+    },
+    toggleMaddLoading(isLoading) {
+      this.loadingMaddData = isLoading
     },
     numberWithDelimiter(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
@@ -700,38 +659,6 @@ export default {
         this.formattedClearedDate = ''
       }
     },
-    getMaddDataByEgid() {
-      if (this.loadingMaddData) return
-      this.loadingMaddData = true
-      axios
-          .get('https://api3.geo.admin.ch/rest/services/api/MapServer/find?layer=ch.bfs.gebaeude_wohnungs_register&searchText=' + this.form.application.object_egid + '&searchField=egid&returnGeometry=false')
-          .then((response) => {
-            let featureAttributes = null
-            if (response.data && response.data.results?.length > 0) {
-              response.data.results.forEach(feature => {
-                if (feature.attributes.egid === this.form.application.object_egid) {
-                  // found feature with searched egid
-                  featureAttributes = feature.attributes
-
-                  this.overwriteAddress.object_street = featureAttributes.strname[0]
-                  this.overwriteAddress.object_streetnumber = featureAttributes.deinr
-                  this.overwriteAddress.object_city = featureAttributes.dplzname
-                  this.overwriteAddress.object_zip = featureAttributes.dplz4
-                  this.overwriteAddress.object_plot = featureAttributes.lparz
-
-                  this.dialog.confirmAddressOverwrite = true
-                }
-              })
-              if (!featureAttributes) {
-                showSnack({message: 'Kein GWR Eintrag für diese EGID gefunden.'})
-              }
-            }
-          }).catch(error => {
-        console.log(error)
-      }).finally(() => {
-        this.loadingMaddData = false
-      })
-    }
   },
   watch: {
     visible: function () {

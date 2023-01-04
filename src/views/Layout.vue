@@ -124,12 +124,12 @@ export default {
         path: '/'
       },
       {
-        name: 'Gesuch',
-        path: '/gesuch'
-      },
-      {
         name: 'Gesuchliste',
         path: '/gesuchliste'
+      },
+      {
+        name: 'Gesuch',
+        path: '/gesuch'
       },
       {
         name: 'Aktivitäten',

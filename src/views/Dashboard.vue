@@ -205,6 +205,12 @@
             <span v-if="statsObject.cleared.feeTotal">Ersatzabgaben: CHF {{
                 formatCurrency(statsObject.cleared.feeTotal)
               }}<br/></span>
+            <span v-if="statsObject.cleared.feeMunicipalities">anteil Gemeinde: CHF {{
+                formatCurrency(statsObject.cleared.feeMunicipalities)
+              }}<br/></span>
+            <span v-if="statsObject.cleared.feeCanton">vom Kanton in Rechnung gestellt: CHF {{
+                formatCurrency(statsObject.cleared.feeCanton)
+              }}<br/></span>
             Energiebezugsfläche: {{ formatCurrency(statsObject.cleared.generatorAreaTotal) }} m&sup2;
           </v-card-text>
 

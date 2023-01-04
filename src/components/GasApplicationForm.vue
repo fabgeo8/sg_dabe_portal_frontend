@@ -117,8 +117,17 @@
                     name="egid"
                     rules=""
                 >
-                  <v-text-field v-model="form.application.object_egid" label="EGID"
-                                :error-messages="errors"></v-text-field>
+                  <v-text-field :loading="loadingMaddData" append-icon="mdi-sync"
+                                v-model="form.application.object_egid" label="EGID" ref="objectEgid" :error-messages="errors">
+                    <v-tooltip top slot="append">
+                      <template v-slot:activator="{ on }">
+                        <v-icon id="syncIcon" v-on="on" color="grey" @click="$refs.addressOverwriteDialog.getMaddDataByEgid()" dark>
+                          mdi-sync
+                        </v-icon>
+                      </template>
+                      <span>Adresse anhand EGID mit GWR abgleichen</span>
+                    </v-tooltip>
+                  </v-text-field>
                 </validation-provider>
               </v-col>
               <v-col cols="6" sm="12" md="6">
@@ -294,6 +303,18 @@
         </v-container>
       </v-card-text>
     </div>
+    <address-overwrite
+        v-if="editedApplication"
+        @overwriteAddress="overwriteFormAddress"
+        @toggleLoading="toggleMaddLoading"
+        :form_city="editedApplication.object_city"
+        :form_plot="editedApplication.object_plot"
+        :form_street="editedApplication.object_street"
+        :form_streetnumber="editedApplication.object_streetnumber"
+        :form_zip="editedApplication.object_city"
+        :form_egid="editedApplication.object_egid"
+        ref="addressOverwriteDialog">
+    </address-overwrite>
   </v-card>
   <!--  </v-dialog>-->
 </template>
@@ -306,6 +327,7 @@ import {required, regex, required_if} from 'vee-validate/dist/rules'
 import {extend, ValidationProvider, ValidationObserver, setInteractionMode} from 'vee-validate'
 import ApplicationStatus from '../utils/statusGas'
 import ActivityList from "./ActivityList";
+import AddressOverwrite from "./AddressOverwrite";
 
 setInteractionMode('eager')
 
@@ -338,6 +360,7 @@ export default {
   },
   components: {
     ActivityList,
+    AddressOverwrite,
     ValidationProvider,
     ValidationObserver
   },
@@ -365,6 +388,7 @@ export default {
       editedApplication: null,
       editedApplicationId: null,
       disableDateChange: true,
+      loadingMaddData: false,
       applicationStatusItems: ApplicationStatus
     }
   },
@@ -452,11 +476,24 @@ export default {
       this.form.application = null
       this.editedApplication = null
       this.editedApplicationId = null
+      this.loadingMaddData = false
     },
     closeDialog() {
       this.resetApplicationDialog()
       this.$emit('getApplications')
       this.$emit('closeDialog')
+    },
+    overwriteFormAddress(newAddress) {
+      this.form.application.object_plot = newAddress.object_plot
+      this.form.application.object_street = newAddress.object_street
+      this.form.application.object_streetnumber = newAddress.object_streetnumber
+      this.form.application.object_city = newAddress.object_city
+      this.form.application.object_zip = newAddress.object_zip
+      // remove focus from egid field
+      this.$refs.objectEgid.blur()
+    },
+    toggleMaddLoading(isLoading) {
+      this.loadingMaddData = isLoading
     },
     getMunicipalities() {
       axios.get('/municipalities')
