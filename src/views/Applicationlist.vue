@@ -8,13 +8,14 @@
         <v-row no-gutters>
           <v-col class="rounded-t d-none d-md-block px-6 py-6">
             <v-row>
-              <v-col>
+              <v-col class="pb-0">
+                <p class="caption mb-1">Textsuche</p>
                 <v-text-field class="mb-5" label="Suchen..." v-model="searchText" outlined clearable hide-details full-width></v-text-field>
               </v-col>
             </v-row>
             <v-row>
               <v-col>
-                <p class="caption mb-1">Statusfilterung</p>
+                <p class="caption mb-1">Filterung Status</p>
                 <v-checkbox v-for="status in filters.statusFilter"
                             :key="status.value"
                             :label="status.textVerbose"
@@ -27,7 +28,7 @@
             </v-row>
             <v-row v-if="showPvApplicationList">
               <v-col>
-                <p class="caption mb-1">Abgerechnete Gesuche anzeigen</p>
+                <p class="caption mb-1">Filterung Stand Abrechnung</p>
                 <v-select v-model="appliedClearedFilter" :items="filters.clearedFilter" item-value="value" item-text="text" outlined full-width></v-select>
               </v-col>
             </v-row>
@@ -70,7 +71,7 @@ export default {
     searchText: '',
     filters: {
       statusFilter: Status,
-      clearedFilter: [{value: 0, text: 'alle anzeigen'}, {value: 1, text: 'nur abgerechnete anzeigen'}, {value: 2, text: 'nur nicht abgerechnete anzeigen'}]
+      clearedFilter: [{value: 0, text: 'alle Gesuche anzeigen'}, {value: 1, text: 'nur abgerechnete Gesuche anzeigen'}, {value: 2, text: 'nur nicht abgerechnete Gesuche anzeigen'}]
     },
     appliedStatusFilters: [],
     appliedClearedFilter: 0

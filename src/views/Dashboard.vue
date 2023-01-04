@@ -135,7 +135,7 @@
                       <v-icon class="mr-1">
                         mdi-receipt-text-check-outline
                       </v-icon>
-                      <span class="subheading">Gesuche abgerechnet</span>
+                      <span class="subheading">Gesuche abrechnen</span>
                     </v-btn>
                   </template>
                   <v-card>
@@ -205,10 +205,10 @@
             <span v-if="statsObject.cleared.feeTotal">Ersatzabgaben: CHF {{
                 formatCurrency(statsObject.cleared.feeTotal)
               }}<br/></span>
-            <span v-if="statsObject.cleared.feeMunicipalities">anteil Gemeinde: CHF {{
+            <span v-if="statsObject.cleared.feeMunicipalities">Anteil Gemeinde: CHF {{
                 formatCurrency(statsObject.cleared.feeMunicipalities)
               }}<br/></span>
-            <span v-if="statsObject.cleared.feeCanton">vom Kanton in Rechnung gestellt: CHF {{
+            <span v-if="statsObject.cleared.feeCanton">Vom Kanton in Rechnung gestellt: CHF {{
                 formatCurrency(statsObject.cleared.feeCanton)
               }}<br/></span>
             Energiebezugsfläche: {{ formatCurrency(statsObject.cleared.generatorAreaTotal) }} m&sup2;
@@ -233,15 +233,12 @@
       </v-col>
       <v-col cols="12" class="d-none" md="2"></v-col>
       <v-col cols="12" md="6" class="">
-        <v-card
-
-        >
+        <v-card>
           <v-card-title>
             <span class="text-h5">Letzte Aktivitäten</span>
           </v-card-title>
           <v-card-text>
             <div class="font-weight-bold ml-8 mb-2">
-
             </div>
 
             <activity-list :activityList="activities"></activity-list>

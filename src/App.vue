@@ -12,7 +12,7 @@
           <v-col cols="6" class="pa-0">
             <v-card-text class="d-flex align-center" style="font-size: 0.8rem">
               <p class="d-flex align-self-center mb-0">
-                © 2022 Kanton St.Gallen, Entwicklung Small Business Know How GmbH
+                © {{ new Date().getFullYear() }} Kanton St.Gallen, Entwicklung Small Business Know How GmbH
               </p>
             </v-card-text>
           </v-col>

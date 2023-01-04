@@ -93,6 +93,8 @@ export default class ExportToExcel {
                 'Ort': a.object_city,
                 'EBF': a.generator_area,
                 'Abgabe': a.fee,
+                'Abgabe Anteil Gemeinde': a.fee_amount_municipality,
+                'Abgabe Anteil Kanton': a.fee_amount_canton,
                 'Gemeinde': a.Municipality.name
             }
 

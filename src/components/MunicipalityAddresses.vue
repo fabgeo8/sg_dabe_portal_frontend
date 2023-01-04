@@ -113,7 +113,7 @@
               :loading="loading"
               :class="{ collapse: !editedDataset }"
           >
-            Zurücksetzen
+            Abbrechen
           </v-btn>
         </v-col>
       </v-row>
