@@ -22,7 +22,7 @@
               <td nowrap="true">{{ props.item.object_egid }}</td>
               <td nowrap="true">{{ props.item.address }}</td>
               <td nowrap="true">{{ props.item.generator_area }} m&sup2;</td>
-              <td nowrap="true">{{ gasOperatorShortNames[props.item.gas_operator] ? gasOperatorShortNames[props.item.gas_operator] : props.item.gas_operator  }}</td>
+              <td nowrap="true">{{ props.item.gas_operator_short }}</td>
               <td nowrap="true">{{ props.item.Municipality.name }}</td>
               <td>{{ props.item.identifier }}</td>
               <td nowrap="true">
@@ -194,7 +194,7 @@ export default {
             text: 'Gasversorger',
             align: 'start',
             filterable: true,
-            value: 'gas_operator'
+            value: 'gas_operator_short'
           },
           {
             text: 'Gemeinde',

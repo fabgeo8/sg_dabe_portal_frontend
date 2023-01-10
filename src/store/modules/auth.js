@@ -142,7 +142,7 @@ const actions = {
                     console.log('fetch userinfo failed: ' + ex.message)
 
                     // if token is expired, singout user
-                    if (ex.response.data.message === 'jwt expired' || ex.response.data.message === 'authentication_error') {
+                    if (ex.response?.data?.message === 'jwt expired' || ex.response?.data?.message === 'authentication_error') {
                         showSnack({ message: 'Benutzersession ist abgelaufen, bitte neu anmelden.', color: 'red' })
                         auth.signOut()
                     }

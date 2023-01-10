@@ -2,6 +2,19 @@
   <div>
     <v-row>
       <v-col>
+        <p>
+          Hinweis: Änderungen an der Liste der Gasversorger haben keine Auswirkungen auf bereits erfasste Gesuche.
+          Es wird dadurch ausschliesslich die Auswahlliste beim mular-Assistenten angepasst.
+        </p>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-btn @click="showCreateDialog = true;" color="primary">Gasversorger hinzufügen</v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
         <h3>Liste der Gasversorger</h3>
       </v-col>
     </v-row>
@@ -23,6 +36,7 @@
               <td nowrap="true">{{ props.item.short_name }}</td>
               <td>
                 <v-icon small @click="editGasOperator(props.item)" class="mr-2">mdi-pencil</v-icon>
+                <v-icon small @click="confirmDelete(props.item)" class="ml-2">mdi-delete</v-icon>
               </td>
             </tr>
           </template>
@@ -116,6 +130,99 @@
         </div>
       </v-card>
     </v-dialog>
+    <v-dialog
+        v-model="confirmDeleteDialog"
+        persistent
+        hide-overlay
+        width="500"
+    >
+      <v-card>
+        <v-card-title class="text-h5">
+          Gasversorger entfernen
+        </v-card-title>
+        <v-card-text class="mt-2">
+          <span>Der Gasversorger wird dauerhaft entfernt.</span>
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+              color=""
+              text
+              @click="resetDialog"
+          >
+            Abbrechen
+          </v-btn>
+          <v-btn
+              color="red"
+              text
+              :loading="isSaving"
+              @click="deleteItem(itemToDelete)">
+            Entfernen
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog max-width="640" persistent v-model="showCreateDialog">
+      <v-card>
+        <v-card-title class="pr-4">
+          <span class="headline">Gasversorger erstellen</span>
+        </v-card-title>
+          <v-card-text>
+            <validation-observer
+                ref="applicationCreateFormObserver"
+                v-slot="{ }"
+            >
+              <v-container>
+                <v-row>
+                  <v-col cols="12" sm="12" md="12">
+                    <validation-provider
+                        v-slot="{ errors }"
+                        name="gasOperator"
+                        rules="required"
+                    >
+                      <v-text-field v-model="form.name" label="Gasversorger"
+                                    :error-messages="errors"></v-text-field>
+                    </validation-provider>
+                  </v-col>
+                </v-row>
+
+                <v-row>
+                  <v-col cols="12" sm="12" md="12">
+                    <validation-provider
+                        v-slot="{ errors }"
+                        name="gasOperatorShort"
+                        rules="required"
+                    >
+                      <v-text-field v-model="form.short_name" label="Kurzname"
+                                    :error-messages="errors"></v-text-field>
+                    </validation-provider>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </validation-observer>
+          </v-card-text>
+          <v-card-actions class="pb-6 pr-6">
+            <v-spacer></v-spacer>
+            <v-btn
+                color=""
+                @click="resetDialog"
+                depressed
+            >
+              Abbrechen
+            </v-btn>
+            <v-btn
+                color="primary lighten-1"
+                @click="create()"
+                :loading="isSaving"
+                :disabled="isSaving"
+                depressed
+            >
+              Speichern
+            </v-btn>
+          </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 <script>
@@ -132,8 +239,11 @@ export default {
     gasOperatorList: [],
     loadingData: false,
     showDialog: false,
+    showCreateDialog: false,
+    confirmDeleteDialog: false,
     editedDataset: null,
     isSaving: false,
+    itemToDelete: null,
     form: {
       name: '',
       short_name: ''
@@ -183,6 +293,39 @@ export default {
       this.form.name = ''
       this.form.short_name = ''
       this.showDialog = false
+      this.showCreateDialog = false
+      this.confirmDeleteDialog = false
+      this.itemToDelete = null
+    },
+    confirmDelete (item) {
+      this.itemToDelete = item
+      this.confirmDeleteDialog = true
+    },
+    deleteItem (item) {
+      this.isSaving = true
+      axios.delete('settings/gas_operators/' + item.id)
+          .then((res) => {
+            if (res.status === 200) {
+              showSnack({message: 'Gasversorger wurde erfolgreich entfernt', color: 'success'})
+              this.resetDialog()
+              this.getData()
+            } else {
+              showSnack({
+                message: 'Gasversorger konte nicht entfernt werden. Keine Berechtigung.',
+                color: 'red'
+              })
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+            showSnack({
+              message: 'Gasversorger konte nicht entfernt werden. Serverfehler.',
+              color: 'red'
+            })
+          })
+          .finally(() => {
+            this.isSaving = false
+          })
     },
     save () {
       this.$refs.applicationFormObserver.validate()
@@ -213,6 +356,36 @@ export default {
                         this.isSaving = false
                       })
                 }})
+    },
+    create () {
+      this.$refs.applicationCreateFormObserver.validate()
+          .then((valid) => {
+            if (valid) {
+              this.isSaving = true
+              axios.post('settings/gas_operators/', this.form)
+                  .then((res) => {
+                    if (res.status === 200) {
+                      showSnack({message: 'Gasversorger wurden erfolgreich erstellt', color: 'success'})
+                      this.resetDialog()
+                      this.getData()
+                    } else {
+                      showSnack({
+                        message: 'Gasversorger konten nicht erstellt werden. Keine Berechtigung.',
+                        color: 'red'
+                      })
+                    }
+                  })
+                  .catch((err) => {
+                    console.log(err)
+                    showSnack({
+                      message: 'Gasversorger konten nicht erstellt werden. Serverfehler.',
+                      color: 'red'
+                    })
+                  })
+                  .finally(() => {
+                    this.isSaving = false
+                  })
+            }})
     }
 
   },

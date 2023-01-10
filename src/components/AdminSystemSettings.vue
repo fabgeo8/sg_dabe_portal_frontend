@@ -36,7 +36,7 @@
       </v-col>
     </v-row>
     <v-divider class="mt-8"></v-divider>
-    <v-row class="mb-1 mt-4">
+    <v-row class="mb-1 mt-4" v-if="false">
       <v-col>
         <h3>Einstellungen an Formularsystem übertragen</h3>
       </v-col>
@@ -120,8 +120,6 @@ export default {
                 }
               })
               this.editedDataset = res.data
-
-              showSnack({message: 'Daten wurden erfolgreich synchronisiert', color: 'success'})
             }
             else {
               showSnack({message: 'Daten konten nicht synchronisiert werden. Keine Berechtigung.', color: 'red'})

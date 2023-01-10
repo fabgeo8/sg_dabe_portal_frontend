@@ -211,7 +211,7 @@
             </v-row>
             <v-row>
               <v-col cols="12" sm="12" md="12">
-                <v-select :items="$store.getters.getGasOperatorList" item-text="name" item-value="name"
+                <v-select :items="gasOperatorList"
                           v-model="form.application.gas_operator" label="Gasversorger">
                 </v-select>
               </v-col>
@@ -328,6 +328,7 @@ import {extend, ValidationProvider, ValidationObserver, setInteractionMode} from
 import ApplicationStatus from '../utils/statusGas'
 import ActivityList from "./ActivityList";
 import AddressOverwrite from "./AddressOverwrite";
+import gasOperatorList from "@/components/GasOperatorList.vue";
 
 setInteractionMode('eager')
 
@@ -531,7 +532,20 @@ export default {
       this.showDialog = this.visible
     }
   },
-  computed: {}
+  computed: {
+    gasOperatorList: {
+      get () {
+        let list = []
+        this.$store.getters.getGasOperatorList.forEach((el) => {
+          list.push(el.name)
+        })
+        if (!list.includes(this.editedApplication.gas_operator)) {
+          list.push(this.editedApplication.gas_operator)
+        }
+        return list.sort()
+      }
+    }
+  }
 }
 </script>
 

@@ -39,9 +39,7 @@ const getters = {
 const actions = {
   updateData({dispatch, state}) {
     if (axios.defaults.headers.common['Authorization']) {
-      if (state.persisted.gasOperatorList.length === 0 || !state.persisted.gasOperatorList) {
-        dispatch('getGasOperators')
-      }
+      dispatch('getGasOperators')
     }
   },
   async getGasApplications ({ commit, state }) {
