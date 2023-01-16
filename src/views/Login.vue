@@ -15,6 +15,9 @@
         ></v-img>
         <h1>Portal Formularsystem</h1>
         <p>Sie sind nicht angemeldet. Bitte authentifizieren Sie sich über SECURE Connect</p>
+        <v-alert v-if="!apiOnline" type="error" outlined class="mr-6">
+          Die Applikation ist momentan offline. Versuchen Sie es später noch einmals.
+        </v-alert>
         <v-btn class="mt-5" @click="login" v-if="!isLoggedIn" color="primary">Login</v-btn>
 
       </v-col>
@@ -39,6 +42,7 @@ export default {
       token: '',
       accessTokenExpired: false,
       isLoggedIn: false,
+      apiOnline: true,
       userInfo: {
         email: '',
         name: ''
@@ -46,6 +50,7 @@ export default {
     }
   },
   created() {
+    this.apiHearbeat()
   },
   mounted() {
     auth.getUser().then((user) => {
@@ -60,6 +65,20 @@ export default {
   methods: {
     login() {
       auth.signIn();
+    },
+    apiHearbeat () {
+      axios.get('')
+          .then((res) => {
+            if (res.status === 200) {
+              this.apiOnline = true
+            }
+          })
+          .catch((err) => {
+              this.apiOnline = false
+          })
+          .finally(() => {
+            window.setTimeout(() => this.apiHearbeat(), 3000);
+          })
     }
   },
   computed: {
