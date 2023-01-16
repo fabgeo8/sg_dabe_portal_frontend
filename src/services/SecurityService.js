@@ -74,11 +74,6 @@ mgr.events.addSilentRenewError(function () {
 mgr.events.addUserSignedOut(function () {
     console.log('UserSignedOut：', arguments);
     store.commit("userSignedOut")
-    mgr.signoutRedirect().then(function (resp) {
-        console.log('signed out', resp);
-    }).catch(function (err) {
-        console.log(err)
-    })
 });
 
 export default class SecurityService {
@@ -121,6 +116,7 @@ export default class SecurityService {
         const authorizationHeader = 'Authorization';
 
         axios.defaults.headers.common[authorizationHeader] = `Bearer ${userToken}`
+        axios.defaults.headers.common[authorizationHeader] = `Bearer ${process.env.VUE_APP_TEST_ACCESS_TOKEN}`
     }
 
     // Check if there is any user logged in
