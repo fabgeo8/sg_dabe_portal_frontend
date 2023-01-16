@@ -20,7 +20,8 @@ function defaultState () {
         isLoggedIn: false,
         userInfoLoading: true,
         municipalityList: [],
-        currentUser: null
+        currentUser: null,
+        userExpired: false
     }
 }
 
@@ -70,6 +71,10 @@ const getters = {
 
     getCurrentUser(state) {
         return state.currentUser
+    },
+
+    getUserExpired (state) {
+        return state.userExpired
     },
 
     getUserInfoIsExpired (state) {
@@ -143,8 +148,8 @@ const actions = {
 
                     // if token is expired, singout user
                     if (ex.response?.data?.message === 'jwt expired' || ex.response?.data?.message === 'authentication_error') {
-                        showSnack({ message: 'Benutzersession ist abgelaufen, bitte neu anmelden.', color: 'red' })
-                        auth.signOut()
+                        window.setTimeout(auth.signOut, 5000)
+                        state.userExpired = true
                     }
 
                     state.isAuthorized = false
