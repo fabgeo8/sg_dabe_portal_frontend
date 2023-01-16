@@ -28,7 +28,7 @@
                     <v-list-item-title>Systemeinstellungen</v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
-                <v-list-item>
+                <v-list-item v-if="$store.getters.getSettingIsMunicipality">
                   <v-list-item-content @click="hideAllSettings(); showMunicipalities = true;">
                     <v-list-item-title v-if="$store.getters.getSettingIsMunicipality">Gemeinde verwalten</v-list-item-title>
                     <v-list-item-title v-else>Gemeinden verwalten</v-list-item-title>

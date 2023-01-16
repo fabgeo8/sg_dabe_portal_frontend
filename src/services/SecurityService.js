@@ -184,7 +184,7 @@ export default class SecurityService {
     }
 
     // Get the token id
-    getIdToken(){
+    getIdToken() {
         let self = this
         return new Promise((resolve, reject) => {
             mgr.getUser().then(function (user) {

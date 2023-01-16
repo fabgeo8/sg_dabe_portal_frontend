@@ -395,7 +395,7 @@
          :form_plot="editedApplication.object_plot"
          :form_street="editedApplication.object_street"
          :form_streetnumber="editedApplication.object_streetnumber"
-         :form_zip="editedApplication.object_city"
+         :form_zip="editedApplication.object_zip"
          :form_egid="editedApplication.object_egid"
      ref="addressOverwriteDialog">
      </address-overwrite>

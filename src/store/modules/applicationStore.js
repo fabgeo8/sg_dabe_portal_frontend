@@ -51,7 +51,7 @@ const actions = {
       })
       .catch((ex) => {
         console.log('fetch application failed: ' + ex.message)
-        showSnack({ message: 'Gesuchsliste konnte nicht geladen werden.', color: 'red' })
+        showSnack({ message: 'Gesuchliste konnte nicht geladen werden.', color: 'red' })
       })
       .finally(() => {
         state.loadingData = false
@@ -66,7 +66,7 @@ const actions = {
       })
       .catch((ex) => {
         console.log('fetch application failed: ' + ex.message)
-        showSnack({ message: 'Gesuchsliste konnte nicht geladen werden.', color: 'red' })
+        showSnack({ message: 'Gesuchliste konnte nicht geladen werden.', color: 'red' })
       })
       .finally(() => {
         state.loadingData = false

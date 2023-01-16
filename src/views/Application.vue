@@ -9,7 +9,7 @@
         <v-col class="mt-0">
           <p>Bitte geben Sie die vollständige <span class="font-weight-bold">Gesuch-ID</span> ein.<br> Wenn Sie die Gesuch-ID nicht kennen, benutzen Sie die
             Filter- und Suchmöglichkeiten unter
-            <router-link to="/gesuchliste">Gesuchsliste</router-link>
+            <router-link to="/gesuchliste">Gesuchliste</router-link>
           </p>
         </v-col>
       </v-row>

@@ -91,8 +91,8 @@
           type="error"
           class="mt-4"
       >
-        Sie sind nicht berechtigt für den Zugriff auf diese Applikation. Der Benutzer muss für diese Applikation konfiguriert werden.<br>
-        Bitte informieren Sie verantwortliche Person, damit Sie freigeschaltet werden.
+        Sie sind aktuell nicht berechtigt für den Zugriff auf diese Applikation. Der Benutzer muss für diese Applikation zuerst freigeschaltet werden.<br/>
+        Bitte informieren Sie die für die Applikation verantwortliche Person, damit Sie freigeschaltet werden.
       </v-alert>
     </v-container>
   </v-main>

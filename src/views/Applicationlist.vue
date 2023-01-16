@@ -1,6 +1,6 @@
 <template>
   <div>
-    <global-filter title="Gesuchsliste"></global-filter>
+    <global-filter title="Gesuchliste"></global-filter>
 
     <v-row>
       <v-col class="py-0 px-0" cols="12" md="3" lg="3" xl="2">

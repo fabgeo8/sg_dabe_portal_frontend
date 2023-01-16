@@ -4,7 +4,7 @@
       <v-col>
         <p>
           Hinweis: Änderungen an der Liste der Gasversorger haben keine Auswirkungen auf bereits erfasste Gesuche.
-          Es wird dadurch ausschliesslich die Auswahlliste beim mular-Assistenten angepasst.
+          Es wird dadurch ausschliesslich die Auswahlliste beim Formular-Assistenten angepasst.
         </p>
       </v-col>
     </v-row>
