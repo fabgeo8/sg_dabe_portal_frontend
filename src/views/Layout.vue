@@ -94,7 +94,7 @@
               class="mt-4"
           >
             Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an. Sie werden in 5s automatisch auf die
-            Login-Seite weitergeleitet. Wenn die Weiterleitung nicht funktioniert, klicken Sie <a href="/logout">hier</a>.
+            Login-Seite weitergeleitet. Wenn die Weiterleitung nicht funktioniert, klicken Sie <a @click="signOut()">hier</a>.
           </v-alert>
           <v-alert
               v-else
@@ -114,7 +114,8 @@
 
 <script>
 import EventBus, {ACTIONS} from "../events";
-
+import Mgr from '../services/SecurityService'
+const auth = new Mgr()
 export default {
   name: "Layout",
   components: {},
@@ -162,6 +163,9 @@ export default {
       this.$store.commit('updateApplicationType', applicationType.value)
 
       window.location.reload();
+    },
+    signOut () {
+      auth.signOut()
     }
   },
   mounted() {

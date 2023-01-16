@@ -107,7 +107,7 @@
             <span class="text-h5">Realisierte Gesuche</span>
           </v-card-title>
           <v-card-subtitle>
-            Stichtag Gesuch realisiert gemäss gewähltem Datumsbereich (abrechnungsrelevant)
+            Stichtag Gesuch realisiert gemäss gewähltem Datumsbereich <span v-if="applicationType === 'pv'">(abrechnungsrelevant)</span>
           </v-card-subtitle>
 
           <v-card-text class="text-h5" v-if="statsObject.completed">
