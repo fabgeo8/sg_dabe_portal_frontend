@@ -13,6 +13,13 @@
       </v-col>
     </v-row>
     <v-row>
+      <v-col md="6">
+        <v-text-field :loading="loading" v-model="settings.inactive_user_wait_time" label="Wartezeit bei inaktiven Benutzern">
+          <template slot="append">Tage</template>
+        </v-text-field>
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col>
         <v-btn
             color="primary"
@@ -58,7 +65,8 @@ export default {
   data: () => ({
     dataPushing: false,
     settings: {
-      fee_amount_municipality: ''
+      fee_amount_municipality: '',
+      inactive_user_wait_time: ''
     },
     isSaving: false,
     loading: false,
@@ -72,6 +80,23 @@ export default {
     save () {
       this.isSaving = true
       axios.patch('settings/global/' + 'fee_amount_municipality', {value: this.settings.fee_amount_municipality})
+          .then((res) => {
+            if (res.status === 200) {
+              showSnack({message: 'Einstellungen wurden erfolgreich gespeichert', color: 'success'})
+              this.getSettings()
+            }
+            else {
+              showSnack({message: 'Einstellungen konten nicht gespeichert werden. Keine Berechtigung.', color: 'red'})
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+            showSnack({message: 'Einstellungen konten nicht synchronisiert werden. Serverfehler.', color: 'red'})
+          })
+          .finally(() => {
+            this.isSaving = false
+          })
+      axios.patch('settings/global/' + 'inactive_user_wait_time', {value: this.settings.inactive_user_wait_time})
           .then((res) => {
             if (res.status === 200) {
               showSnack({message: 'Einstellungen wurden erfolgreich gespeichert', color: 'success'})

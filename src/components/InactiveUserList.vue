@@ -10,7 +10,6 @@
             :loading="loadingData"
             :headers="headers"
             locale="de-CH"
-
             loading-text="Benutzerdaten werden geladen."
             class="elevation-1">
           <template v-slot:item="props">
@@ -18,6 +17,7 @@
               <td nowrap="true">{{ new Date(props.item.createdAt).toLocaleDateString(undefined, {day: '2-digit', month: '2-digit', year: 'numeric'}) }}</td>
               <td nowrap="true">{{ props.item.fullname }}</td>
               <td nowrap="true">{{ props.item.email }}</td>
+              <td nowrap="true" align="end">{{ props.item.days_to_removal }} Tagen</td>
               <td nowrap="true">
                 <v-dialog
                     v-model="confirmActivate[props.item.id]"
@@ -160,6 +160,12 @@ export default {
             align: 'start',
             filterable: false,
             value: 'email'
+          },
+          {
+            text: 'Läuft ab in',
+            align: 'end',
+            filterable: false,
+            value: 'days_to_removal'
           },
           {
             text: '',

@@ -28,6 +28,11 @@
                     <v-list-item-title>Systemeinstellungen</v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
+                <v-list-item v-if="!$store.getters.getSettingIsMunicipality">
+                  <v-list-item-content @click="hideAllSettings(); showDataExport = true;">
+                    <v-list-item-title>Datenexport</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
                 <v-list-item v-if="$store.getters.getSettingIsMunicipality">
                   <v-list-item-content @click="hideAllSettings(); showMunicipalities = true;">
                     <v-list-item-title v-if="$store.getters.getSettingIsMunicipality">Gemeinde verwalten</v-list-item-title>
@@ -62,6 +67,20 @@
             </v-card-title>
             <v-card-text>
               <admin-system-settings v-if="!$store.getters.getActiveSettingMunicipality"></admin-system-settings>
+            </v-card-text>
+          </v-card>
+
+          <v-card
+              v-if="!$store.getters.getSettingIsMunicipality && showDataExport"
+              class="mx-auto"
+              rounded
+              min-height="700"
+          >
+            <v-card-title>
+              Daten exportieren
+            </v-card-title>
+            <v-card-text>
+              <admin-data-export v-if="!$store.getters.getActiveSettingMunicipality"></admin-data-export>
             </v-card-text>
           </v-card>
 
@@ -123,6 +142,7 @@ import {showSnack} from "../globalActions";
 import AdminSystemSettings from "../components/AdminSystemSettings";
 import GasOperatorList from "../components/GasOperatorList";
 import MunicipalityAddresses from "../components/MunicipalityAddresses";
+import AdminDataExport from "@/components/AdminDataExport.vue";
 
 export default {
   name: 'Settings',
@@ -132,13 +152,15 @@ export default {
     'inactive-user-list': InactiveUserList,
     'active-user-list': ActiveUserList,
     'admin-system-settings': AdminSystemSettings,
-    'gas-operator-list': GasOperatorList
+    'gas-operator-list': GasOperatorList,
+    'admin-data-export': AdminDataExport
   },
   data: () => ({
     showGeneral: true,
     showMunicipalities: false,
     showGasProviders: false,
     showUserManagement: false,
+    showDataExport: false
   }),
   computed: {
     activeUserMunicipality: {
@@ -180,6 +202,7 @@ export default {
       this.showGasProviders = false
       this.showGeneral = false
       this.showMunicipalities = false
+      this.showDataExport = false
     },
     updateUserData () {
       console.log("updating data")

@@ -54,6 +54,22 @@ export default class ExportToExcel {
         this.generateXlsx(formattedData, metaJson, filename)
     }
 
+    static exportGenericObject (dataList, filename) {
+        /* create a new blank workbook */
+        let wb = XLSX.utils.book_new();
+
+        /* create a worksheet for books */
+        let ws = XLSX.utils.json_to_sheet(dataList, {skipHeader:false});
+
+        /* Add the worksheet to the workbook */
+        XLSX.utils.book_append_sheet(wb, ws, "Export");
+
+        const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        const data1 = new Blob([excelBuffer], { type: fileType });
+        FileSaver.saveAs(data1, filename);
+    }
+
     static generateXlsx(applicationJson, metaDataJson, filename) {
         /* create a new blank workbook */
         let wb = XLSX.utils.book_new();
